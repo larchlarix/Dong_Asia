@@ -1,6 +1,11 @@
 package com.example.DongAisa.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name="user",schema = "dong_asia", uniqueConstraints = {@UniqueConstraint(columnNames = "user_id")})
 public class User {

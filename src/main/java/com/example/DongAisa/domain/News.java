@@ -17,9 +17,9 @@ public class News {
     @Column(name="news_title",unique = false, nullable = false)
     private String newsTitle;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+
     @Column(name= "news_date", unique = false, nullable = true)
-    private LocalDate newsDate;
+    private String newsDate;
 
     @Column(name="news_contents", unique = true, nullable = false)
     private String newsContents;
@@ -48,11 +48,11 @@ public class News {
         this.newsTitle = newsTitle;
     }
 
-    public LocalDate getNewsDate() {
+    public String getNewsDate() {
         return newsDate;
     }
 
-    public void setNewsDate(LocalDate newsDate) {
+    public void setNewsDate(String newsDate) {
         this.newsDate = newsDate;
     }
 

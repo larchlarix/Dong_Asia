@@ -25,12 +25,13 @@ public class NewsController {
     }
 
 
-    //뉴스 생성
+    /*뉴스 생성
     @RequestMapping(value="",method = RequestMethod.POST)
     public ResponseEntity<NewsDto> createNews(@RequestBody final NewsDto newsDto) throws IOException {
     NewsDto savedNewsDto = newsService.createNews(newsDto);
     return new ResponseEntity<>(savedNewsDto, HttpStatus.OK);
     }
+    */
 
     //뉴스 목록 조회
     @RequestMapping(value="",method= RequestMethod.GET)
