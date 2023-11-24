@@ -1,0 +1,120 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뉴스 목록</title>
+</head>
+<body>
+<h1>뉴스 목록</h1>
+
+
+<div th:if="${newsList.isEmpty()}">
+    <p>뉴스가 없습니다.</p>
+</div>
+
+<div th:each="news : ${newsList}">
+    <div th:text="${news.newsTitle}"></div>
+    <div th:text="${news.newsContents}"></div>
+    <div th:text="${news.newsDate}"></div>
+    <div th:text="${news.newsLink}"></div>
+    <hr>
+</div>
+</body>
+</html>
+
+-->
+
+
+<!--
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News List</title>
+</head>
+<body>
+<h1>News List</h1>
+<div id="newsList"></div>
+
+<script>
+    // API 요청을 보낼 URL 설정
+    const apiUrl = 'http://localhost:8080';
+
+    // API에서 뉴스 목록을 가져와서 화면에 표시하는 함수
+    async function fetchNewsList() {
+        try {
+            const response = await fetch(apiUrl);
+            const newsList = await response.json();
+
+            // 뉴스 목록을 화면에 표시
+            const newsListContainer = document.getElementById('newsList');
+            newsListContainer.innerHTML = '';
+
+            newsList.forEach(news => {
+                const newsItem = document.createElement('div');
+                newsItem.innerHTML = `<strong>${news.newsTitle}</strong> - ${news.newsDate}<br>${news.newsContents}<br><a href="${news.newsLink}" target="_blank">Read more</a><hr>`;
+                newsListContainer.appendChild(newsItem);
+            });
+        } catch (error) {
+            console.error('Error fetching news:', error);
+        }
+    }
+
+    // 페이지 로드 시 뉴스 목록을 가져와서 표시
+    window.onload = fetchNewsList;
+</script>
+</body>
+</html>
+-->
+<!--
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>뉴스 목록</title>
+</head>
+<body>
+
+<h1>뉴스 목록</h1>
+
+<form th:action="@{/news}" method="get">
+    <label for="keyword">키워드:</label>
+    <input type="text" id="keyword" name="keyword" th:value="${keyword}" />
+
+    <label for="sort">정렬:</label>
+    <select id="sort" name="sort" th:value="${sort}">
+        <option value="byDate">날짜</option>
+
+    </select>
+
+    <button type="submit">검색</button>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>제목</th>
+        <th>날짜</th>
+        <th>본문</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="news : ${newsList}">
+        <td th:text="${news.newsId}"></td>
+        <td th:text="${news.newsTitle}"></td>
+        <td th:text="${news.newsDate}"></td>
+        <td th:text="${news.newsContents}"></td>
+        <td th:text="${news.newsLink}"></td>
+
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
+-->

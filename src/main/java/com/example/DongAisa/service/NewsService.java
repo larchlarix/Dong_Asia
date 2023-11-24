@@ -41,7 +41,7 @@ public class NewsService {
     public List<NewsDto> getNewsList(String keyword, String sort) {
         List<News> news;
 
-        if (Objects.equals(sort, "byNewsDate")) {
+        if (Objects.equals(sort, "byDate")) {
             news = newsRepository.findByNewsTitleContainingOrderByNewsDateAsc(keyword);
         } else {
             throw new IllegalArgumentException("알 수 없는 정렬 기준입니다");

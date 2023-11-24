@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Builder
 @Entity
@@ -23,7 +25,19 @@ public class User {
     @Column(name="user_password", unique = false, nullable = false)
     private  String userPassword;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="news_id")
+    private News news;
 
+
+
+    public News getNews() {
+        return news;
+    }
+
+    public void setNews(News news) {
+        this.news = news;
+    }
 
     public User(){};
 

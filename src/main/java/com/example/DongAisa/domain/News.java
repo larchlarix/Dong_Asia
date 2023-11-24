@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Entity
@@ -24,9 +25,19 @@ public class News {
     @Column(name="news_contents", unique = true, nullable = false)
     private String newsContents;
 
-    @Column(name = "news_link",unique = true,nullable = false)
+    @Column(name = "news_link",unique = true,nullable = true)
     private String newsLink;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "news", cascade = CascadeType.ALL)
+    private List<User> user;
+
+    public List<User> getUser() {
+        return user;
+    }
+
+    public void setUser(List<User> user) {
+        this.user = user;
+    }
 
     public News(){};
 
