@@ -7,11 +7,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/news")
 public class NewsController {
 
@@ -25,6 +26,7 @@ public class NewsController {
         return new ResponseEntity<>(news, HttpStatus.OK);
     }
 */
+    /*
     @RequestMapping(value="/{newsId}", method = RequestMethod.GET)
     public ResponseEntity<NewsDto> getNews(@PathVariable("newsId") final long newsId) {
         try {
@@ -38,6 +40,22 @@ public class NewsController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+*/
+    @RequestMapping(value="/{newsId}", method = RequestMethod.GET)
+    public String getNews(Model model, @PathVariable("newsId") final long newsId){
+        try {
+            NewsDto news = newsService.getNews(newsId);
+            model.addAttribute("news", news);
+            return "main_text";
+        } catch (EntityNotFoundException e){
+            // 뉴스가 존재하지 않는 경우
+            return String.valueOf(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            // 다른 예외 발생 시
+            return String.valueOf(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        }
+    }
+
 
 
     /*뉴스 생성

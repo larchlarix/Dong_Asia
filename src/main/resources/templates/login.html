@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+</head>
+<body>
+<h2 th:text="${message}"></h2>
+
+<!-- 로그인 폼 -->
+<form method="post">
+    <label for="loginUserEmail">Email:</label>
+    <input type="email" id="loginUserEmail" name="userEmail" required>
+
+    <label for="loginUserPassword">Password:</label>
+    <input type="password" id="loginUserPassword" name="userPassword" required>
+
+    <button type="submit">Login</button>
+</form>
+
+<!-- 로그아웃 폼 -->
+<form action="/logout" method="post">
+    <button type="submit">Logout</button>
+</form>
+</body>
+</html>

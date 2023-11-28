@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>뉴스 본문</title>
+</head>
+<body>
+
+<div th:if="${news}">
+    <h1 th:text="${news.newsTitle}"></h1>
+    <p th:text="${news.newsContents}"></p>
+    <p th:text="${news.newsDate}"></p>
+    <p th:text="${news.newsLink}"></p>
+
+</div>
+
+<div th:unless="${news}">
+    <p>해당 뉴스를 찾을 수 없습니다.</p>
+</div>
+
+</body>
+</html>
+
