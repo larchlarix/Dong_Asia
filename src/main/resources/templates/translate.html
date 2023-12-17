@@ -1,0 +1,90 @@
+<!--
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Page</title>
+</head>
+<body>
+<h1>Translation Page</h1>
+
+<form action="/translate/result" method="get">
+    <label for="sentence">Enter a sentence to translate:</label>
+    <input type="text" id="sentence" name="sentence" required>
+    <button type="submit">Translate</button>
+</form>
+
+<div th:if="${translatedSentence != null and not #strings.isEmpty(translatedSentence)}">
+    <p>Translated Sentence:</p>
+    <p th:text="${translatedSentence}"></p>
+</div>
+</body>
+</html>
+-->
+<!-- src/main/resources/templates/translate.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Page</title>
+
+    <!-- jQuery 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+<h1>Translation Page</h1>
+
+<form action="/translate/result" method="get" onsubmit="return translate()">
+    <label for="sentenceInput">Enter a sentence to translate:</label>
+    <!-- 입력 상자에 결과를 표시할 div 추가 -->
+    <div id="resultContainer" style="position: relative;">
+        <input type="text" id="sentenceInput" name="sentence" required>
+        <div id="translationResult" style="position: absolute; top: 100%; left: 0;"></div>
+    </div>
+    <button type="submit">Translate</button>
+</form>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function translate() {
+        var sentenceInput = $('#sentenceInput');
+        var translationResultDiv = $('#translationResult');
+
+        // 입력 상자의 값으로 API 호출
+        $.get('/translate/result', { sentence: sentenceInput.val() })
+            .done(function (data) {
+                // 번역 결과를 div에 표시
+                translationResultDiv.text('Translated Sentence: ' + data);
+            })
+            .fail(function () {
+                console.error('Error during translation');
+                alert('번역 중 오류가 발생했습니다.');
+            });
+
+        // 폼 제출을 막습니다.
+        return false;
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

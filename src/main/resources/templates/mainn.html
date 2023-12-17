@@ -1,0 +1,74 @@
+<!--
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <h1>Hello Spring</h1>
+
+        <p>회원 기능</p>
+        <p>
+
+            <a href="/user/signup">회원 가입</a>
+            <a href="/user/login">로그인</a>
+
+        </p>
+
+    </div>
+    <h1>뉴스 목록</h1>
+
+
+    <div th:if="${newsList.isEmpty()}">
+        <p>뉴스가 없습니다.</p>
+    </div>
+
+    <div th:each="news : ${newsList}">
+        <div th:text="${news.newsTitle}"></div>
+        <div th:text="${news.newsContents}"></div>
+        <div th:text="${news.newsDate}"></div>
+        <div th:text="${news.newsLink}"></div>
+        <hr>
+    </div>
+</div>
+</body>
+</html>
+-->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <h1>Hello Spring</h1>
+
+        <p>회원 기능</p>
+        <!-- 로그인 상태 확인 로그 -->
+        <p th:text="${userService.isLoggedIn()}"></p>
+
+        <!-- 로그인 상태에 따라 다른 버튼 표시 -->
+        <th:block th:if="${not userService.isLoggedIn()}">
+            <a href="/user/signup">회원 가입</a>
+            <a href="/user/login">로그인</a>
+        </th:block>
+        <th:block th:if="${userService.isLoggedIn()}">
+            <a href="/user/logout">로그아웃</a>
+        </th:block>
+    </div>
+    <h1>뉴스 목록</h1>
+
+    <div th:if="${newsList.isEmpty()}">
+        <p>뉴스가 없습니다.</p>
+    </div>
+
+    <div th:each="news, iterStat : ${newsList}">
+        <div>제목: <span th:text="${news.newsTitle}"></span></div>
+        <div>
+            <!-- newsId를 기반으로 링크 생성 -->
+            <a th:href="@{'/news/' + ${news.newsId}}">뉴스 상세페이지로 이동</a>
+        </div>
+        <hr>
+    </div>
+</div>
+</body>
+</html>
+
+

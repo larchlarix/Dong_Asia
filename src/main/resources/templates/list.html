@@ -1,26 +1,141 @@
 
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tr="http://www.thymeleaf.org" >
 <head>
+    <link rel="stylesheet" href="./style.css" type="text/css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>뉴스 목록</title>
 </head>
 <body>
-<h1>뉴스 목록</h1>
+<header>
+    <div id="logo">
+        <h1><a href="main.html">LOGO</a></h1>
+        <form action="">
+            <div class="search">
+                <input type="text" name="query" placeholder="뉴스 검색">
+                <img id="search-button" src="search.png" />
+                <img class="ques-icon" id="ques0" src="ques.png" />
+            </div>
+        </form>
+        <div id="login-button">
+            <a href="login.html">로그인</a>&nbsp;&nbsp;&nbsp;<a href="signup.html">회원가입</a>
+        </div>
+    </div>
 
 
+    <div class="main-menu-bar">
+        <ul class="main-menu">
+            <li class="item">
+                <div class="item__name">기사 보기</div>
+                <div class="item__contents">
+                    <div class="contents__menu">
+                        <ul class="inner">
+                            <li>
+                                <h4>국가</h4>
+                                <ul>
+                                    <li>일본</li>
+                                    <li>중국</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h4>주제</h4>
+                                <ul>
+                                    <li>경제</li>
+                                    <li>정치</li>
+                                    <li>사회 문화</li>
+                                    <li>스포츠</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h4>언론사</h4>
+                                <ul>
+                                    <li>NHK</li>
+                                    <li>아사히</li>
+                                    <li>마이니치</li>
+                                    <li>산케이</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li class="item">
+                <div class="item__name">기사 분석</div>
+        </ul>
+    </div>
+</header>
+<br>
+<h1 class="page_title">뉴스 목록</h1>
+<tr class="app">
+    <table id="tblTodo">
+        <caption></caption>
+        <colgroup>
+            <col width="20%" />
+            <col width="50%" />
+            <col width="20%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>사진</th>
+            <th>제목</th>
+            <th>내용</th>
+            <th>일자</th>
+            <th>언론사</th>
+        </tr>
+        <tr th:each="news : ${newsList}">
+            <td th:text="${news.newsTitle}">제목</td>
+            <td th:text="${news.newsContents}">내용</td>
+            <td th:text="${news.newsDate}">일자</td>
+            <td th:text="${news.newsLink}">언론사</td>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+
+    <div class="paging">
+        <!-- Icon은 fontawesome에서 가져왔습니다. -->
+        <i class="fa-solid fa-angles-left" id="first_page"></i>
+        <i class="fa-solid fa-angle-left" id="prev_page"></i>
+        <div class="pages">
+            <span class="active">1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>6</span>
+            <span>7</span>
+            <span>8</span>
+            <span>9</span>
+            <span>10</span>
+        </div>
+        <i class="fa-solid fa-angle-right" id="next_page"></i>
+        <i class="fa-solid fa-angles-right" id="last_page"></i>
+    </div>
+</tr>
+<!--
 <div th:if="${newsList.isEmpty()}">
     <p>뉴스가 없습니다.</p>
 </div>
-
-<div th:each="news : ${newsList}">
+    <article class="article">
+        <ul class="contents"></ul>
+        <div class="buttons"></div>
+    </article>
+<script src="pagnation.js"></script>
+ <div th:each="news : ${newsList}">
     <div th:text="${news.newsTitle}"></div>
     <div th:text="${news.newsContents}"></div>
     <div th:text="${news.newsDate}"></div>
     <div th:text="${news.newsLink}"></div>
     <hr>
+ </div>
+-->
+
+<div id="footer">
+    <p>< footer ></p>
 </div>
 </body>
 </html>

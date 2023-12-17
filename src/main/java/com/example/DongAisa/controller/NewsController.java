@@ -95,4 +95,23 @@ public class NewsController {
         NewsDto deleteNewsDto = newsService.deleteNews(newsId);
         return new ResponseEntity<>(deleteNewsDto, HttpStatus.OK);
     }
+/*
+    //뉴스 검색
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String search(@RequestParam(value = "keyword") String keyword, Model model){
+        List<NewsDto> newsDtoList = newsService.searchNews(keyword);
+        model.addAttribute("newsList",newsDtoList);
+        return "list";
+    }
+
+ */
+@RequestMapping(value = "/search", method = RequestMethod.GET)
+public String search(@RequestParam(value = "keyword") String keyword,
+                     @RequestParam(value = "language", defaultValue = "en") String language,
+                     Model model) {
+    List<NewsDto> newsDtoList = newsService.searchNews(keyword, language);
+    model.addAttribute("newsList", newsDtoList);
+    return "listtt";
+}
+
 }

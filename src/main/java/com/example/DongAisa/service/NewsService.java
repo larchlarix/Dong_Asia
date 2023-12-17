@@ -8,15 +8,14 @@ import org.springframework.stereotype.Service;
 import com.example.DongAisa.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class NewsService {
     @Autowired
     private NewsRepository newsRepository;
+
+
 
     public NewsDto getNews(Long newsId){
         Optional<News> res = newsRepository.findById(newsId);
@@ -50,5 +49,26 @@ public class NewsService {
         return newsDtos;
     }
 
+    /*
+    public List<NewsDto> searchNews(String keyword){
+        List<News> news = newsRepository.findByNewsTitleContaining(keyword);
+        List<NewsDto> newsDtoList = NewsMapper.convertToDtoList(news);
+        if(news.isEmpty()) return newsDtoList;
+
+        return newsDtoList;
+    }
+
+     */
+    public List<NewsDto> searchNews(String keyword, String language) {
+
+
+        // 뉴스 검색
+        List<News> news = newsRepository.findByNewsTitleContaining(keyword);
+
+        // DTO로 변환
+        List<NewsDto> newsDtoList = NewsMapper.convertToDtoList(news);
+
+        return newsDtoList;
+    }
 
 }

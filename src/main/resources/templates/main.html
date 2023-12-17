@@ -1,70 +1,142 @@
-<!--
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="/style.css">
 <body>
-<div class="container">
+
+<script>
+    function translate() {
+        // 입력창에서 텍스트 가져오기
+        var inputText = document.getElementById('inputText').value;
+
+        // Papago API로 번역 요청
+        fetch('/translate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: inputText, sourceLang: 'ko', targetLang: 'en' }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 번역 결과를 입력 상자에 표시
+                document.getElementById('inputText').value = data.translatedText;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function search() {
+        // 검색 폼 제출
+        document.getElementById('searchForm').submit();
+    }
+</script>
+
+<header>
+    <h2>한국에 대한 중국과 일본의 시각을 한눈에!</h2>
+    <h2>LOGO</h2>
+
+    <!-- ID 추가 -->
+    <input id="inputText" type="text" placeholder="텍스트를 입력해주세요">
+
+    <a href="/user/signup">회원 가입</a>
+    <a href="/user/login">로그인</a>
+
+    <!-- 번역 및 검색 버튼 분리 -->
+    <button type="button" onclick="translate()">번역</button>
+    <button type="button" onclick="search()">검색</button>
+</header>
+
+<script>
+    function translate() {
+        // 입력창에서 텍스트 가져오기
+        var inputText = document.getElementById('inputText').value;
+
+        // Papago API로 번역 요청
+        fetch('/translate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: inputText, sourceLang: 'ko', targetLang: 'en' }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 번역 결과를 입력 상자에 표시
+                document.getElementById('inputText').value = data.translatedText;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function search() {
+        // 검색 폼 제출
+        document.getElementById('searchForm').submit();
+    }
+</script>
+
+<form id="searchForm" action="/news/search" method="GET">
+    <div class="search">
+        <input name="keyword" type="hidden" placeholder="검색어를 입력해주세요">
+    </div>
+</form>
+
+<nav>
+    <div><ul class="list">
+        <li><a href="/news">뉴스 보기</a></li>
+        <li><a href="Analysis.html">뉴스 분석</a></li>
+    </ul></div>
+
+    <ul class="list">
+        <li>국가</li>
+        <li>중국</li>
+        <li>일본</li>
+    </ul>
+    <ul class="list">
+        <li>주제</li>
+        <li>정치</li>
+        <li>사회 문화</li>
+        <li>스포츠</li>
+        <li>경제</li>
+    </ul>
+</nav>
+
+<h1>뉴스 목록</h1>
+
+<div th:if="${newsList.isEmpty()}">
+    <p>뉴스가 없습니다.</p>
+</div>
+
+<div th:each="news, iterStat : ${newsList}">
+    <div>제목: <span th:text="${news.newsTitle}"></span></div>
+
     <div>
-        <h1>Hello Spring</h1>
-
-        <p>회원 기능</p>
-        <p>
-
-            <a href="/user/signup">회원 가입</a>
-            <a href="/user/login">로그인</a>
-
-        </p>
-
+        <!-- newsId를 기반으로 링크 생성 -->
+        <a th:href="@{'/news/' + ${news.newsId}}">뉴스 상세페이지로 이동</a>
     </div>
-    <h1>뉴스 목록</h1>
-
-
-    <div th:if="${newsList.isEmpty()}">
-        <p>뉴스가 없습니다.</p>
-    </div>
-
-    <div th:each="news : ${newsList}">
-        <div th:text="${news.newsTitle}"></div>
-        <div th:text="${news.newsContents}"></div>
-        <div th:text="${news.newsDate}"></div>
-        <div th:text="${news.newsLink}"></div>
-        <hr>
+    <hr>
+</div>
+<div class="GoToOrgin">
+    <p style="">원문 바로 가기</p>
+    <img src="/ques.png" alt="q-mark" />
+    <div id="jpmedia">
+        <ul class="list">
+            <li><a href="https://www.yomiuri.co.jp/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/yomiuri.png" alt="yomiuri" /><br>요미우리</a></li>
+            <li><a href="https://www3.nhk.or.jp/news/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/nhk.png" alt="nhk" /><br>NHK</a></li>
+            <li><a href="https://www.nikkei.com/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/nikkei.png" alt="nikkei" /><br>닛케이</a></li>
+        </ul>
+        <ul class="list">
+            <li><a href="https://mainichi.jp/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/mainichi.png" alt="mainichi" /><br>마이니치</a></li>
+            <li><a href="https://www.asahi.com/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/asahi.png" alt="asahi" /><br>아사히</a></li>
+            <li><a href="https://www.sankei.com/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/sankei.png" alt="sankei" /><br>산케이</a></li>
+        </ul>
     </div>
 </div>
+<footer>
+    <div><h2>LOGO</h2>
+        <span>팀 동아시아 제작</span>
+        <span></span>
+    </div>
+</footer>
 </body>
 </html>
--->
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
-<div class="container">
-    <div>
-        <h1>Hello Spring</h1>
 
-        <p>회원 기능</p>
-        <p>
-            <a href="/user/signup">회원 가입</a>
-            <a href="/user/login">로그인</a>
-        </p>
 
-    </div>
-    <h1>뉴스 목록</h1>
 
-    <div th:if="${newsList.isEmpty()}">
-        <p>뉴스가 없습니다.</p>
-    </div>
-
-    <div th:each="news, iterStat : ${newsList}">
-        <div>제목: <span th:text="${news.newsTitle}"></span></div>
-        <!--
-        <div th:text="${news.newsContents}"></div>
-        <div th:text="${news.newsDate}"></div>
-        -->
-        <div>
-            <!-- newsId를 기반으로 링크 생성 -->
-            <a th:href="@{'/news/' + ${news.newsId}}">뉴스 상세페이지로 이동</a>
-        </div>
-        <hr>
-    </div>
-</div>
-</body>
-</html>
