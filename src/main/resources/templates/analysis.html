@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="popover.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis</title>
+</head>
+<body>
+<div class="headerSection">
+    <div class="logo">LOGO</div>
+    <div class="formBox">
+        <form action="">
+            <input type="text" name="query" placeholder="뉴스 검색">
+            <button type="button"><img class="search-button" src="search.png" /></button>
+            <button type="button"><img class="ques-icon" id="ques0" src="ques.png" /></button>
+        </form>
+    </div>
+    <div class="login"><a class="login" href="login.html">로그인</a>&nbsp;&nbsp;&nbsp;<a class="signin" href="signup.html">회원가입</a></div>
+</div>
+<nav>
+    <ul class="nav">
+        <li><a href="list.html">기사 보기</a>
+            <div><span>국가</span>
+                <input type="checkbox" class="menu-btn-chk" id="japan">
+                <label class="menu-btn-label" for="japan">일본</label>
+                <input type="checkbox" class="menu-btn-chk" id="china">
+                <label class="menu-btn-label" for="china">중국</label>
+                <br>
+                <br>
+                <span>주제</span>
+                <input type="checkbox" class="menu-btn-chk" id="economics">
+                <label class="menu-btn-label" for="economics">경제</label>
+                <input type="checkbox" class="menu-btn-chk" id="politics">
+                <label class="menu-btn-label" for="politics">정치</label>
+                <input type="checkbox" class="menu-btn-chk" id="culture">
+                <label class="menu-btn-label" for="culture">사회 문화</label>
+                <input type="checkbox" class="menu-btn-chk" id="sports">
+                <label class="menu-btn-label" for="sports">스포츠</label>
+                <br>
+                <br>
+                <span>일본 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="nikkei">
+                <label class="menu-btn-label" for="nikkei">닛케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="mainichi">
+                <label class="menu-btn-label" for="mainichi">마이니치</label>
+                <input type="checkbox" class="menu-btn-chk" id="sankei">
+                <label class="menu-btn-label" for="sankei">산케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="asahi">
+                <label class="menu-btn-label" for="asahi">아사히</label>
+                <input type="checkbox" class="menu-btn-chk" id="yomiuri">
+                <label class="menu-btn-label" for="yomiuri">요미우리</label>
+                <input type="checkbox" class="menu-btn-chk" id="nhk">
+                <label class="menu-btn-label" for="nhk">NHK</label>
+                <br>
+                <br>
+                <span>중국 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="jp">
+                <label class="menu-btn-label" for="jp">인민일보</label>
+                <br>
+                <button type="submit">조회</button>
+            </div>
+        </li>
+        <li><a href="analysis.html">기사 분석</a></li>
+    </ul>
+</nav>
+
+
+<main>
+    <div class="mainContent">
+        <div class="nums-of-mention1">
+           언급량 분석
+            <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Disabled popover">
+                <button><img src="ques.png"></button></span>
+        </div>
+        <div class="nums-of-mention2">
+            <div class="dateSelect">
+            기간
+            <label class="dateBox" for="startdate1">
+                <input type="date"
+                       id="startdate1"
+                       max="2050-12-31"
+                       min="2000-01-01">
+            </label>
+                ~
+            <label class="dateBox" for="enddate1">
+                <input type="date"
+                       id="enddate1"
+                       max="2050-12-31"
+                       min="2000-01-01">
+            </label></div>
+            <br>
+
+            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                언론사
+                <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck1">닛케이</label>
+
+                <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck2">마이니치</label>
+
+                <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck3">산케이</label>
+
+                <input type="checkbox" class="btn-check" id="btncheck4" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck4">아사히</label>
+
+                <input type="checkbox" class="btn-check" id="btncheck5" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck5">요미우리</label>
+
+                <input type="checkbox" class="btn-check" id="btncheck6" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck6">NHK</label>
+                <input class="btn-check-submit" type="button" value="조회">
+            </div>
+
+        </div>
+
+        <div class="nums-of-mention3">
+            <div class="wordMap">
+                show the result
+            </div>
+            <div class="textChart">
+                <ul>
+                    <li>1</li>
+                    <li>2</li>
+                    <li>3</li>
+                    <li>4</li>
+                    <li>5</li>
+                </ul>
+            </div>
+            <div class="textChart2">
+                <ul>
+                    <li>32 건</li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="analysisOfKeywordBox">
+        <span>키워드 분석</span>
+        <button><img src="ques.png"></button>
+        <div class="checkBox">
+            <div class="dateCheckBox">
+            <span>기간</span>
+            <label for="startdate2">
+                <input type="date"
+                id="startdate2"
+                max="2050-12-31"
+                min="2000-01-01">
+            </label>
+               <span>~</span>
+            <label for="enddate2">
+                <input type="date"
+                       id="enddate2"
+                       max="2050-12-31"
+                       min="2000-01-01">
+            </label></div>
+            <form action="/*서버주소 입력*/">
+            <input type="text" name="query" value="">
+            <button type="submit"><img src="search.png"></button>
+            </form>
+            <div class="selectKeywordBox">
+                <p>인기 키워드</p>
+                <input type="checkbox">
+            </div>
+        </div>
+    </div>
+    <div class="resultOfKeyword">
+            <div class="list-group">
+                <button type="button" class="list-group-item">언급량 추이</button>
+                <button type="button" class="list-group-item">연관어 및 긍부정 분석</button>
+                <button type="button" class="list-group-item">언론사 별 긍부정 경향</button>
+            </div>
+            <div>
+
+            </div>
+    </div>
+</main>
+<footer>
+    <div id="footer">< footer ></div>
+</footer>
+
+</body>
+</html>
