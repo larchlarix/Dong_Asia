@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="./style.css">
+<meta charset="UTF-8">
 <body>
 
 <script>
@@ -32,18 +33,24 @@
 
 <header>
     <h2>한국에 대한 중국과 일본의 시각을 한눈에!</h2>
-    <h2>LOGO</h2>
-
-    <!-- ID 추가 -->
-    <input id="inputText" type="text" placeholder="텍스트를 입력해주세요">
-
-    <a href="/user/signup">회원 가입</a>
-    <a href="/user/login">로그인</a>
-
-    <!-- 번역 및 검색 버튼 분리 -->
-    <button type="button" onclick="translate()">번역</button>
-    <button type="button" onclick="search()">검색</button>
 </header>
+    <!-- ID 추가 -->
+<div class="headerSection">
+    <div class="logo">LOGO</div>
+    <div class="formBox">
+        <form action="/news/search" method="GET">
+            <input id="inputText" type="text" name="query" placeholder="뉴스 검색">
+            <button type="button" onclick="translate()">번역</button>
+            <button type="button" onclick="search()"><img class="search-button" src="search.png" /></button>
+            <button type="button"><img class="ques-icon" id="ques0" src="ques.png" /></button>
+        </form>
+    </div>
+    <div class="login"><a class="login" href="login.html">로그인</a>&nbsp;&nbsp;&nbsp;<a class="signin" href="signup.html">회원가입</a></div>
+</div>
+    <!-- 번역 및 검색 버튼 분리 -->
+    <!--<button type="button" onclick="translate()">번역</button>-->
+
+
 
 <script>
     function translate() {
@@ -79,22 +86,53 @@
 </form>
 
 <nav>
-    <div><ul class="list">
-        <li><a href="/news">뉴스 보기</a></li>
-        <li><a href="Analysis.html">뉴스 분석</a></li>
-    </ul></div>
-
-    <ul class="list">
-        <li>국가</li>
-        <li>중국</li>
-        <li>일본</li>
-    </ul>
-    <ul class="list">
-        <li>주제</li>
-        <li>정치</li>
-        <li>사회 문화</li>
-        <li>스포츠</li>
-        <li>경제</li>
+    <ul class="nav">
+        <li><a href="list.html">기사 보기</a>
+            <div><span>국가</span>
+                <input type="checkbox" class="menu-btn-chk" id="japan">
+                <label class="menu-btn-label" for="japan">일본</label>
+                <input type="checkbox" class="menu-btn-chk" id="china">
+                <label class="menu-btn-label" for="china">중국</label>
+                <br>
+                <br>
+                <span>주제</span>
+                <input type="checkbox" class="menu-btn-chk" id="economics">
+                <label class="menu-btn-label" for="economics">경제</label>
+                <input type="checkbox" class="menu-btn-chk" id="politics">
+                <label class="menu-btn-label" for="politics">정치</label>
+                <input type="checkbox" class="menu-btn-chk" id="culture">
+                <label class="menu-btn-label" for="culture">사회 문화</label>
+                <input type="checkbox" class="menu-btn-chk" id="sports">
+                <label class="menu-btn-label" for="sports">스포츠</label>
+                <br>
+                <br>
+                <span>일본 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="nikkei">
+                <label class="menu-btn-label" for="nikkei">닛케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="mainichi">
+                <label class="menu-btn-label" for="mainichi">마이니치</label>
+                <input type="checkbox" class="menu-btn-chk" id="sankei">
+                <label class="menu-btn-label" for="sankei">산케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="asahi">
+                <label class="menu-btn-label" for="asahi">아사히</label>
+                <input type="checkbox" class="menu-btn-chk" id="yomiuri">
+                <label class="menu-btn-label" for="yomiuri">요미우리</label>
+                <input type="checkbox" class="menu-btn-chk" id="nhk">
+                <label class="menu-btn-label" for="nhk">NHK</label>
+                <br>
+                <br>
+                <span>중국 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="jp">
+                <label class="menu-btn-label" for="jp">인민일보</label>
+                <br>
+                <button type="submit">조회</button>
+            </div>
+        </li>
+        <li><a href="analysis.html">기사 분석</a></li>
     </ul>
 </nav>
 
@@ -129,7 +167,7 @@
         </ul>
     </div>
 </div>
-<footer>
+<footer id="footer">
     <div><h2>LOGO</h2>
         <span>팀 동아시아 제작</span>
         <span></span>
