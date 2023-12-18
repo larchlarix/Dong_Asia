@@ -2,8 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>뉴스 본문</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css" type="text/css">
 </head>
 <body>
+<div class="headerSection">
+    <div class="logo">LOGO</div>
+    <div class="formBox">
+        <form action="">
+            <input type="text" name="query" placeholder="뉴스 검색">
+            <button type="button"><img class="search-button" src="search.png" /></button>
+            <button type="button"><img class="ques-icon" id="ques0" src="ques.png" /></button>
+        </form>
+    </div>
+    <div class="login"><a class="login" href="login.html">로그인</a>&nbsp;&nbsp;&nbsp;<a class="signin" href="signup.html">회원가입</a></div>
+</div>
+<nav>
+    <ul class="nav">
+        <li><a href="list.html">기사 보기</a>
+            <div><span>국가</span>
+                <input type="checkbox" class="menu-btn-chk" id="japan">
+                <label class="menu-btn-label" for="japan">일본</label>
+                <input type="checkbox" class="menu-btn-chk" id="china">
+                <label class="menu-btn-label" for="china">중국</label>
+                <br>
+                <br>
+                <span>주제</span>
+                <input type="checkbox" class="menu-btn-chk" id="economics">
+                <label class="menu-btn-label" for="economics">경제</label>
+                <input type="checkbox" class="menu-btn-chk" id="politics">
+                <label class="menu-btn-label" for="politics">정치</label>
+                <input type="checkbox" class="menu-btn-chk" id="culture">
+                <label class="menu-btn-label" for="culture">사회 문화</label>
+                <input type="checkbox" class="menu-btn-chk" id="sports">
+                <label class="menu-btn-label" for="sports">스포츠</label>
+                <br>
+                <br>
+                <span>일본 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="nikkei">
+                <label class="menu-btn-label" for="nikkei">닛케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="mainichi">
+                <label class="menu-btn-label" for="mainichi">마이니치</label>
+                <input type="checkbox" class="menu-btn-chk" id="sankei">
+                <label class="menu-btn-label" for="sankei">산케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="asahi">
+                <label class="menu-btn-label" for="asahi">아사히</label>
+                <input type="checkbox" class="menu-btn-chk" id="yomiuri">
+                <label class="menu-btn-label" for="yomiuri">요미우리</label>
+                <input type="checkbox" class="menu-btn-chk" id="nhk">
+                <label class="menu-btn-label" for="nhk">NHK</label>
+                <br>
+                <br>
+                <span>중국 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="jp">
+                <label class="menu-btn-label" for="jp">인민일보</label>
+                <br>
+                <button type="submit">조회</button>
+            </div>
+        </li>
+        <li><a href="analysis.html">기사 분석</a></li>
+    </ul>
+</nav>
 
 <div th:if="${news}">
     <h1 th:text="${news.newsTitle}"></h1>
@@ -16,7 +79,8 @@
 <div th:unless="${news}">
     <p>해당 뉴스를 찾을 수 없습니다.</p>
 </div>
-
+<div id="footer">
+    <p>< footer ></p>
 </body>
 </html>
 

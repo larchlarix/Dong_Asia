@@ -36,6 +36,30 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
+<header>
+    <nav>
+        <div class="navbar navbar-expand-md navbar-gray fixed-top bg-gray">
+
+            <div class="container-fluid">
+                <a class="logo" href="main.html">LOGO</a>
+                <form class="search-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn" type="submit">검색</button>
+                </form>
+                <div class="navbar-collapse collapse" id="navbarCollapse" style>
+                    <ul class="navbar-nav me-auto mb-2 mb-md-o">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="list.html">기사 보기</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="analysis.html">기사 분석</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
 <div class="container">
     <div>
         <h1>Hello Spring</h1>
@@ -66,5 +90,7 @@
         <hr>
     </div>
 </div>
+<div id="footer">
+    <p>< footer ></p>
 </body>
 </html>

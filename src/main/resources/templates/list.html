@@ -3,24 +3,136 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="./style.css" type="text/css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="pagnation.js"></script>
     <title>뉴스 목록</title>
 </head>
 <body>
-<h1>뉴스 목록</h1>
+<div class="headerSection">
+    <div class="logo">LOGO</div>
+    <div class="formBox">
+        <form action="">
+            <input type="text" name="query" placeholder="뉴스 검색">
+            <button type="button"><img class="search-button" src="search.png" /></button>
+            <button type="button"><img class="ques-icon" id="ques0" src="ques.png" /></button>
+        </form>
+    </div>
+    <div class="login"><a class="login" href="login.html">로그인</a>&nbsp;&nbsp;&nbsp;<a class="signin" href="signup.html">회원가입</a></div>
+</div>
+<nav>
+    <ul class="nav">
+        <li><a href="list.html">기사 보기</a>
+            <div><span>국가</span>
+                <input type="checkbox" class="menu-btn-chk" id="japan">
+                <label class="menu-btn-label" for="japan">일본</label>
+                <input type="checkbox" class="menu-btn-chk" id="china">
+                <label class="menu-btn-label" for="china">중국</label>
+                <br>
+                <br>
+                <span>주제</span>
+                <input type="checkbox" class="menu-btn-chk" id="economics">
+                <label class="menu-btn-label" for="economics">경제</label>
+                <input type="checkbox" class="menu-btn-chk" id="politics">
+                <label class="menu-btn-label" for="politics">정치</label>
+                <input type="checkbox" class="menu-btn-chk" id="culture">
+                <label class="menu-btn-label" for="culture">사회 문화</label>
+                <input type="checkbox" class="menu-btn-chk" id="sports">
+                <label class="menu-btn-label" for="sports">스포츠</label>
+                <br>
+                <br>
+                <span>일본 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="nikkei">
+                <label class="menu-btn-label" for="nikkei">닛케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="mainichi">
+                <label class="menu-btn-label" for="mainichi">마이니치</label>
+                <input type="checkbox" class="menu-btn-chk" id="sankei">
+                <label class="menu-btn-label" for="sankei">산케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="asahi">
+                <label class="menu-btn-label" for="asahi">아사히</label>
+                <input type="checkbox" class="menu-btn-chk" id="yomiuri">
+                <label class="menu-btn-label" for="yomiuri">요미우리</label>
+                <input type="checkbox" class="menu-btn-chk" id="nhk">
+                <label class="menu-btn-label" for="nhk">NHK</label>
+                <br>
+                <br>
+                <span>중국 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="jp">
+                <label class="menu-btn-label" for="jp">인민일보</label>
+                <br>
+                <button type="submit">조회</button>
+            </div>
+        </li>
+        <li><a href="analysis.html">기사 분석</a></li>
+    </ul>
+</nav>
+<br>
+<h1 class="page_title">뉴스 목록</h1>
+<div class="app">
+    <table id="tblTodo">
+        <caption></caption>
+        <colgroup>
+            <col width="20%" />
+            <col width="50%" />
+            <col width="20%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>사진</th>
+            <th>제목 내용</th>
+            <th>일자</th>
+            <th>언론사</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
-
+    <div class="paging">
+        <!-- Icon은 fontawesome에서 가져왔습니다. -->
+        <i class="fa-solid fa-angles-left" id="first_page"></i>
+        <i class="fa-solid fa-angle-left" id="prev_page"></i>
+        <div class="pages">
+            <span class="active">1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>6</span>
+            <span>7</span>
+            <span>8</span>
+            <span>9</span>
+            <span>10</span>
+        </div>
+        <i class="fa-solid fa-angle-right" id="next_page"></i>
+        <i class="fa-solid fa-angles-right" id="last_page"></i>
+    </div>
+</div>
+<!--
 <div th:if="${newsList.isEmpty()}">
     <p>뉴스가 없습니다.</p>
 </div>
-
-<div th:each="news : ${newsList}">
+    <article class="article">
+        <ul class="contents"></ul>
+        <div class="buttons"></div>
+    </article>
+<script src="pagnation.js"></script>
+ <div th:each="news : ${newsList}">
     <div th:text="${news.newsTitle}"></div>
     <div th:text="${news.newsContents}"></div>
     <div th:text="${news.newsDate}"></div>
     <div th:text="${news.newsLink}"></div>
     <hr>
+ </div>
+-->
+
+<div id="footer">
+    <p>< footer ></p>
 </div>
 </body>
 </html>
