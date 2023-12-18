@@ -3,6 +3,7 @@ body {
     height: 100%;
 }
 
+<<<<<<< HEAD
 header h2 {
     margin-left: 320px;
     margin-top: 10px;
@@ -10,6 +11,8 @@ header h2 {
     color: #FF9D9D;
 }
 
+=======
+>>>>>>> origin/231218
 .sign-login-h2 {
     text-align: center;
     font-weight: normal;
@@ -137,10 +140,15 @@ div.headerSection>div.formBox>form>input {
 div.headerSection>div.formBox>form>button {
     border-style: none;
     background-color: white;
+<<<<<<< HEAD
     cursor: pointer;
 }
 
 
+=======
+}
+
+>>>>>>> origin/231218
 div.headerSection>div.login{
     width: 200px;
     float: right;
@@ -223,7 +231,11 @@ nav ul.nav li:hover div input[class="menu-btn-chk"] {
     display: none;
 }
 
+<<<<<<< HEAD
 nav ul.nav li:hover div span {
+=======
+회 span {
+>>>>>>> origin/231218
     font-weight: bold;
 }
 
