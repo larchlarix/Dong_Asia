@@ -1,9 +1,9 @@
 
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:tr="http://www.thymeleaf.org" >
+<html xmlns:th="http://www.thymeleaf.org"  >
 <head>
-    <link rel="stylesheet" href="./style.css" type="text/css">
+    <link rel="stylesheet" href="/style.css" type="text/css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>뉴스 목록</title>
@@ -11,14 +11,14 @@
 <body>
 <header>
     <div id="logo">
-        <h1><a href="main.html">LOGO</a></h1>
-        <form action="">
-            <div class="search">
-                <input type="text" name="query" placeholder="뉴스 검색">
-                <img id="search-button" src="search.png" />
-                <img class="ques-icon" id="ques0" src="ques.png" />
-            </div>
-        </form>
+        <h1><a href>LOGO</a></h1>
+        <div class="search">
+            <form th:action="@{/news/search}" method="get">
+                <input type="text" name="keyword" placeholder="뉴스 검색" />
+                <button type="submit"><img class="search-button" src="/search.png" /></button>
+                <button type="button"><img class="ques-icon" id="ques0" src="/ques.png" /></button>
+            </form>
+        </div>
         <div id="login-button">
             <a href="login.html">로그인</a>&nbsp;&nbsp;&nbsp;<a href="signup.html">회원가입</a>
         </div>
@@ -85,14 +85,30 @@
             <th>일자</th>
             <th>언론사</th>
         </tr>
-        <tr th:each="news : ${newsList}">
-            <td th:text="${news.newsTitle}">제목</td>
-            <td th:text="${news.newsContents}">내용</td>
-            <td th:text="${news.newsDate}">일자</td>
-            <td th:text="${news.newsLink}">언론사</td>
-        </tr>
+
         </thead>
-        <tbody></tbody>
+        <tbody>
+        <tr th:each="news : ${newsList}">
+            <td>
+                <img th:src="${news.newsImageURL}" alt="뉴스 이미지" width="200" height="100" />
+            </td>
+            <td>
+              <a th:href="@{/news/{newsId}(newsId=${news.newsId})}" th:text="${news.newsTitle}">제목</a>
+            </td>
+            <td>
+                <p th:text="${news.newsContents}" th:utext="${#strings.abbreviate(news.newsContents, 100)}">내용</p>
+            </td>
+            <td th:text="${news.newsDate}">일자</td>
+            <td>
+                <span th:switch="${news.newsPublisher}">
+                    <span th:case="0">NHK</span>
+                  <span th:case="1">마이니치</span>
+                  <span th:case="2">아사히</span>
+                  <span th:case="3">산케이</span>
+                </span>
+            </td>
+        </tr>
+        </tbody>
     </table>
 
 

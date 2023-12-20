@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
-
+/*
 @Controller
-@RequestMapping("/translate")
+@RequestMapping("/")
 public class TranslateController {
 
     private final TranslateService translateService;
@@ -22,10 +22,10 @@ public class TranslateController {
     public String showTranslatePage(Model model) {
         // Thymeleaf에서의 null 이슈 방지를 위해 빈 문자열을 추가
         model.addAttribute("translatedSentence", "");
-        return "translate";
+        return "main";
     }
 
-    @GetMapping("/result")
+    @PostMapping
     public String getTranslatedSentence(@RequestParam String sentence, Model model) {
         try {
             String translatedSentence = translateService.getTranslatedSentence(sentence);
@@ -33,7 +33,8 @@ public class TranslateController {
         } catch (RuntimeException e) {
             model.addAttribute("translatedSentence", "번역 중 오류가 발생했습니다.");
         }
-        return "translate";
+        return "main";
     }
 }
 
+*/

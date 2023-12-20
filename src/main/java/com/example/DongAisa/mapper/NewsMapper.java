@@ -16,6 +16,9 @@ public class NewsMapper {
         newsDto.setNewsContents(news.getNewsContents());
         newsDto.setNewsDate(news.getNewsDate());
         newsDto.setNewsLink(news.getNewsLink());
+        newsDto.setNewsCategory(news.getNewsCategory());
+        newsDto.setNewsImageURL(news.getNewsImageURL());
+        newsDto.setNewsPublisher(news.getNewsPublisher());
         return newsDto;
 
     }
@@ -26,6 +29,9 @@ public class NewsMapper {
         news.setNewsContents(newsDto.getNewsContents());
         news.setNewsDate(newsDto.getNewsDate());
         news.setNewsLink(newsDto.getNewsLink());
+        news.setNewsCategory(newsDto.getNewsCategory());
+        news.setNewsImageURL(newsDto.getNewsImageURL());
+        news.setNewsPublisher(newsDto.getNewsPublisher());
         return  news;
     }
 

@@ -1,135 +1,316 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <link rel="stylesheet" href="/style.css">
+<meta charset="UTF-8">
 <body>
 
-<script>
-    function translate() {
-        // 입력창에서 텍스트 가져오기
-        var inputText = document.getElementById('inputText').value;
+<div class="translation-form">
+    <form th:action="@{/}" method="post" onsubmit="return translateAndSubmit()">
+        <label for="sentence">번역할 문장을 입력하세요:</label>
+        <input type="text" id="sentence" name="sentence" required>
+        <button type="submit">번역</button>
+    </form>
 
-        // Papago API로 번역 요청
-        fetch('/translate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: inputText, sourceLang: 'ko', targetLang: 'en' }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                // 번역 결과를 입력 상자에 표시
-                document.getElementById('inputText').value = data.translatedText;
-            })
-            .catch(error => console.error('Error:', error));
-    }
+    <div th:if="${translatedSentence != null and not #strings.isEmpty(translatedSentence)}">
 
-    function search() {
-        // 검색 폼 제출
-        document.getElementById('searchForm').submit();
-    }
-</script>
-
-<header>
-    <h2>한국에 대한 중국과 일본의 시각을 한눈에!</h2>
-    <h2>LOGO</h2>
-
-    <!-- ID 추가 -->
-    <input id="inputText" type="text" placeholder="텍스트를 입력해주세요">
-
-    <a href="/user/signup">회원 가입</a>
-    <a href="/user/login">로그인</a>
-
-    <!-- 번역 및 검색 버튼 분리 -->
-    <button type="button" onclick="translate()">번역</button>
-    <button type="button" onclick="search()">검색</button>
-</header>
-
-<script>
-    function translate() {
-        // 입력창에서 텍스트 가져오기
-        var inputText = document.getElementById('inputText').value;
-
-        // Papago API로 번역 요청
-        fetch('/translate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: inputText, sourceLang: 'ko', targetLang: 'en' }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                // 번역 결과를 입력 상자에 표시
-                document.getElementById('inputText').value = data.translatedText;
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-    function search() {
-        // 검색 폼 제출
-        document.getElementById('searchForm').submit();
-    }
-</script>
-
-<form id="searchForm" action="/news/search" method="GET">
-    <div class="search">
-        <input name="keyword" type="hidden" placeholder="검색어를 입력해주세요">
     </div>
-</form>
+</div>
+
+<div class="search-form">
+    <form th:action="@{/news/search}" method="get">
+        <label for="searchKeyword">검색할 키워드:</label>
+        <input type="text" id="searchKeyword" name="keyword" placeholder="뉴스 검색" th:value="${translatedSentence}" required>
+        <button type="submit">검색</button>
+    </form>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function translateAndSubmit() {
+        var sentenceInput = document.getElementById('sentence');
+        var translatedSentenceDiv = document.getElementById('translatedSentence');
+        var translatedSentence = translatedSentenceDiv.textContent.trim();
+
+        // 번역된 결과를 검색 상자에 설정
+        document.getElementById('searchKeyword').value = translatedSentence;
+
+        // 폼을 제출하여 페이지 이동을 막습니다.
+        return false;
+    }
+    /*]]>*/
+</script>
+
+
+<a href="/user/signup">회원 가입</a>
+<a href="/user/login">로그인</a>
+
+
 
 <nav>
-    <div><ul class="list">
-        <li><a href="/news">뉴스 보기</a></li>
-        <li><a href="Analysis.html">뉴스 분석</a></li>
-    </ul></div>
-
-    <ul class="list">
-        <li>국가</li>
-        <li>중국</li>
-        <li>일본</li>
-    </ul>
-    <ul class="list">
-        <li>주제</li>
-        <li>정치</li>
-        <li>사회 문화</li>
-        <li>스포츠</li>
-        <li>경제</li>
+    <ul class="nav">
+        <li><a th:href ="@{/news}">기사 보기</a>
+            <div><span>국가</span>
+                <input type="checkbox" class="menu-btn-chk" id="japan">
+                <label class="menu-btn-label" for="japan">일본</label>
+                <input type="checkbox" class="menu-btn-chk" id="china">
+                <label class="menu-btn-label" for="china">중국</label>
+                <br>
+                <br>
+                <span>주제</span>
+                <input type="checkbox" class="menu-btn-chk" id="economics">
+                <label class="menu-btn-label" for="economics">경제</label>
+                <input type="checkbox" class="menu-btn-chk" id="politics">
+                <label class="menu-btn-label" for="politics">정치</label>
+                <input type="checkbox" class="menu-btn-chk" id="culture">
+                <label class="menu-btn-label" for="culture">사회 문화</label>
+                <input type="checkbox" class="menu-btn-chk" id="sports">
+                <label class="menu-btn-label" for="sports">스포츠</label>
+                <br>
+                <br>
+                <span>일본 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="nikkei">
+                <label class="menu-btn-label" for="nikkei">닛케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="mainichi">
+                <label class="menu-btn-label" for="mainichi">마이니치</label>
+                <input type="checkbox" class="menu-btn-chk" id="sankei">
+                <label class="menu-btn-label" for="sankei">산케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="asahi">
+                <label class="menu-btn-label" for="asahi">아사히</label>
+                <input type="checkbox" class="menu-btn-chk" id="yomiuri">
+                <label class="menu-btn-label" for="yomiuri">요미우리</label>
+                <input type="checkbox" class="menu-btn-chk" id="nhk">
+                <label class="menu-btn-label" for="nhk">NHK</label>
+                <br>
+                <br>
+                <span>중국 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="jp">
+                <label class="menu-btn-label" for="jp">인민일보</label>
+                <br>
+                <button type="submit">조회</button>
+            </div>
+        </li>
+        <li><a href="analysis.html">기사 분석</a></li>
     </ul>
 </nav>
 
-<h1>뉴스 목록</h1>
 
-<div th:if="${newsList.isEmpty()}">
-    <p>뉴스가 없습니다.</p>
-</div>
+<div id="section-wrap">
 
-<div th:each="news, iterStat : ${newsList}">
-    <div>제목: <span th:text="${news.newsTitle}"></span></div>
+    <br>
+    <div id="weekly-keyword">
+        <div id="selcnt1" onclick="ChangeImg()">
+            <img class="jp-button" src="/japan.jpeg" />
+            <img class="exch-button" src="/exchange-arrow.png" />
+            <img class="cn-button" src="/china.jpeg" />
+        </div>
 
-    <div>
-        <!-- newsId를 기반으로 링크 생성 -->
-        <a th:href="@{'/news/' + ${news.newsId}}">뉴스 상세페이지로 이동</a>
-    </div>
-    <hr>
-</div>
-<div class="GoToOrgin">
-    <p style="">원문 바로 가기</p>
-    <img src="/ques.png" alt="q-mark" />
-    <div id="jpmedia">
-        <ul class="list">
-            <li><a href="https://www.yomiuri.co.jp/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/yomiuri.png" alt="yomiuri" /><br>요미우리</a></li>
-            <li><a href="https://www3.nhk.or.jp/news/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/nhk.png" alt="nhk" /><br>NHK</a></li>
-            <li><a href="https://www.nikkei.com/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/nikkei.png" alt="nikkei" /><br>닛케이</a></li>
+        <img id="la1" src="/left-arrow.png" />
+        <h4 class="section-title">일본 주간 키워드</h4>
+        <img class="ques-icon" id="ques1" src="/ques.png" />
+        <!-- '?' img -->
+        <p>2023.10.02 ~ 2023.10.08</p>
+
+        <ul>
+            <li>
+                <div class="keyword">
+                    아시안 게임
+                </div>
+                <div class="num">
+                    574건
+                </div>
+            </li>
+            <li class="even">
+                <div class="keyword">
+                    김정은
+                </div>
+                <div class="num">
+                    496건
+                </div>
+            </li>
+            <li>
+                <div class="keyword">
+                    한류 드라마
+                </div>
+                <div class="num">
+                    368건
+                </div>
+            </li>
+            <li class="even">
+                <div class="keyword">
+                    아이돌
+                </div>
+                <div class="num">
+                    297건
+                </div>
+            </li>
+            <li>
+                <div class="keyword">
+                    한일관계
+                </div>
+                <div class="num">
+                    253건
+                </div>
+            </li>
         </ul>
-        <ul class="list">
-            <li><a href="https://mainichi.jp/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/mainichi.png" alt="mainichi" /><br>마이니치</a></li>
-            <li><a href="https://www.asahi.com/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/asahi.png" alt="asahi" /><br>아사히</a></li>
-            <li><a href="https://www.sankei.com/" target="_blank" rel="noopener noreferrer"><img class="mediaicon" src="/sankei.png" alt="sankei" /><br>산케이</a></li>
-        </ul>
+    </div>
+
+    <div id="recent-news">
+        <div id="selcnt2">
+            <img class="jp-button" src="/japan.jpeg" />
+            <img class="exch-button" src="/exchange-arrow.png" />
+            <img class="cn-button" src="/china.jpeg" />
+        </div>
+
+        <h4 class="section-title">일본 최신 뉴스</h4>
+        <img id="la2" src="/left-arrow.png" />
+        <img class="ques-icon" id="ques2" src="/ques.png" />
+        <a id="translate-button">번역</a>
+
+        <div id="four-news">
+            <div th:if="${newsList != null and not #lists.isEmpty(newsList)}">
+                <div th:with="filteredNews=${newsList.?[newsPublisher == 2]}">
+                    <!-- 필터된 뉴스가 비어 있지 않은지 확인 -->
+                    <div th:if="${not #lists.isEmpty(filteredNews)}">
+                        <!-- 첫 번째 publisher가 2인 뉴스 표시 -->
+                        <div class="one-news">
+                            <img class="news-img" th:src="${filteredNews[0].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
+                            <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[0].newsId})}" th:text="${filteredNews[0].newsTitle}"></a></h5>
+                            <img class="small-icon" src="/asahi.png" />
+                            <p class="publisher">아사히</p>
+                            <p class="one-news-date" th:text="${filteredNews[0].newsDate}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div th:with="filteredNews=${newsList.?[newsPublisher == 0]}">
+                    <!-- 필터된 뉴스가 비어 있지 않은지 확인 -->
+                    <div th:if="${not #lists.isEmpty(filteredNews)}">
+                        <!-- 첫 번째 publisher가 0인 뉴스 표시 -->
+                        <div class="one-news">
+                            <img class="news-img" th:src="${filteredNews[2].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
+                            <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[2].newsId})}" th:text="${filteredNews[2].newsTitle}"></a></h5>
+                            <img class="small-icon" src="/nhk.png" />
+                            <p class="publisher">NHK</p>
+                            <p class="one-news-date" th:text="${filteredNews[2].newsDate}"></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- newsPublisher가 3인 아이템만 필터링 -->
+                <div th:with="filteredNews=${newsList.?[newsPublisher == 3]}">
+                    <!-- 필터된 뉴스가 비어 있지 않은지 확인 -->
+                    <div th:if="${not #lists.isEmpty(filteredNews)}">
+                        <!-- 첫 번째 publisher가 3인 뉴스 표시 -->
+                        <div class="one-news">
+                            <img class="news-img" th:src="${filteredNews[1].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
+                            <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[1].newsId})}" th:text="${filteredNews[1].newsTitle}"></a></h5>
+                            <img class="small-icon" src="/sankei.png" />
+                            <p class="publisher">산케이</p>
+                            <p class="one-news-date" th:text="${filteredNews[1].newsDate}"></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- newsPublisher가 1인 아이템만 필터링 -->
+                <div th:with="filteredNews=${newsList.?[newsPublisher == 1]}">
+                    <!-- 필터된 뉴스가 비어 있지 않은지 확인 -->
+                    <div th:if="${not #lists.isEmpty(filteredNews)}">
+                        <!-- 첫 번째 publisher가 1인 뉴스 표시 -->
+                        <div class="one-news">
+                            <img class="news-img" th:src="${filteredNews[2].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
+                            <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[2].newsId})}" th:text="${filteredNews[2].newsTitle}"></a></h5>
+                            <img class="small-icon" src="/mainichi.png" />
+                            <p class="publisher">마이니치</p>
+                            <p class="one-news-date" th:text="${filteredNews[2].newsDate}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <a id="more-button" th:href="@{/news}">최신 뉴스 더보기</a>
+    </div>
+
+    <div id="go-to-websites">
+        <h4 class="section-title">원문 바로가기</h4>
+        <img class="ques-icon" id="ques3" src="/ques.png" />
+
+        <div class="six-icons" id="si1">
+            <div class="one-icon">
+                <a href="https://www.yomiuri.co.jp/" target="_blank">
+                    <img class="icon" src="/yomiuri.png" />
+                </a>
+                <p class="icon-pub">요미우리</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.nhk.or.jp/" targer="_blank">
+                    <img class="icon" src="/nhk.png" />
+                </a>
+                <p class="icon-pub">NHK</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.nikkei.com/" target="_blank">
+                    <img class="icon" src="/nikkei.png" /></a>
+                <p class="icon-pub">닛케이</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://mainichi.jp/" target="_blank">
+                    <img class="icon" src="/mainichi.png" /></a>
+                <p class="icon-pub">마이니치</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.asahi.com/" target="_blank">
+                    <img class="icon" src="/asahi.png" /></a>
+                <p class="icon-pub">아사히</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.sankei.com/" target="_blank">
+                    <img class="icon" src="/sankei.png" /></a>
+                <p class="icon-pub">산케이</p>
+            </div>
+        </div>
+        <div id="icon-line"></div>
+
+        <div class="six-icons" id="si2">
+            <div class="one-icon">
+                <a href="www.peopledaily.com.cn" target="_blank">
+                    <img class="icon" src="/inmin.png" /></a>
+                <p class="icon-pub">인민일보</p>
+            </div>
+            <div class="one-icon">
+                <a href="http://www.bjnews.com.cn/" target="_blank">
+                    <img class="icon" src="/shinkyungbo.png" /></a>
+                <p class="icon-pub">신경보</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.huanqiu.com/" target="_blank">
+                    <img class="icon" src="/hwangu.png" /></a>
+                <p class="icon-pub">환구시보</p>
+            </div>
+            <div class="one-icon">
+                <a href="http://global.chinadaily.com.cn/" target="_blank">
+                    <img class="icon" src="/jungguk.png" /></a>
+                <p class="icon-pub">중국일보</p>
+            </div>
+            <div class="one-icon">
+                <a href="http://www.cyol.net/" target="_blank">
+                    <img class="icon" src="/junggukchungnyun.png" /></a>
+                <p class="icon-pub">중국청년보</p>
+            </div>
+            <div class="one-icon">
+                <a href="http://www.cankaoxiaoxi.com/" target="_blank">
+                    <img class="icon" src="/chamgo.png" /></a>
+                <p class="icon-pub">참고소식</p>
+            </div>
+        </div>
+
     </div>
 </div>
-<footer>
+
+<br>
+
+<footer id="footer">
     <div><h2>LOGO</h2>
         <span>팀 동아시아 제작</span>
         <span></span>
@@ -137,6 +318,7 @@
 </footer>
 </body>
 </html>
+
 
 
 

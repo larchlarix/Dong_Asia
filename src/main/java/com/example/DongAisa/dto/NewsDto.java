@@ -10,6 +10,12 @@ public class NewsDto {
 
     String newsLink;
 
+    Long newsCategory;
+
+    String newsImageURL;
+
+    Long newsPublisher;
+
     public Long getNewsId() {
         return newsId;
     }
@@ -48,5 +54,31 @@ public class NewsDto {
 
     public void setNewsLink(String newsLink) {
         this.newsLink = newsLink;
+    }
+
+    public Long getNewsCategory() {
+        return newsCategory;
+    }
+
+    public void setNewsCategory(Long newsCategory) {
+        this.newsCategory = newsCategory;
+    }
+
+
+
+    public Long getNewsPublisher() {
+        return newsPublisher;
+    }
+
+    public void setNewsPublisher(Long newsPublisher) {
+        this.newsPublisher = newsPublisher;
+    }
+
+    public String getNewsImageURL() {
+        return newsImageURL;
+    }
+
+    public void setNewsImageURL(String newsImageURL) {
+        this.newsImageURL = newsImageURL;
     }
 }

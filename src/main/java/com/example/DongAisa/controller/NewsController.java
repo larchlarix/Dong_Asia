@@ -106,12 +106,14 @@ public class NewsController {
 
  */
 @RequestMapping(value = "/search", method = RequestMethod.GET)
-public String search(@RequestParam(value = "keyword") String keyword,
-                     @RequestParam(value = "language", defaultValue = "en") String language,
-                     Model model) {
-    List<NewsDto> newsDtoList = newsService.searchNews(keyword, language);
+public String search(@RequestParam(value = "keyword") String keyword, Model model){
+    // 로그 추가
+    System.out.println("Search keyword: " + keyword);
+    List<NewsDto> newsDtoList = newsService.searchNews(keyword);
     model.addAttribute("newsList", newsDtoList);
-    return "listtt";
+    return "list";
 }
+
+
 
 }
