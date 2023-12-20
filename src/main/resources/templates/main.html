@@ -3,6 +3,11 @@
 <link rel="stylesheet" href="./style.css">
 <meta charset="UTF-8">
 <body>
+<script>
+    <!--국가 이미지 변경 스크립트-->
+
+
+</script>
 
 <script>
     function translate() {
@@ -38,17 +43,22 @@
     <div class="logo">LOGO</div>
     <div class="formBox">
         <form action="/" method="post">
-            <input id="inputText" type="text" name="query" placeholder="뉴스 검색">
+            <input id="inputText" type="text" name="query" placeholder="뉴스 검색" onclick="translate()">
             <!-- 번역 및 검색 버튼 분리 -->
-            <button type="button" onclick="translate()">번역</button>
-            <button type="button" onclick="search()"><img class="search-button" src="search.png" /></button>
-            <button type="button"><img class="ques-icon" id="ques0" src="ques.png" /></button>
+            <button type="button" class="translate-btn">번역</button>
+            <button type="button" onclick="search()"><img class="search-button" src="/search.png" /></button>
+            <button type="button"><img class="ques-icon" id="ques0" src="/ques.png" /></button>
         </form>
     </div>
     <div class="login"><a class="login" href="login.html">로그인</a>&nbsp;&nbsp;&nbsp;<a class="signin" href="signup.html">회원가입</a></div>
 </div>
-
+<form id="searchForm" action="/news/search" method="GET">
+    <div class="search">
+        <input name="keyword" type="hidden" placeholder="검색어를 입력해주세요">
+    </div>
+</form>
 <script>
+    const translateBtn= document.querySelector('.translate-btn');
     function translate() {
         // 입력창에서 텍스트 가져오기
         var inputText = document.getElementById('inputText').value;
@@ -75,11 +85,7 @@
     }
 </script>
 
-<form id="searchForm" action="/news/search" method="GET">
-    <div class="search">
-        <input name="keyword" type="hidden" placeholder="검색어를 입력해주세요">
-    </div>
-</form>
+
 
 <nav>
     <ul class="nav">
@@ -150,15 +156,15 @@
 
     <br>
     <div id="weekly-keyword">
-        <div id="selcnt1" onclick="ChangeImg()">
-            <img class="jp-button" src="../static/japan.jpeg" />
-            <img class="exch-button" src="../static/exchange-arrow.png" />
-            <img class="cn-button" src="../static/china.jpeg" />
+        <div id="selcnt1">
+            <button type="button" id="jpFlagBtn" onclick="changeImg()"><img class="jp-button" src="../static/japan.jpeg" /></button>
+            <img class="exch-button" src="/exchange-arrow.png" />
+            <img class="cn-button" src="/china.jpeg" />
         </div>
 
-        <img id="la1" src="../static/left-arrow.png" />
+        <img id="la1" src="/left-arrow.png" />
         <h4 class="section-title">일본 주간 키워드</h4>
-        <img class="ques-icon" id="ques1" src="../static/ques.png" />
+        <img class="ques-icon" id="ques1" src="/ques.png" />
         <!-- '?' img -->
         <p>2023.10.02 ~ 2023.10.08</p>
 
@@ -208,42 +214,42 @@
 
     <div id="recent-news">
         <div id="selcnt2">
-            <img class="jp-button" src="../static/japan.jpeg" />
-            <img class="exch-button" src="../static/exchange-arrow.png" />
-            <img class="cn-button" src="../static/china.jpeg" />
+            <img class="jp-button" src="/japan.jpeg" />
+            <img class="exch-button" src="/exchange-arrow.png" />
+            <img class="cn-button" src="/china.jpeg" />
         </div>
 
         <h4 class="section-title">일본 최신 뉴스</h4>
-        <img id="la2" src="../static/left-arrow.png" />
-        <img class="ques-icon" id="ques2" src="../static/ques.png" />
+        <img id="la2" src="/left-arrow.png" />
+        <img class="ques-icon" id="ques2" src="/ques.png" />
         <a id="translate-button">번역</a>
 
         <div id="four-news">
             <div class="one-news">
-                <img class="news-img" src="../static/news1.png" />
+                <img class="news-img" src="/news1.png" />
                 <h5>ジャニーズ再出発に識者「あれは演者の会見だった」 TVもコメント</h5>
-                <img class="small-icon" src="../static/asahi.png" />
+                <img class="small-icon" src="/asahi.png" />
                 <p class="publisher">아사히</p>
                 <p class="one-news-date">2023.10.08 21:23</p>
             </div>
             <div class="one-news">
-                <img class="news-img" src="img/news2.png" />
+                <img class="news-img" src="/news2.png" />
                 <h5>見捨てられる恐怖に突き動かされたハマス イスラエルは甘く見ていた</h5>
-                <img class="small-icon" src="../static/sankei.png" />
+                <img class="small-icon" src="/sankei.png" />
                 <p class="publisher">산케이</p>
                 <p class="one-news-date">2023.10.08 12:45</p>
             </div>
             <div class="one-news">
-                <img class="news-img" src="src/main/resource/static/news3.png" />
+                <img class="news-img" src="news3.png" />
                 <h5>訪ロの鈴木宗男参院議員「処分に反対も抵抗もしない」 札幌市で会見</h5>
-                <img class="small-icon" src="../static/nhk.png" />
+                <img class="small-icon" src="/nhk.png" />
                 <p class="publisher">NHK</p>
                 <p class="one-news-date">2023.10.08 11:12</p>
             </div>
             <div class="one-news">
-                <img class="news-img" src="img/news4.png" />
+                <img class="news-img" src="news4.png" />
                 <h5>鉄棒で橋本大輝が初優勝 大会3冠 平行棒の杉本は銅 世界体操</h5>
-                <img class="small-icon" src="../static/mainichi.png" />
+                <img class="small-icon" src="/mainichi.png" />
                 <p class="publisher">마이니치</p>
                 <p class="one-news-date">2023.10.08 07:24</p>
             </div>
@@ -253,24 +259,24 @@
 
     <div id="go-to-websites">
         <h4 class="section-title">원문 바로가기</h4>
-        <img class="ques-icon" id="ques3" src="../static/ques.png" />
+        <img class="ques-icon" id="ques3" src="/ques.png" />
 
         <div class="six-icons" id="si1">
             <div class="one-icon">
                 <a href="https://www.yomiuri.co.jp/" target="_blank">
-                    <img class="icon" src="../static/yomiuri.png" />
+                    <img class="icon" src="/yomiuri.png" />
                 </a>
                 <p class="icon-pub">요미우리</p>
             </div>
             <div class="one-icon">
                 <a href="https://www.nhk.or.jp/" targer="_blank">
-                    <img class="icon" src="../static/nhk.png" />
+                    <img class="icon" src="/nhk.png" />
                 </a>
                 <p class="icon-pub">NHK</p>
             </div>
             <div class="one-icon">
                 <a href="https://www.nikkei.com/" target="_blank">
-                    <img class="icon" src="../static/nikkei.png" /></a>
+                    <img class="icon" src="/nikkei.png" /></a>
                 <p class="icon-pub">닛케이</p>
             </div>
             <div class="one-icon">
@@ -280,12 +286,12 @@
             </div>
             <div class="one-icon">
                 <a href="https://www.asahi.com/" target="_blank">
-                    <img class="icon" src="../static/asahi.png" /></a>
+                    <img class="icon" src="/asahi.png" /></a>
                 <p class="icon-pub">아사히</p>
             </div>
             <div class="one-icon">
                 <a href="https://www.sankei.com/" target="_blank">
-                    <img class="icon" src="../static/sankei.png" /></a>
+                    <img class="icon" src="/sankei.png" /></a>
                 <p class="icon-pub">산케이</p>
             </div>
         </div>
@@ -294,32 +300,32 @@
         <div class="six-icons" id="si2">
             <div class="one-icon">
                 <a href="www.peopledaily.com.cn" target="_blank">
-                    <img class="icon" src="../static/inmin.png" /></a>
+                    <img class="icon" src="/inmin.png" /></a>
                 <p class="icon-pub">인민일보</p>
             </div>
             <div class="one-icon">
                 <a href="http://www.bjnews.com.cn/" target="_blank">
-                    <img class="icon" src="../static/shinkyungbo.png" /></a>
+                    <img class="icon" src="/shinkyungbo.png" /></a>
                 <p class="icon-pub">신경보</p>
             </div>
             <div class="one-icon">
                 <a href="https://www.huanqiu.com/" target="_blank">
-                    <img class="icon" src="../static/hwangu.png" /></a>
+                    <img class="icon" src="/hwangu.png" /></a>
                 <p class="icon-pub">환구시보</p>
             </div>
             <div class="one-icon">
                 <a href="http://global.chinadaily.com.cn/" target="_blank">
-                    <img class="icon" src="../static/jungguk.png" /></a>
+                    <img class="icon" src="/jungguk.png" /></a>
                 <p class="icon-pub">중국일보</p>
             </div>
             <div class="one-icon">
                 <a href="http://www.cyol.net/" target="_blank">
-                    <img class="icon" src="../static/junggukchungnyun.png" /></a>
+                    <img class="icon" src="/junggukchungnyun.png" /></a>
                 <p class="icon-pub">중국청년보</p>
             </div>
             <div class="one-icon">
                 <a href="http://www.cankaoxiaoxi.com/" target="_blank">
-                    <img class="icon" src="../static/chamgo.png" /></a>
+                    <img class="icon" src="/chamgo.png" /></a>
                 <p class="icon-pub">참고소식</p>
             </div>
         </div>
