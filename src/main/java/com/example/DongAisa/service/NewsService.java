@@ -41,7 +41,7 @@ public class NewsService {
         List<News> news;
 
         if (Objects.equals(sort, "byDate")) {
-            news = newsRepository.findByNewsTitleContainingOrderByNewsDateAsc(keyword);
+            news = newsRepository.findByNewsTitleContainingOrderByNewsDateDesc(keyword);
         } else {
             throw new IllegalArgumentException("알 수 없는 정렬 기준입니다");
         }
@@ -59,8 +59,8 @@ public class NewsService {
     }
 
      */
-    public List<NewsDto> searchNews(String keyword, String language) {
-
+    public List<NewsDto> searchNews(String keyword) {
+        System.out.println("Processing search for keyword: " + keyword);
 
         // 뉴스 검색
         List<News> news = newsRepository.findByNewsTitleContaining(keyword);
@@ -70,5 +70,7 @@ public class NewsService {
 
         return newsDtoList;
     }
+
+
 
 }

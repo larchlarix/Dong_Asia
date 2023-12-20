@@ -1,18 +1,25 @@
 package com.example.DongAisa.controller;
 
 import com.example.DongAisa.service.MyWebClientService;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import reactor.core.publisher.Mono;
 
 import java.util.Base64;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class MyController {
 
     private final MyWebClientService webClientService;
+
+    private static final Logger logger = LoggerFactory.getLogger(MyController.class);
 
     public MyController(MyWebClientService webClientService) {
         this.webClientService = webClientService;
@@ -25,32 +32,35 @@ public class MyController {
                 .doOnNext(response -> model.addAttribute("jsonData", response))
                 .thenReturn("jsonView");
     }
-
     @GetMapping("/showImageData")
     public Mono<String> showImageData(Model model) {
         return webClientService.fetchImageDataFromFlaskServer()
-                .doOnNext(response -> handleImageResponse(response, model))
-                .thenReturn("imageView");
+                .map(imageData -> {
+                    String base64Image = Base64.getEncoder().encodeToString(imageData);
+                    model.addAttribute("base64Image", base64Image);
+                    return "imageView"; // Assuming "imageView" is the name of your view template
+                })
+                .doOnSuccess(response -> logger.info("Successfully retrieved and displayed the image"))
+                .defaultIfEmpty("imageNotFound");
     }
 
-    private static void handleImageResponse(String response, Model model) {
-        System.out.println("Received response in handleImageResponse: " + response);
-
-        try {
-            // 이미지를 Base64에서 디코딩
-            byte[] imageBytes = Base64.getDecoder().decode(response);
-
-            // 디코딩된 이미지 데이터를 모델에 추가하여 템플릿에서 사용할 수 있도록 함
-            model.addAttribute("imageData", imageBytes);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            // 추가 로깅 또는 오류 처리를 수행하세요.
-        }
+    /*
+    @GetMapping("/showImageData")
+    public Mono<ResponseEntity<ByteArrayResource>> showImage(Model model) {
+        return webClientService.fetchImageDataFromFlaskServer()
+                .map(imageData -> new ByteArrayResource(imageData))
+                .map(resource -> ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(resource))
+                .doOnSuccess(response -> logger.info("Successfully retrieved and displayed the image"))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
+*/
 
     private static void handleResponse(String response) {
         System.out.println("Received response in handleResponse: " + response);
     }
 }
+
+
+
 
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long> {
-    List<News> findByNewsTitleContainingOrderByNewsDateAsc(String Keyword);
+    List<News> findByNewsTitleContainingOrderByNewsDateDesc(String Keyword);
     List<News> findByNewsTitleContaining(String Keyword);
 
 }

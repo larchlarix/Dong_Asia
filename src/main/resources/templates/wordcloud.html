@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet">
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div id="myChart"></div>
+
+<script>
+    zingchart.MODULESDIR = 'https://cdn.zingchart.com/modules/';
+
+
+    //워드클라우드 환경설정
+    var myConfig = {
+        type: 'wordcloud',
+        options: {
+            words: [
+                {
+                    text: "아시안게임",
+                    count: 80
+                },
+                {
+                    text: "삼성",
+                    count: 70
+                },
+                {
+                    text: "정부",
+                    count: 60
+                },
+                {
+                    text: "문체부",
+                    count: 50
+                },
+                {
+                    text: "손흥민",
+                    count: 40
+                },
+                {
+                    text: "양궁",
+                    count: 30
+                },
+                {
+                    text: "은메달",
+                    count: 20
+                },
+                {
+                    text: "수영",
+                    count: 10
+                },
+                {
+                    text: "우승",
+                    count: 25
+                },
+                {
+                    text: "북한",
+                    count: 8
+                },
+                {
+                    text: "카카오",
+                    count: 5
+                },
+                {
+                    text: "동메달",
+                    count: 24
+                },
+                {
+                    text: "금메달",
+                    count: 35
+                },
+                {
+                    text: "CJ E&M",
+                    count: 16
+                },
+            ],
+            minLength: 5,
+            ignore: [""],
+            maxItems: 40,
+            aspect: 'spiral', // 'flow-top' | 'flow-center'
+
+            colorType: 'palette',
+            palette: ['#D32F2F', '#5D4037', '#1976D2', '#E53935', '#6D4C41', '#1E88E5', '#F44336', '#795548', '#2196F3', '#EF5350', '#8D6E63', '#42A5F5'],
+
+            style: {
+                fontFamily: 'Crete Round',
+
+                hoverState: {
+                    backgroundColor: '#D32F2F',
+                    borderRadius: 2,
+                    fontColor: 'white'
+                },
+                tooltip: {
+                    text: '%text: %hits',
+                    visible: true,
+                    alpha: 0.9,
+                    backgroundColor: '#1976D2',
+                    borderRadius: 2,
+                    borderColor: 'none',
+                    fontColor: 'white',
+                    fontFamily: 'Georgia',
+                    textAlpha: 1
+                }
+            }
+        },
+
+        source: {
+            //text: '--President Barack Obama<br> Selma 50th anniversary speech<br>March 7, 2015',
+            //Source: https://obamawhitehouse.archives.gov/the-press-office/2015/03/07/remarks-president-50th-anniversary-selma-montgomery-marches
+            fontColor: '#64B5F6',
+            fontSize: 10,
+            fontFamily: 'Georgia',
+            fontWeight: 'normal',
+            marginBottom: '10%'
+        }
+    };
+
+    //워드클라우드 렌더링
+    zingchart.render({
+        id: 'myChart',
+        data: myConfig,
+        height: 400,
+        width: '100%'
+    });
+
+</script>
+</body>
+</html>

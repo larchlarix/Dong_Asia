@@ -22,11 +22,22 @@ public class News {
     @Column(name= "news_date", unique = false, nullable = true)
     private String newsDate;
 
-    @Column(name="news_contents", unique = true, nullable = false)
+    @Column(name="news_contents", unique = true, nullable = false,columnDefinition = "TEXT")
     private String newsContents;
 
     @Column(name = "news_link",unique = true,nullable = true)
     private String newsLink;
+
+    @Column(name = "news_category", unique = false, nullable = true)
+    private Long newsCategory;
+
+
+    @Column(name="news_publisher", unique=false, nullable = true)
+    private Long newsPublisher;
+
+
+    @Column(name="news_image_url", unique=false, nullable=true)
+    private String newsImageURL;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "news", cascade = CascadeType.ALL)
     private List<User> user;
@@ -38,6 +49,7 @@ public class News {
     public void setUser(List<User> user) {
         this.user = user;
     }
+
 
     public News(){};
 
@@ -81,6 +93,28 @@ public class News {
 
     public void setNewsLink(String newsLink) {
         this.newsLink = newsLink;
+    }
+
+    public Long getNewsCategory() {
+        return newsCategory;
+    }
+
+    public void setNewsCategory(Long newsCategory) {
+        this.newsCategory = newsCategory;
+    }
+
+    public Long getNewsPublisher() {return newsPublisher; }
+
+    public void setNewsPublisher(Long newsPublisher) {
+        this.newsPublisher = newsPublisher;
+    }
+
+    public String getNewsImageURL() {
+        return newsImageURL;
+    }
+
+    public void setNewsImageURL(String newsImageURL) {
+        this.newsImageURL = newsImageURL;
     }
 
 }
