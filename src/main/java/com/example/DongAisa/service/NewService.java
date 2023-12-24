@@ -1,12 +1,47 @@
 package com.example.DongAisa.service;
 
+import com.example.DongAisa.FormData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 @Service
 public class NewService {
-    public String processFormData(String id, String password, String email) {
-        // 여기에 실제로 필요한 비즈니스 로직을 추가
-        // 예제에서는 받은 데이터를 그대로 반환하도록 했습니다.
-        return "ID: " + id + ", Password: " + password + ", Email: " + email;
+
+    @Value("${flask.url}")
+    private String flaskUrl;
+
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public NewService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
+
+public ResponseEntity<String> sendDataToFlask(FormData formData) {
+
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    HttpEntity<FormData> requestEntity = new HttpEntity<>(formData, headers);
+
+    ResponseEntity<String> responseEntity = restTemplate.postForEntity(flaskUrl+"/processData", requestEntity, String.class);
+
+    return ResponseEntity.ok(responseEntity.getBody());
+}
+/*
+    public String processFormData(String formData) {
+        // 받은 데이터를 Flask 서버에 전송
+        String response = restTemplate.postForObject(flaskUrl + "/your-endpoint", formData, String.class);
+
+        // 받은 응답을 그대로 반환
+        return response;
+    }
+
+ */
 }

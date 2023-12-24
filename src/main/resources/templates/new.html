@@ -8,36 +8,38 @@
 <body>
 
 <div id="example">AJAX
-<input type="text" id="id1" placeholder="id">
-<input type="text" id="password1" placeholder="password">
-<input type="text" id="email1" placeholder="email">
-<input type="button" id="execute" value="execute">
+    <input type="text" id="id1" placeholder="id">
+    <input type="text" id="password1" placeholder="password">
+    <button id="execute">execute</button> <!-- input type을 button으로 변경 -->
+
+    <!-- 결과를 표시할 영역 추가 -->
+    <div id="result"></div>
 </div>
 
 <script>
     $('#execute').click(function(){
         var id = $('#id1').val();
         var password = $('#password1').val();
-        var email = $('#email1').val();
 
         var postdata = {
-            'id':id, 'password':password, 'email':email
-        }
+            'id': id, 'password': password
+        };
+
         $.ajax({
-            type: 'GET',
-            url: 'http://localhost:5000/new_f',
+            type: 'POST',
+            url: '/processForm',
             data: JSON.stringify(postdata),
-            dataType : 'JSON',
             contentType: "application/json",
             success: function(data){
-                alert('성공! 데이터 값:' + data.result2['id']+" " + data.result2['password']+ " " + data.result2['email'])
+                // 서버에서 받은 데이터를 동적으로 표시
+                $('#result').html('성공! 데이터 값:' + data);
             },
             error: function(request, status, error){
-                alert('ajax 통신 실패')
+                alert('AJAX 통신 실패');
                 alert(error);
             }
-        })
-    })
+        });
+    });
 </script>
 
 </body>
