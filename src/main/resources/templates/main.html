@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:>
 <link rel="stylesheet" href="/style.css">
 <meta charset="UTF-8">
 <body>
@@ -24,6 +24,12 @@
     </form>
 </div>
 
+
+<div>
+    <h2>Flask 응답: <span id="displayFlaskResponse" th:text="${flaskResponse}"></span></h2>
+    <button type="button" onclick="sendRequestToFlask()">데이터 Flask로 전송</button>
+</div>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
     function translateAndSubmit() {
@@ -38,6 +44,31 @@
         return false;
     }
     /*]]>*/
+</script>
+
+
+<script th:inline="javascript">
+    function sendRequestToFlask() {
+        // Ajax를 사용하여 Flask로 요청 보내기
+        $.ajax({
+            type: 'POST',  // 또는 GET, 요청 방식에 따라 수정
+            url: '/sendDataToFlask',  // 실제 엔드포인트로 대체해야 합니다.
+            success: function(response) {
+                // 서버 응답을 표시
+                updateFlaskResponse(response);
+            },
+            error: function() {
+                // 오류 처리
+                console.error('Failed to send request to Flask.');
+            }
+        });
+    }
+
+    // Flask 응답을 업데이트하는 함수
+    function updateFlaskResponse(response) {
+        var displayElement = document.getElementById('displayFlaskResponse');
+        displayElement.innerText = response;
+    }
 </script>
 
 

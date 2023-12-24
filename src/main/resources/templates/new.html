@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>new flask spring</title>
+</head>
+<body>
+
+<div id="example">AJAX
+<input type="text" id="id1" placeholder="id">
+<input type="text" id="password1" placeholder="password">
+<input type="text" id="email1" placeholder="email">
+<input type="button" id="execute" value="execute">
+</div>
+
+<script>
+    $('#execute').click(function(){
+        var id = $('#id1').val();
+        var password = $('#password1').val();
+        var email = $('#email1').val();
+
+        var postdata = {
+            'id':id, 'password':password, 'email':email
+        }
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:5000/new_f',
+            data: JSON.stringify(postdata),
+            dataType : 'JSON',
+            contentType: "application/json",
+            success: function(data){
+                alert('성공! 데이터 값:' + data.result2['id']+" " + data.result2['password']+ " " + data.result2['email'])
+            },
+            error: function(request, status, error){
+                alert('ajax 통신 실패')
+                alert(error);
+            }
+        })
+    })
+</script>
+
+</body>
+</html>

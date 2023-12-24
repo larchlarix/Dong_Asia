@@ -6,10 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Base64;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class MyController {
     public MyController(MyWebClientService webClientService) {
         this.webClientService = webClientService;
     }
-
+/*
     @GetMapping("/showJsonData")
     public Mono<String> showJsonData(Model model) {
         return webClientService.fetchDataFromFlaskServer()
@@ -32,6 +33,31 @@ public class MyController {
                 .doOnNext(response -> model.addAttribute("jsonData", response))
                 .thenReturn("jsonView");
     }
+
+ */
+
+    @RequestMapping(value = "/sendDataToFlask", method = {RequestMethod.POST, RequestMethod.GET})
+    public Mono<String> sendDataToFlask(Model model) {
+        return webClientService.sendDataToFlask("Hello, Flask!")
+                .flatMap(flaskResponse -> {
+                    model.addAttribute("flaskResponse", flaskResponse);
+                    return Mono.just("sendData");
+                });
+    }
+
+    @RequestMapping(value = "/sendResponseToFlask", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Mono<String> sendResponseToFlask(@RequestParam String responseData) {
+        String responseBody = "Response from Spring Boot: Data received successfully!";
+        return webClientService.sendDataToFlask(responseBody);
+    }
+
+    private void handleResponse(String response) {
+        System.out.println("Response from Flask server: " + response);
+    }
+
+/*
+
     @GetMapping("/showImageData")
     public Mono<String> showImageData(Model model) {
         return webClientService.fetchImageDataFromFlaskServer()
@@ -44,6 +70,8 @@ public class MyController {
                 .defaultIfEmpty("imageNotFound");
     }
 
+ */
+
     /*
     @GetMapping("/showImageData")
     public Mono<ResponseEntity<ByteArrayResource>> showImage(Model model) {
@@ -55,9 +83,6 @@ public class MyController {
     }
 */
 
-    private static void handleResponse(String response) {
-        System.out.println("Received response in handleResponse: " + response);
-    }
 }
 
 
