@@ -1,6 +1,7 @@
 package com.example.DongAisa.controller;
 
 import com.example.DongAisa.FormData;
+import com.example.DongAisa.NewsData;
 import com.example.DongAisa.service.NewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,17 @@ public class NewController {
 public ResponseEntity<String> processForm(@RequestBody FormData formData) {
     return newService.sendDataToFlask(formData);
 }
+
+//분석페이지
+    @GetMapping("/analysis")
+    public String analysis() {
+        return "analysis_test"; // HTML 폼을 보여주는 페이지로 이동
+    }
+
+    @PostMapping("/process")
+    public ResponseEntity<String> process(@RequestBody NewsData newsData) {
+        return newService.sendData(newsData);
+    }
 /*
     @PostMapping(value = "/processForm", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseBody

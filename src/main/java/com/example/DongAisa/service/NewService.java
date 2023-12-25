@@ -1,6 +1,7 @@
 package com.example.DongAisa.service;
 
 import com.example.DongAisa.FormData;
+import com.example.DongAisa.NewsData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,19 @@ public ResponseEntity<String> sendDataToFlask(FormData formData) {
 
     return ResponseEntity.ok(responseEntity.getBody());
 }
+
+    public ResponseEntity<String> sendData(NewsData newsData) {
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<NewsData> requestEntity = new HttpEntity<>(newsData, headers);
+
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(flaskUrl+"/process", requestEntity, String.class);
+
+        return ResponseEntity.ok(responseEntity.getBody());
+    }
 /*
     public String processFormData(String formData) {
         // 받은 데이터를 Flask 서버에 전송

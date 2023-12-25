@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>News Data Selection</title>
+</head>
+<body>
+
+<div class="nums-of-mention2">
+    <div class="dateSelect">
+        기간
+        <label class="dateBox" for="startdate1">
+            <input type="date" id="startdate1" max="2050-12-31" min="2000-01-01">
+        </label>
+        ~
+        <label class="dateBox" for="enddate1">
+            <input type="date" id="enddate1" max="2050-12-31" min="2000-01-01">
+        </label>
+    </div>
+    <br>
+
+    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        언론사
+        <input type="checkbox" class="btn-check" id="btncheck0" data-publisher-index="0" autocomplete="off">
+        <label class="btn btn-outline-primary" for="btncheck0">NHK</label>
+
+        <input type="checkbox" class="btn-check" id="btncheck1" data-publisher-index="1" autocomplete="off">
+        <label class="btn btn-outline-primary" for="btncheck1">마이니치</label>
+
+        <input type="checkbox" class="btn-check" id="btncheck2" data-publisher-index="2" autocomplete="off">
+        <label class="btn btn-outline-primary" for="btncheck2">아사히</label>
+
+        <input type="checkbox" class="btn-check" id="btncheck3" data-publisher-index="3" autocomplete="off">
+        <label class="btn btn-outline-primary" for="btncheck3">산케이</label>
+
+        <!-- 나머지 언론사들도 동일한 방식으로 추가 -->
+
+        <input class="btn-check-submit" type="button" value="조회" id="btnSubmit">
+    </div>
+
+</div>
+
+<div id="resultContainer">
+    <!-- 결과를 출력할 곳 -->
+</div>
+
+<script>
+    $('#btnSubmit').click(function () {
+        var startDate = $('#startdate1').val();
+        var endDate = $('#enddate1').val();
+
+        var selectedPublishers = [];
+
+        $('.btn-check:checked').each(function () {
+            var publisherIndex = $(this).data('publisher-index'); // 체크된 언론사의 인덱스 가져오기
+            selectedPublishers.push(publisherIndex);
+        });
+
+        var requestData = {
+            "startdate": startDate,
+            "enddate": endDate,
+            "publisher": selectedPublishers.join(',')
+        };
+        console.log(requestData);  // 추가한 디버깅 코드
+
+        // Ajax 요청 보내기
+        $.ajax({
+            type: 'POST',
+            url: '/process',
+            data: JSON.stringify(requestData),
+            dataType: 'json',
+            contentType: "application/json",
+            success: function (response) {
+                $('#resultContainer').html('성공! 데이터 값:' + response);
+            },
+
+            error: function (request, status, error) {
+                alert('AJAX 통신 실패');
+                alert(error);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+
+

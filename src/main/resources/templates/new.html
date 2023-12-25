@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <title>new flask spring</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Line Chart Example</title>
 </head>
 <body>
 
-<div id="example">AJAX
+<div id="example">
     <input type="text" id="id1" placeholder="id">
     <input type="text" id="password1" placeholder="password">
-    <button id="execute">execute</button> <!-- input type을 button으로 변경 -->
+    <button id="execute">Draw Line Chart</button>
 
-    <!-- 결과를 표시할 영역 추가 -->
-    <div id="result"></div>
+    <!-- 차트를 그릴 캔버스 요소 -->
+    <canvas id="lineChart" width="400" height="400"></canvas>
 </div>
 
 <script>
-    $('#execute').click(function(){
+    $('#execute').click(function () {
         var id = $('#id1').val();
         var password = $('#password1').val();
 
@@ -27,19 +28,51 @@
 
         $.ajax({
             type: 'POST',
-            url: '/processForm',
+            url: '/processForm', // Flask 서버의 엔드포인트에 맞게 수정
             data: JSON.stringify(postdata),
             contentType: "application/json",
-            success: function(data){
-                // 서버에서 받은 데이터를 동적으로 표시
-                $('#result').html('성공! 데이터 값:' + data);
+            success: function (rawData) {
+                // 데이터 가공
+                var data = JSON.parse(rawData);
+
+                // 각 항목의 첫 번째 요소를 X 축 값으로, 두 번째 요소를 Y 축 값으로 사용
+                var labels = data.map(item => item[0]); // X 축 값
+                var values = data.map(item => item[1]); // Y 축 값
+
+                // 차트 그리기
+                drawLineChart(labels, values);
             },
-            error: function(request, status, error){
+            error: function (request, status, error) {
                 alert('AJAX 통신 실패');
                 alert(error);
             }
         });
     });
+
+    function drawLineChart(labels, values) {
+        var ctx = document.getElementById('lineChart').getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Line Chart Data',
+                    data: values,
+                    fill: false, // 선 아래 영역을 채우지 않음
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
 </script>
 
 </body>
