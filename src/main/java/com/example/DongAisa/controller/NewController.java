@@ -1,7 +1,8 @@
 package com.example.DongAisa.controller;
 
-import com.example.DongAisa.FormData;
-import com.example.DongAisa.NewsData;
+import com.example.DongAisa.dto.FormData;
+import com.example.DongAisa.dto.KeywordData;
+import com.example.DongAisa.dto.NewsData;
 import com.example.DongAisa.service.NewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public ResponseEntity<String> processForm(@RequestBody FormData formData) {
 }
 
 //분석페이지
+    //기간, 신문사
     @GetMapping("/analysis")
     public String analysis() {
         return "analysis_test"; // HTML 폼을 보여주는 페이지로 이동
@@ -42,6 +44,16 @@ public ResponseEntity<String> processForm(@RequestBody FormData formData) {
     public ResponseEntity<String> process(@RequestBody NewsData newsData) {
         return newService.sendData(newsData);
     }
+
+
+    @GetMapping("/keyword_analysis")
+    public String keyanalysis(){ return "analysis_keyword";}
+
+    @PostMapping("/keyword_process")
+    public ResponseEntity<String> keyword_process(@RequestBody KeywordData keywordData) {
+        return newService.sendKeyData(keywordData);
+    }
+
 /*
     @PostMapping(value = "/processForm", consumes = {"application/json"}, produces = {"application/json"})
     @ResponseBody

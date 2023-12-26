@@ -1,7 +1,8 @@
 package com.example.DongAisa.service;
 
-import com.example.DongAisa.FormData;
-import com.example.DongAisa.NewsData;
+import com.example.DongAisa.dto.FormData;
+import com.example.DongAisa.dto.KeywordData;
+import com.example.DongAisa.dto.NewsData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,19 @@ public ResponseEntity<String> sendDataToFlask(FormData formData) {
         HttpEntity<NewsData> requestEntity = new HttpEntity<>(newsData, headers);
 
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(flaskUrl+"/process", requestEntity, String.class);
+
+        return ResponseEntity.ok(responseEntity.getBody());
+    }
+
+    public ResponseEntity<String> sendKeyData(KeywordData keywordData) {
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<KeywordData> requestEntity = new HttpEntity<>(keywordData, headers);
+
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(flaskUrl+"/keyword_process", requestEntity, String.class);
 
         return ResponseEntity.ok(responseEntity.getBody());
     }

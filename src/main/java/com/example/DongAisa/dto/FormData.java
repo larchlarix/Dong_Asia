@@ -1,4 +1,4 @@
-package com.example.DongAisa;
+package com.example.DongAisa.dto;
 
 public class FormData {
     private String id;

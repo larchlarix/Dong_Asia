@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+    <div class="analysisOfKeywordBox">
+
+        <div class="dateCheckBox">
+            <span>기간</span>
+            <label for="startdate2">
+                <input type="date"
+                       id="startdate2"
+                       max="2050-12-31"
+                       min="2000-01-01">
+            </label>
+            <span>~</span>
+            <label for="enddate2">
+                <input type="date"
+                       id="enddate2"
+                       max="2050-12-31"
+                       min="2000-01-01">
+            </label>
+        </div>
+
+        <form >키워드 입력
+            <input type="text" name="query" value="" id="keyword" >
+            <button type="submit" id="btnSubmit">조회</button>
+        </form>
+    </div>
+
+    <div id="resultContainer">
+        <!-- 결과를 출력할 곳 -->
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#btnSubmit').click(function (event) {
+                event.preventDefault();
+                var startDate = $('#startdate2').val();
+                var endDate = $('#enddate2').val();
+                var keyWord = $('#keyword').val();
+
+                var requestData = {
+                    "startdate": startDate,
+                    "enddate": endDate,
+                    "keyword": keyWord
+                };
+                console.log(requestData);  // 디버깅 코드
+
+                // Ajax 요청
+                $.ajax({
+                    type: 'POST',
+                    url: '/keyword_process',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response);
+                        $('#resultContainer').html('성공! 데이터 값:' + response);
+                    },
+                    error: function (request, status, error) {
+                        alert('AJAX 통신 실패');
+                        alert(error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

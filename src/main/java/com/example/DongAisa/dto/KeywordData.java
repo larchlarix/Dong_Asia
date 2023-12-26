@@ -1,27 +1,22 @@
-package com.example.DongAisa;
+package com.example.DongAisa.dto;
 
-public class NewsData {
+public class KeywordData {
     private String startdate;
 
     private String enddate;
-    private String publisher;
+    private String keyword;
 
 
-
-
-
-    public String getPublisher() {
-        return publisher;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
 
-    public String getStartdate() {
-        return startdate;
-    }
+    public String getStartdate() {return startdate;}
 
     public void setStartdate(String startdate) {
         this.startdate = startdate;
@@ -35,8 +30,7 @@ public class NewsData {
         this.enddate = enddate;
     }
 
-    public NewsData() {
+    public KeywordData() {
         // 기본 생성자
     }
-
 }
