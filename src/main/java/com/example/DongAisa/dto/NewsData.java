@@ -6,7 +6,7 @@ public class NewsData {
     private String enddate;
     private String publisher;
 
-
+    private String topic;
 
 
 
@@ -33,6 +33,15 @@ public class NewsData {
 
     public void setEnddate(String enddate) {
         this.enddate = enddate;
+    }
+
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public NewsData() {
