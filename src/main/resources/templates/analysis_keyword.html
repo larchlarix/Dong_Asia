@@ -3,71 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <title>Title</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3@6"></script>
+    <script src="https://unpkg.com/d3-cloud@1.2.5/build/d3.layout.cloud.js"></script>
+</head>
+    <title>Keyword Analysis</title>
+    <style>
+        .graph-container,
+        .wordcloud-container {
+            width: 800px;
+            height: 400px;
+            margin: 20px auto;
+        }
+
+    </style>
 </head>
 <body>
-    <div class="analysisOfKeywordBox">
-
-        <div class="dateCheckBox">
-            <span>기간</span>
-            <label for="startdate2">
-                <input type="date"
-                       id="startdate2"
-                       max="2050-12-31"
-                       min="2000-01-01">
-            </label>
-            <span>~</span>
-            <label for="enddate2">
-                <input type="date"
-                       id="enddate2"
-                       max="2050-12-31"
-                       min="2000-01-01">
-            </label>
-        </div>
-
-        <form >키워드 입력
-            <input type="text" name="query" value="" id="keyword" >
-            <button type="submit" id="btnSubmit">조회</button>
-        </form>
+<div class="analysisOfKeywordBox">
+    <div class="dateCheckBox">
+        <span>기간</span>
+        <label for="startdate2">
+            <input type="date"
+                   id="startdate2"
+                   max="2050-12-31"
+                   min="2000-01-01">
+        </label>
+        <span>~</span>
+        <label for="enddate2">
+            <input type="date"
+                   id="enddate2"
+                   max="2050-12-31"
+                   min="2000-01-01">
+        </label>
     </div>
 
-    <div id="resultContainer">
-        <!-- 결과를 출력할 곳 -->
-    </div>
+    <form>
+        키워드 입력
+        <input type="text" name="query" value="" id="keyword">
+        <button type="submit" id="btnSubmit">조회</button>
+    </form>
+</div>
 
-    <script>
-        $(document).ready(function () {
-            $('#btnSubmit').click(function (event) {
-                event.preventDefault();
-                var startDate = $('#startdate2').val();
-                var endDate = $('#enddate2').val();
-                var keyWord = $('#keyword').val();
+<div id="wordCloudContainer" class="wordcloud-container"></div>
+<div id="graphContainer" class="graph-container"></div>
 
-                var requestData = {
-                    "startdate": startDate,
-                    "enddate": endDate,
-                    "keyword": keyWord
-                };
-                console.log(requestData);  // 디버깅 코드
+<script>
+    $(document).ready(function () {
+        $('#btnSubmit').click(function (event) {
+            event.preventDefault();
+            var startDate = $('#startdate2').val();
+            var endDate = $('#enddate2').val();
+            var keyWord = $('#keyword').val();
 
-                // Ajax 요청
-                $.ajax({
-                    type: 'POST',
-                    url: '/keyword_process',
-                    data: JSON.stringify(requestData),
-                    dataType: 'json',
-                    contentType: "application/json",
-                    success: function (response) {
-                        console.log(response);
-                        $('#resultContainer').html('성공! 데이터 값:' + response);
-                    },
-                    error: function (request, status, error) {
-                        alert('AJAX 통신 실패');
-                        alert(error);
-                    }
-                });
+            var requestData = {
+                "startdate": startDate,
+                "enddate": endDate,
+                "keyword": keyWord
+            };
+
+            var request1 = $.ajax({
+                type: 'POST',
+                url: '/keyword_process',
+                data: JSON.stringify(requestData),
+                dataType: 'json',
+                contentType: 'application/json'
+            });
+
+            var request2 = $.ajax({
+                type: 'POST',
+                url: '/keyword_amount_process',
+                data: JSON.stringify(requestData),
+                dataType: 'json',
+                contentType: 'application/json'
+            });
+
+            $.when(request1, request2).done(function (response1, response2) {
+                console.log("response1",response1)
+                console.log("response1[0]",response1[0])
+                // response2데이터 변환 함수
+                function transformData(data) {
+                    // JSON 문자열을 JavaScript 객체로 파싱
+                    var parsedData = JSON.parse(data);
+
+                    // 객체를 날짜와 값 속성을 갖는 객체 배열로 변환
+                    return Object.entries(parsedData)
+                        .filter(([date, value]) => !isNaN(Date.parse(date)) && !isNaN(+value))
+                        .map(([date, value]) => ({ date: new Date(date), value: +value }));
+                }
+
+                // D3.js 그래프 생성
+                var transformedData = transformData(response2[0]);
+                renderGraph(transformedData);
+
+                // WordCloud 생성
+                var similarWords = JSON.parse(response1[0]).map(item => [item[0], item[1], item[2]]);
+                renderWordCloud(keyWord, similarWords);
+
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error('Error from /keyword_process:', jqXHR.responseText);
             });
         });
-    </script>
+        function renderWordCloud(keyword, similarWords) {
+            var wordCloudContainer = d3.select("#wordCloudContainer");
+            wordCloudContainer.html(""); // 기존 내용 지우기
+
+            // WordCloud 렌더링 함수
+            function drawWordCloud(words) {
+                d3.layout.cloud().size([800, 400])
+                    .words(words)
+                    .rotate(function () { return ~~(Math.random() * 2) * 90; })
+                    .font("Impact")
+                    .fontSize(function (d) { return d.size; })
+                    .on("end", function (wordCloudWords) {
+                        d3.select("#wordCloudContainer").append("svg")
+                            .attr("width", 800)
+                            .attr("height", 400)
+                            .append("g")
+                            .attr("transform", "translate(400,200)")
+                            .selectAll("text")
+                            .data(wordCloudWords)
+                            .enter().append("text")
+                            .style("font-size", function (d) { return d.size + "px"; })
+                            .style("font-weight", function (d) { return d.sentiment === "user-keyword" ? "bold" : "normal"; })
+                            .style("fill", function (d) {
+                                if (d.sentiment === "positive") {
+                                    return "blue";
+                                } else if (d.sentiment === "negative") {
+                                    return "red";
+                                } else if (d.sentiment === "neutral") {
+                                    return "black";
+                                } else {
+                                    return "green"; // 사용자가 입력한 키워드 색상
+                                }
+                            })
+                            .attr("text-anchor", "middle")
+                            .attr("transform", function (d) {
+                                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                            })
+                            .text(function (d) { return d.text; });
+                    })
+                    .start();
+            }
+
+            // WordCloud 데이터 설정
+            var wordCloudData = [
+                { text: keyword, size: 60, sentiment: "user-keyword" }, // 사용자가 입력한 키워드 크게 표시
+                ...similarWords.map(word => ({ text: word[0], size: word[1] * 40, sentiment: word[2] })),
+            ];
+
+            drawWordCloud(wordCloudData);
+        }
+        function renderGraph(data) {
+            var graphContainer = d3.select("#graphContainer");
+            graphContainer.html(""); // 기존 내용 지우기
+
+            // D3.js 그래프 생성
+            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+                width = 800 - margin.left - margin.right,
+                height = 400 - margin.top - margin.bottom;
+
+            var x = d3.scaleTime()
+                .domain(d3.extent(data, d => d.date))
+                .range([0, width]);
+
+            var y = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.value)])
+                .range([height, 0]);
+
+            var line = d3.line()
+                .x(d => x(d.date))
+                .y(d => y(d.value));
+
+            var svg = graphContainer.append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            svg.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", line);
+
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            svg.append("g")
+                .call(d3.axisLeft(y));
+        }
+
+    });
+</script>
 </body>
 </html>
+
+
+
+
+
+
+

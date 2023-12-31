@@ -53,6 +53,11 @@ public ResponseEntity<String> processForm(@RequestBody FormData formData) {
     public ResponseEntity<String> keyword_process(@RequestBody KeywordData keywordData) {
         return newService.sendKeyData(keywordData);
     }
+    @PostMapping("/keyword_amount_process")
+    public ResponseEntity<String> keyword_amount_process(@RequestBody KeywordData keywordData) {
+        // 두 번째 엔드포인트에 대한 로직 추가
+        return newService.sendAmountData(keywordData);
+    }
 
 /*
     @PostMapping(value = "/processForm", consumes = {"application/json"}, produces = {"application/json"})
