@@ -1,0 +1,211 @@
+/*analysis css*/
+
+main div div.nums-of-mention1 {
+    position: static;
+    top: 224px;
+    left: 80px;
+    margin-top: 10px;
+    margin-left: 280px;
+    padding-left: 5px;
+    padding-top: 5px;
+    font-size: 27px;
+    font-weight: normal;
+    font-family: Arial, sans-serif;
+}
+
+main div div button {
+    position: static;
+    border-style: none;
+    background-color: white;
+    top: 224px;
+    left: 100px;
+}
+
+div button>img {
+    width: 20px;
+}
+
+div.nums-of-mention2 {
+    position: static;
+    width: 800px;
+    height: 100px;
+    top: 350px;
+    left: 100px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 1rem;
+    padding-top: 10px;
+    margin-left: 300px;
+    margin-top: 10px;
+    font-family: Arial, sans-serif;
+}
+
+div.nums-of-mention2>div.dateSelect>label {
+    margin-left: 30px;
+}
+
+input[class="btn-check"] + label {
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 30px;
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+}
+input[class="btn-check"]:checked + label {
+    background-color: #FF9D9D;
+    border-radius: 2rem;
+}
+input[class="btn-check"] {
+    display: none;
+}
+
+input[class="btn-check-submit"] {
+    background-color: #FF9D9D;
+    border-style: solid;
+    border-color: #FF9D9D;
+    border-radius: 1rem;
+    cursor: pointer;
+    width: 40px;
+    height: 30px;
+    margin-left: 40px;
+}
+
+.nums-of-mention3 {
+    position: static;
+    display: inline-block;
+    width: 800px;
+    height: 200px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 1rem;
+    margin-left: 300px;
+    margin-top: 10px;
+    font-family: Arial, sans-serif;
+}
+
+.wordMap {
+    float: left;
+    width: 500px;
+    height: 200px;
+    border-width: 1px;
+    border-right: solid;
+}
+
+div.textChart {
+    float: left;
+    width: 100px;
+    height: 200px;
+    padding-top: 10px;
+    margin-top: 8px;
+    font-family: Arial, sans-serif;
+}
+
+div.textChart2 {
+    float: right;
+    width: 100px;
+    height: 200px;
+    padding-top: 10px;
+    margin-top: 8px;
+}
+
+div > ul > li{
+    list-style-type: none;
+}
+
+div.analysisOfKeywordBox {
+    position: static;
+    margin-top: 30px;
+    font-family: Arial, sans-serif;
+}
+
+.analysisOfKeywordBox>span {
+    font-size: 30px;
+    margin-left: 300px;
+    font-family: Arial, sans-serif;
+}
+
+.analysisOfKeywordBox>button {
+    border-style: none;
+    background-color: white;
+}
+
+.analysisOfKeywordBox > div.checkBox {
+    width: 800px;
+    height: 200px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 1rem;
+    margin-left: 300px;
+    margin-top: 10px;
+}
+
+.analysisOfKeywordBox>div.checkBox>div.dateCheckBox {
+    margin-left: 20px;
+    margin-top: 20px;
+}
+.analysisOfKeywordBox >div.checkBox > div.dateCheckBox > label {
+    margin-left: 48px;
+}
+
+.analysisOfKeywordBox>div.checkBox> form > input[type=text] {
+    width: 500px;
+    height: 25px;
+    font-size: 12px;
+    border-color: #999999;
+    border-radius: 0.5rem;
+    border-width: 1px;
+    margin-top: 10px;
+    margin-left: 100px;
+}
+
+.analysisOfKeywordBox>div.checkBox> form > button {
+    background-color: #FF9D9D;
+    width: 30px;
+    height: 30px;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+.analysisOfKeywordBox>div.checkBox>div.selectKeywordBox {
+    width: 800px;
+    height: 110px;
+    margin-top: 10px;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    background-color: #EDEDED;
+}
+
+div.resultOfKeyword {
+    width: 800px;
+    height: 600px;
+    margin-top: 15px;
+    margin-left: 300px;
+    border-style: solid;
+    border-radius: 1rem;
+}
+
+div.resultOfKeyword>div.list-group {
+    margin-top: 15px;
+    text-align: center;
+    float: right;
+    margin-right: 100px;
+}
+
+div.resultOfKeyword>div.list-group>button.list-group-item {
+    border-style: none;
+    font-size: 15px;
+    padding-left: 20px;
+    cursor: pointer;
+}
+
+div.resultOfKeyword>div.list-group>button[type=button]:hover,
+div.resultOfKeyword>div.list-group>button[type=button]:active {
+    border-bottom: #FF9D9D;
+    border-style: solid;
+    border-width: 4px;
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+}
