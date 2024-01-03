@@ -2,13 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <title>Title</title>
 </head>
 <body>
-이메일
-닉네임
-비밀번호(감추고)
-스크랩한기사
+<header th:replace="fragments.html :: fragment-header"></header>
+<nav th:replace="fragments.html :: fragment-nav"></nav>
+
+<aside class="myPageMenu">
+    <ul>
+        <li>스크랩</li>
+        <li>내 정보</li>
+    </ul>
+</aside>
+
+<div class="scrapBox">
+    <!--북마크한 기사 목록-->
+</div>
+
+<div class="userInfo">
+    <!--유저 정보
+    이메일
+    아이디
+    비밀번호
+    -->
+</div>
 
 </body>
 </html>
