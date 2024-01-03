@@ -3,69 +3,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"  >
 <head>
-    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>뉴스 목록</title>
 </head>
 <body>
-<header>
-    <div id="logo">
-        <h1><a href>LOGO</a></h1>
-        <div class="search">
-            <form th:action="@{/news/search}" method="get">
-                <input type="text" name="keyword" placeholder="뉴스 검색" />
-                <button type="submit"><img class="search-button" src="/search.png" /></button>
-                <button type="button"><img class="ques-icon" id="ques0" src="/ques.png" /></button>
-            </form>
-        </div>
-        <div id="login-button">
-            <a href="login.html">로그인</a>&nbsp;&nbsp;&nbsp;<a href="signup.html">회원가입</a>
-        </div>
-    </div>
-
-
-    <div class="main-menu-bar">
-        <ul class="main-menu">
-            <li class="item">
-                <div class="item__name">기사 보기</div>
-                <div class="item__contents">
-                    <div class="contents__menu">
-                        <ul class="inner">
-                            <li>
-                                <h4>국가</h4>
-                                <ul>
-                                    <li>일본</li>
-                                    <li>중국</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <h4>주제</h4>
-                                <ul>
-                                    <li>경제</li>
-                                    <li>정치</li>
-                                    <li>사회 문화</li>
-                                    <li>스포츠</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <h4>언론사</h4>
-                                <ul>
-                                    <li>NHK</li>
-                                    <li>아사히</li>
-                                    <li>마이니치</li>
-                                    <li>산케이</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <li class="item">
-                <div class="item__name">기사 분석</div>
-        </ul>
-    </div>
-</header>
+    
+<header th:replace="fragments.html :: fragment-header"></header>
+<!--mebubar fragment-->
+<nav th:replace="fragments.html :: fragment-nav"></nav>
+    
 <br>
 <h1 class="page_title">뉴스 목록</h1>
 <tr class="app">
