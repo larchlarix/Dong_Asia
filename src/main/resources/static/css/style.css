@@ -1,6 +1,16 @@
+
 html, body {
     height: 100%;}
 
+* {margin: 0; padding: 0;}
+
+:root {
+    --site-width: 1200px;
+}
+
+a {text-decoration-line: none;}
+
+li {list-style: none;}
 
 #wrap {
     position: relative;
@@ -205,7 +215,7 @@ h1.page_title {
 }
 
 
-* {margin: 0 auto; padding: 0px;}
+
 
 
 div.headerSection {
@@ -318,6 +328,7 @@ nav ul.nav li:hover div {
     width: 1600px;
     visibility: visible;
     overflow: visible;
+    text-align: left;
 
     background-color: #ECECEC;
     border-bottom-left-radius: 3rem;
@@ -365,6 +376,7 @@ nav ul.nav li:hover div button {
     margin-left: 100px;
     margin-top: 20px;
     font-family: Arial, sans-serif;
+
 }
 
 .section-title {
