@@ -6,6 +6,7 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/d3@6"></script>
     <script src="https://unpkg.com/d3-cloud@1.2.5/build/d3.layout.cloud.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
 </head>
     <title>Keyword Analysis</title>
     <style>
@@ -19,6 +20,12 @@
     </style>
 </head>
 <body>
+
+<header th:replace="fragments.html :: fragment-header"></header>
+<!--mebubar fragment-->
+<nav th:replace="fragments.html :: fragment-nav"></nav>
+
+
 <div class="analysisOfKeywordBox">
     <div class="dateCheckBox">
         <span>기간</span>

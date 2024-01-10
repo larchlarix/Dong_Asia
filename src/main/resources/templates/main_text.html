@@ -1,86 +1,81 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>뉴스 본문</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/style.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기사 본문</title>
 </head>
 <body>
-<div class="headerSection">
-    <div class="logo">LOGO</div>
-    <div class="search">
-        <form th:action="@{/news/search}" method="get">
-            <input type="text" name="keyword" placeholder="뉴스 검색" />
-            <button type="submit"><img class="search-button" src="/search.png" /></button>
-            <button type="button"><img class="ques-icon" id="ques0" src="/ques.png" /></button>
-        </form>
-    </div>
-    <div class="login"><a class="login" href="login.html">로그인</a>&nbsp;&nbsp;&nbsp;<a class="signin" href="signup.html">회원가입</a></div>
+
+<header th:replace="fragments.html :: fragment-header"></header>
+<!--mebubar fragment-->
+<nav th:replace="fragments.html :: fragment-nav"></nav>
+
+
+<div th:if="${news}" class="news-main-border-box">
+    <table>
+        <tr><td colspan="5" class="news-main-title">
+            <span th:text="${news.newsTitle}">기사 제목</span>
+            &nbsp;&nbsp;
+            <span class="translate_btn">번역</span>
+        </td></tr>
+
+        <tr class="news-info">
+            <td width="30">
+                <span th:switch="${news.newsPublisher}">
+                        <span th:case="0"><img class="news-icon" th:src="@{/nhk.png}"></span>
+                        <span th:case="1"><img class="news-icon" th:src="@{/mainichi.png}"></span>
+                        <span th:case="2"><img class="news-icon" th:src="@{/asahi.png}"></span>
+                        <span th:case="3"><img class="news-icon" th:src="@{/sankei.png}"></span>
+                </span>
+            </td>
+            <td style="text-align: left">
+                &nbsp;&nbsp;
+                <span th:switch="${news.newsPublisher}">
+                        <span th:case="0">NHK</span>
+                        <span th:case="1">마이니치</span>
+                        <span th:case="2">아사히</span>
+                        <span th:case="3">산케이</span>
+                </span>
+                &nbsp;&nbsp;·&nbsp;&nbsp;
+                <span th:text="${news.newsDate}">기사 날짜</span>
+            </td>
+
+            <td style="text-align: right">
+                <span>
+                    <img th:src="@{/bookmark_0.png}" width="12" height="12">
+                    스크랩하기
+                </span>
+                &nbsp;&nbsp;·&nbsp;&nbsp;
+                <a th:href="${news.newsLink}">원문보기</a>
+            </td>
+        </tr>
+
+        <tr th:unless="${news.newsImageURL == ''}"><td colspan="5" style="text-align: center">
+            <br>
+            <img th:src="${news.newsImageURL}" alt="뉴스 이미지" class="news-image">
+        </td></tr>
+        <tr><td colspan="5" style="padding: 30px">
+            <span id="news-body" th:text="${news.newsContents}">
+                기사 본문
+            </span>
+            <script type="text/javascript">
+                function insert_new_body() {
+                    var str = document.getElementById('news-body').textContent;
+                    var change = str.replaceAll("/", "<br><br>");
+                    document.getElementById('news-body').innerHTML = change;
+                }
+                insert_new_body();
+            </script>
+        </td></tr>
+    </table>
 </div>
-<nav>
-    <ul class="nav">
-        <li><a th:href ="@{/news}">기사 보기</a>
-            <div><span>국가</span>
-                <input type="checkbox" class="menu-btn-chk" id="japan">
-                <label class="menu-btn-label" for="japan">일본</label>
-                <input type="checkbox" class="menu-btn-chk" id="china">
-                <label class="menu-btn-label" for="china">중국</label>
-                <br>
-                <br>
-                <span>주제</span>
-                <input type="checkbox" class="menu-btn-chk" id="economics">
-                <label class="menu-btn-label" for="economics">경제</label>
-                <input type="checkbox" class="menu-btn-chk" id="politics">
-                <label class="menu-btn-label" for="politics">정치</label>
-                <input type="checkbox" class="menu-btn-chk" id="culture">
-                <label class="menu-btn-label" for="culture">사회 문화</label>
-                <input type="checkbox" class="menu-btn-chk" id="sports">
-                <label class="menu-btn-label" for="sports">스포츠</label>
-                <br>
-                <br>
-                <span>일본 언론사</span>
-                <br>
-                <br>
-                <input type="checkbox" class="menu-btn-chk" id="nikkei">
-                <label class="menu-btn-label" for="nikkei">닛케이</label>
-                <input type="checkbox" class="menu-btn-chk" id="mainichi">
-                <label class="menu-btn-label" for="mainichi">마이니치</label>
-                <input type="checkbox" class="menu-btn-chk" id="sankei">
-                <label class="menu-btn-label" for="sankei">산케이</label>
-                <input type="checkbox" class="menu-btn-chk" id="asahi">
-                <label class="menu-btn-label" for="asahi">아사히</label>
-                <input type="checkbox" class="menu-btn-chk" id="yomiuri">
-                <label class="menu-btn-label" for="yomiuri">요미우리</label>
-                <input type="checkbox" class="menu-btn-chk" id="nhk">
-                <label class="menu-btn-label" for="nhk">NHK</label>
-                <br>
-                <br>
-                <span>중국 언론사</span>
-                <br>
-                <br>
-                <input type="checkbox" class="menu-btn-chk" id="jp">
-                <label class="menu-btn-label" for="jp">인민일보</label>
-                <br>
-                <button type="submit">조회</button>
-            </div>
-        </li>
-        <li><a href="analysis.html">기사 분석</a></li>
-    </ul>
-</nav>
-<div th:if="${news}">
-    <h1 th:text="${news.newsTitle}"></h1>
-    <p>
-        <img th:src="${news.newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
-    </p>
-    <p th:text="${news.newsDate}"></p>
-    <p th:text="${news.newsContents}"></p>
-    <p><a th:href="${news.newsLink}" target="_blank">기사홈</a></p>
-</div>
-<div th:unless="${news}">
-    <p>해당 뉴스를 찾을 수 없습니다.</p>
-</div>
-<div id="footer">
-    <p>< footer ></p>
-</div>
+
+<!-- 모바일 하단 메뉴 -->
+<nav th:replace="fragments.html :: mobile-nav"></nav>
+
+
+
 </body>
 </html>

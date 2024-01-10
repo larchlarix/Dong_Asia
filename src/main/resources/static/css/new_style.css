@@ -1,0 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+}
+.page-section {
+    margin-left: 50px;
+}
+.page-section h2 {
+    margin: 20px;
+}
+.list-table {
+    width: 80%;
+    border-spacing: 10px;
+    border-bottom: 1px solid darkgray;
+    margin-left: 50px;
+}
+.news-img {
+    height: 120px;
+    width: 180px;
+    border-radius:20px;
+}
+.news-title {
+    vertical-align:top;
+    font-size: 20px;
+    height: 70px;
+}
+.news-title a {
+    text-decoration-line: none;
+    color: black;
+}
+.news-title a:link {
+    color: black;
+}
+.news-title a:visited {
+    color: grey;
+}
+.news-title a:hover {
+    color: lightpink;
+}
+.news-title a:active {
+    color: lightpink;
+}
+.news-icon {
+    height: 30px;
+    width: 30px;
+    border-radius:15px;
+}
+.news-option {
+    width: 80%;
+    border: 1px solid grey;
+    border-radius: 20px;
+    border-spacing: 15px;
+    margin-left: 50px;
+}
+.news-option tr {
+    height: 40px;
+}
+.news-option span {
+    font-weight: bolder;
+}
+.news-option label {
+    padding: 5px;
+    color: dimgray;
+}
+.news-option input[type=checkbox], input[type=radio] {
+    display: none;
+}
+.news-option input[type=checkbox]:checked + label {
+    background-color: #FFC9C9;
+    border-radius: 10px;
+    color: #851212;
+}
+.news-option input[type=radio]:checked + label {
+    background-color: #FFC9C9;
+    border-radius: 10px;
+    color: #851212;
+}
+.news-option input[type=submit] {
+    height: 130px;
+    width: 70px;
+    background-color: #FF8D8D;
+    border: 0;
+    border-radius: 10px;
+    color: #851212;
+    font-weight: bolder;
+}
+.news-option input[type=submit]:active {
+    background-color: #FF6F6F;
+}
+.news-main-border-box table {
+    border-collapse : collapse;
+    width: 100%;
+}
+.news-main-title {
+    height: 100px;
+    font-size: 30px;
+    vertical-align: top;
+}
+.news-info {
+    text-align: center;
+    height: 30px;
+    font-size: 12px;
+    border-bottom: 1px solid grey;
+}
+.news-main-border-box {
+    margin: 50px;
+    padding: 30px;
+    width: 80%;
+    border: 1px solid grey;
+    border-radius: 20px;
+}
+.news-main-border-box .news-image {
+    width: 70%;
+    border-radius: 20px;
+}
+.news-main-border-box a {
+    text-decoration-line: none;
+    color: black;
+}
+.news-main-border-box a:link {
+    color: black;
+}
+.news-main-border-box a:visited {
+    color: black;
+}
+.news-main-border-box a:hover {
+    color: grey;
+}
+.news-main-border-box a:active {
+    color: grey;
+}
+.translate_btn {
+    color: #851212;
+    font-size: 14px;
+    font-weight: bold;
+}
+.header-table {
+    background-color: white;
+    border-collapse: collapse;
+    width: 100%;
+    height: 70px;
+}
+.header-table .td1 {
+    width: 100px;
+}
+.header-table .td1 a {
+    text-decoration-line: none;
+    font-size: 28px;
+    font-family: Josefin Slab;
+    color: #851212;
+}
+.header-table .td1 a:link {
+    color: #851212;
+}
+.header-table .td1 a:visited {
+    color: #851212;
+}
+.header-table .td1 a:hover {
+    color: #851212;
+}
+.header-table .td1 a:active {
+    color: #851212;
+}
+.header-table .td2 {
+    text-align: center;
+}
+.header-table .td2 div {
+    display: inline-block;
+}
+.header-table .td2 input {
+    border: 1px solid grey;
+    height: 24px;
+    border-radius: 10px;
+}
+.header-table .td2 button {
+    border: 0;
+    background-color: white;
+    font-size: 16px;
+}
+.header-table .td3 {
+    width: 200px;
+    text-align: right;
+    font-size: 12px;
+}
+.nav-bar {
+    padding-left: 50px;
+    background-color: #414141;
+    width: 100%;
+    height: 50px;
+}
+.nav-bar div {
+    display: inline-block;
+    height: 50px;
+    width: 140px;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;
+}
+.nav-bar div a {
+    text-decoration-line: none;
+    color: white;
+    height: 50px;
+    width: 140px;
+    display: inline-block;
+}
+.nav-bar div a:link {
+    color: white;
+}
+.nav-bar div a:visited {
+    color: white;
+}
+.nav-bar div a:hover {
+    background-color: #FFC9C9;
+    font-weight: bold;
+    color: #851212;
+}
+.nav-bar div a:active {
+    background-color: #FFC9C9;
+    font-weight: bold;
+    color: #851212;
+}
+.space-bottom-menu {
+    display: none;
+}
+.bottom-menu {
+    display: none;
+}
+
+/* 모바일에 최적화된 예외 CSS 코드*/
+@media (max-width: 768px) {
+    /* 헤더, nav 프레그먼트 */
+    .header-table {
+        border-bottom: 1px solid grey;
+    }
+    .header-table .td2 {
+        text-align: right;
+        padding-right: 20px;
+    }
+    .header-table .td3 {
+        display: none;
+    }
+    .nav-bar {
+        display: none;
+    }
+
+    /* 모바일 하단 메뉴 */
+    .space-bottom-menu {
+        display: block;
+        height: 50px;
+    }
+    .bottom-menu {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        z-index:100;
+        border-top: 1px solid grey;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+    }
+    .bottom-menu div {
+        display: inline-block;
+        padding: 7px;
+    }
+    .bottom-menu img{
+        width: 36px;
+        height: 36px;
+    }
+
+
+    /* 리스트 페이지 */
+    .option {
+        display: none;
+    }
+    .list-table {
+        width: 100%;
+        border-spacing: 15px;
+        border-bottom: 1px solid darkgray;
+        margin-left: 0;
+    }
+    .page-section {
+        margin-left: 0;
+    }
+
+    /* 기사 본문 페이지 */
+    .news-main-border-box {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+    }
+    .news-info {
+        border-bottom: 0;
+    }
+}
+

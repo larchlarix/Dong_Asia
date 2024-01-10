@@ -1,199 +1,120 @@
-
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"  >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>뉴스 목록</title>
+    <title>기사 보기</title>
 </head>
 <body>
     
 <header th:replace="fragments.html :: fragment-header"></header>
 <!--mebubar fragment-->
 <nav th:replace="fragments.html :: fragment-nav"></nav>
-    
-<br>
-<h1 class="page_title">뉴스 목록</h1>
-<tr class="app">
-    <table id="tblTodo">
-        <caption></caption>
-        <colgroup>
-            <col width="20%" />
-            <col width="50%" />
-            <col width="20%" />
-            <col width="10%" />
-        </colgroup>
-        <thead>
-        <tr>
-            <th>사진</th>
-            <th>제목</th>
-            <th>내용</th>
-            <th>일자</th>
-            <th>언론사</th>
-        </tr>
 
-        </thead>
-        <tbody>
-        <tr th:each="news : ${newsList}">
-            <td>
-                <img th:src="${news.newsImageURL}" alt="뉴스 이미지" width="200" height="100" />
+<div class="page-section option">
+
+    <h2>옵션</h2>
+
+    <!-- 기사 옵션 ⌵ -->
+    <form method="get" action="">
+        <table class="news-option">
+            <tr>
+                <td width="100">
+                    <span>국가</span>
+                </td>
+                <td>
+                    <input type="radio" name="country" value="0" id="jpn" checked="checked">
+                    <label for="jpn">일본</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="radio" name="country" value="1" id="ch">
+                    <label for="ch">중국</label>
+                </td>
+                <td rowspan="3" style="text-align: right"><input type="submit" value="조회"></td>
+            </tr>
+            <tr>
+                <td>
+                    <span>주제</span>
+                </td>
+                <td>
+                    <input type="checkbox" name="category" value="1" id="cate1">
+                    <label for="cate1">국제·정치</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="checkbox" name="category" value="3" id="cate3">
+                    <label for="cate3">경제</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="checkbox" name="category" value="4" id="cate4">
+                    <label for="cate4">사회·문화</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="checkbox" name="category" value="2" id="cate2">
+                    <label for="cate2">스포츠</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span>언론사</span>
+                </td>
+                <td>
+                    <input type="checkbox" name="publisher" value="0" id="pub0">
+                    <label for="pub0">NHK</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="checkbox" name="publisher" value="2" id="pub2">
+                    <label for="pub2">아사히</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="checkbox" name="publisher" value="3" id="pub3">
+                    <label for="pub3">산케이</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="checkbox" name="publisher" value="1" id="pub1">
+                    <label for="pub1">마이니치</label>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<br>
+
+<div class="page-section">
+
+    <h2>
+        <span>기사 보기</span>
+        &nbsp;&nbsp;
+        <span class="translate_btn">번역</span>
+    </h2>
+
+    <!-- 기사 목록 -->
+    <table class="list-table" th:each="news : ${newsList}">
+        <tr>
+            <td th:unless="${news.newsImageURL == ''}" rowspan="2" width="200">
+                <img class="news-img" th:src="${news.newsImageURL}" alt="뉴스 이미지">
             </td>
-            <td>
-              <a th:href="@{/news/{newsId}(newsId=${news.newsId})}" th:text="${news.newsTitle}">제목</a>
-            </td>
-            <td>
-                <p th:text="${news.newsContents}" th:utext="${#strings.abbreviate(news.newsContents, 100)}">내용</p>
-            </td>
-            <td th:text="${news.newsDate}">일자</td>
-            <td>
+            <td colspan="3" class="news-title"><a th:href="@{/news/{newsId}(newsId=${news.newsId})}" th:text="${news.newsTitle}">기사 제목</a></td>
+        </tr>
+        <tr height="50" style="font-size: 14px">
+            <td width="40">
                 <span th:switch="${news.newsPublisher}">
-                    <span th:case="0">NHK</span>
-                  <span th:case="1">마이니치</span>
-                  <span th:case="2">아사히</span>
-                  <span th:case="3">산케이</span>
+                        <span th:case="0"><img class="news-icon" th:src="@{/nhk.png}"></span>
+                        <span th:case="1"><img class="news-icon" th:src="@{/mainichi.png}"></span>
+                        <span th:case="2"><img class="news-icon" th:src="@{/asahi.png}"></span>
+                        <span th:case="3"><img class="news-icon" th:src="@{/sankei.png}"></span>
                 </span>
             </td>
+            <td>
+                <span th:switch="${news.newsPublisher}">
+                        <span th:case="0">NHK</span>
+                        <span th:case="1">마이니치</span>
+                        <span th:case="2">아사히</span>
+                        <span th:case="3">산케이</span>
+                </span>
+            </td>
+            <td th:text="${news.newsDate}" style="text-align:right; color: grey">기사 일자</td>
         </tr>
-        </tbody>
     </table>
-
-
-    <div class="paging">
-        <!-- Icon은 fontawesome에서 가져왔습니다. -->
-        <i class="fa-solid fa-angles-left" id="first_page"></i>
-        <i class="fa-solid fa-angle-left" id="prev_page"></i>
-        <div class="pages">
-            <span class="active">1</span>
-            <span>2</span>
-            <span>3</span>
-            <span>4</span>
-            <span>5</span>
-            <span>6</span>
-            <span>7</span>
-            <span>8</span>
-            <span>9</span>
-            <span>10</span>
-        </div>
-        <i class="fa-solid fa-angle-right" id="next_page"></i>
-        <i class="fa-solid fa-angles-right" id="last_page"></i>
-    </div>
-</tr>
-<!--
-<div th:if="${newsList.isEmpty()}">
-    <p>뉴스가 없습니다.</p>
 </div>
-    <article class="article">
-        <ul class="contents"></ul>
-        <div class="buttons"></div>
-    </article>
-<script src="pagnation.js"></script>
- <div th:each="news : ${newsList}">
-    <div th:text="${news.newsTitle}"></div>
-    <div th:text="${news.newsContents}"></div>
-    <div th:text="${news.newsDate}"></div>
-    <div th:text="${news.newsLink}"></div>
-    <hr>
- </div>
--->
 
-<div id="footer">
-    <p>< footer ></p>
-</div>
-</body>
-</html>
-
-
-
-
-<!--
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News List</title>
-</head>
-<body>
-<h1>News List</h1>
-<div id="newsList"></div>
-
-<script>
-    // API 요청을 보낼 URL 설정
-    const apiUrl = 'http://localhost:8080';
-
-    // API에서 뉴스 목록을 가져와서 화면에 표시하는 함수
-    async function fetchNewsList() {
-        try {
-            const response = await fetch(apiUrl);
-            const newsList = await response.json();
-
-            // 뉴스 목록을 화면에 표시
-            const newsListContainer = document.getElementById('newsList');
-            newsListContainer.innerHTML = '';
-
-            newsList.forEach(news => {
-                const newsItem = document.createElement('div');
-                newsItem.innerHTML = `<strong>${news.newsTitle}</strong> - ${news.newsDate}<br>${news.newsContents}<br><a href="${news.newsLink}" target="_blank">Read more</a><hr>`;
-                newsListContainer.appendChild(newsItem);
-            });
-        } catch (error) {
-            console.error('Error fetching news:', error);
-        }
-    }
-
-    // 페이지 로드 시 뉴스 목록을 가져와서 표시
-    window.onload = fetchNewsList;
-</script>
-</body>
-</html>
--->
-<!--
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>뉴스 목록</title>
-</head>
-<body>
-
-<h1>뉴스 목록</h1>
-
-<form th:action="@{/news}" method="get">
-    <label for="keyword">키워드:</label>
-    <input type="text" id="keyword" name="keyword" th:value="${keyword}" />
-
-    <label for="sort">정렬:</label>
-    <select id="sort" name="sort" th:value="${sort}">
-        <option value="byDate">날짜</option>
-
-    </select>
-
-    <button type="submit">검색</button>
-</form>
-
-<table>
-    <thead>
-    <tr>
-        <th>제목</th>
-        <th>날짜</th>
-        <th>본문</th>
-
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="news : ${newsList}">
-        <td th:text="${news.newsId}"></td>
-        <td th:text="${news.newsTitle}"></td>
-        <td th:text="${news.newsDate}"></td>
-        <td th:text="${news.newsContents}"></td>
-        <td th:text="${news.newsLink}"></td>
-
-    </tr>
-    </tbody>
-</table>
+<!-- 모바일 하단 메뉴 -->
+<nav th:replace="fragments.html :: mobile-nav"></nav>
 
 </body>
 </html>
--->

@@ -3,133 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
 </head>
 <body>
-
+<!-- <div id="logoHead"><div class="slogan">한국 이슈에 대한 일본과 중국의 시각을 한 눈에!</div> -->
 <header th:fragment="fragment-header">
-    <div id="logoHead"><div class="slogan">한국 이슈에 대한 일본과 중국의 시각을 한 눈에!</div>
-        <br>
-        <div class="logo"><a class="logoLink" th:href="@{/#}">InsightOfCJ</a></div>
 
-        <div class="translation-form">
-            <form th:action="@{/}" method="post" onsubmit="return translateAndSubmit()">
-                <label for="sentence">번역할 문장을 입력하세요:</label>
-                <input type="text" id="sentence" name="sentence" required>
-                <button type="submit">번역</button>
-            </form></div>
+    <table class="header-table">
+        <tr>
+            <td class="td1">
+                <span>&nbsp;&nbsp;<a th:href="@{/#}">Dongasians'</a></span>
+            </td>
+            <td class="td2">
+                <div class="translation-form">
+                    <form th:action="@{/}" method="post" onsubmit="return translateAndSubmit()">
+                        <input type="text" id="sentence" name="sentence" placeholder="번역할 단어 입력하기" required>
+                        <button type="submit">
+                            ➜
+                        </button>
+                    </form>
+                </div>
 
-        <div th:if="${translatedSentence != null and not #strings.isEmpty(translatedSentence)}"></div>
+                <div style="visibility: collapse" th:if="${translatedSentence != null and not #strings.isEmpty(translatedSentence)}"></div>
 
-        <div class="search-form">
-            <form th:action="@{/news/search}" method="get">
-                <label for="searchKeyword">검색할 키워드:</label>
-                <input type="text" id="searchKeyword" name="keyword" placeholder="뉴스 검색" th:value="${translatedSentence}" required>
-                <button type="submit">검색</button>
-            </form>
-        </div>
-        <div class="signupAndLogin"><a href="/user/signup">회원 가입</a>
-            <a href="/user/login">로그인</a></div>
+                <div class="search-form">
+                    <form th:action="@{/news/search}" method="get">
+                        <label for="searchKeyword"></label>
+                        <input type="text" id="searchKeyword" name="keyword" placeholder="뉴스 검색하기" th:value="${translatedSentence}" required>
+                        <button type="submit">
+                            🔍︎
+                        </button>
+                    </form>
+                </div>
+                &nbsp;&nbsp;
+                <div>
+                    <img th:src="@{/ques.png}" width="12" height="12">
+                </div>
+            </td>
+            <td class="td3">
+                <a>로그인</a>
+                &nbsp;&nbsp;·&nbsp;&nbsp;
+                <a>회원가입</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr>
+    </table>
 
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function translateAndSubmit() {
+            var sentenceInput = document.getElementById('sentence');
+            var translatedSentenceDiv = document.getElementById('translatedSentence');
+            var translatedSentence = translatedSentenceDiv.textContent.trim();
 
-    </div>
+            // 번역된 결과를 검색 상자에 설정
+            document.getElementById('searchKeyword').value = translatedSentence;
 
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    function translateAndSubmit() {
-        var sentenceInput = document.getElementById('sentence');
-        var translatedSentenceDiv = document.getElementById('translatedSentence');
-        var translatedSentence = translatedSentenceDiv.textContent.trim();
-
-        // 번역된 결과를 검색 상자에 설정
-        document.getElementById('searchKeyword').value = translatedSentence;
-
-        // 폼을 제출하여 페이지 이동을 막습니다.
-        return false;
-    }
-    /*]]>*/
-</script>
-
-
-<script th:inline="javascript">
-    function sendRequestToFlask() {
-        // Ajax를 사용하여 Flask로 요청 보내기
-        $.ajax({
-            type: 'POST',  // 또는 GET, 요청 방식에 따라 수정
-            url: '/sendDataToFlask',  // 실제 엔드포인트로 대체해야 합니다.
-            success: function(response) {
-                // 서버 응답을 표시
-                updateFlaskResponse(response);
-            },
-            error: function() {
-                // 오류 처리
-                console.error('Failed to send request to Flask.');
-            }
-        });
-    }
-
-    // Flask 응답을 업데이트하는 함수
-    function updateFlaskResponse(response) {
-        var displayElement = document.getElementById('displayFlaskResponse');
-        displayElement.innerText = response;
-    }
-</script>
+            // 폼을 제출하여 페이지 이동을 막습니다.
+            return false;
+        }
+        /*]]>*/
+    </script>
 </header>
 
 
-
-
 <nav th:fragment="fragment-nav">
-    <ul class="nav">
-        <li><a th:href ="@{/news}">기사 보기</a>
-            <div><span>국가</span>
-                <input type="checkbox" class="menu-btn-chk" id="japan">
-                <label class="menu-btn-label" for="japan">일본</label>
-                <input type="checkbox" class="menu-btn-chk" id="china">
-                <label class="menu-btn-label" for="china">중국</label>
-                <br>
-                <br>
-                <span>주제</span>
-                <input type="checkbox" class="menu-btn-chk" id="economics">
-                <label class="menu-btn-label" for="economics">경제</label>
-                <input type="checkbox" class="menu-btn-chk" id="politics">
-                <label class="menu-btn-label" for="politics">정치</label>
-                <input type="checkbox" class="menu-btn-chk" id="culture">
-                <label class="menu-btn-label" for="culture">사회 문화</label>
-                <input type="checkbox" class="menu-btn-chk" id="sports">
-                <label class="menu-btn-label" for="sports">스포츠</label>
-                <br>
-                <br>
-                <span>일본 언론사</span>
-                <br>
-                <br>
-                <input type="checkbox" class="menu-btn-chk" id="nikkei">
-                <label class="menu-btn-label" for="nikkei">닛케이</label>
-                <input type="checkbox" class="menu-btn-chk" id="mainichi">
-                <label class="menu-btn-label" for="mainichi">마이니치</label>
-                <input type="checkbox" class="menu-btn-chk" id="sankei">
-                <label class="menu-btn-label" for="sankei">산케이</label>
-                <input type="checkbox" class="menu-btn-chk" id="asahi">
-                <label class="menu-btn-label" for="asahi">아사히</label>
-                <input type="checkbox" class="menu-btn-chk" id="yomiuri">
-                <label class="menu-btn-label" for="yomiuri">요미우리</label>
-                <input type="checkbox" class="menu-btn-chk" id="nhk">
-                <label class="menu-btn-label" for="nhk">NHK</label>
-                <br>
-                <br>
-                <span>중국 언론사</span>
-                <br>
-                <br>
-                <input type="checkbox" class="menu-btn-chk" id="jp">
-                <label class="menu-btn-label" for="jp">인민일보</label>
-                <br>
-                <button type="submit">조회</button>
-            </div>
-        </li>
-        <li><a th:href="@{/analysis}">기사 분석</a></li>
-    </ul>
+    <div class="nav-bar">
+        <div><a th:href ="@{/news}">기사 보기</a></div>
+        <div><a th:href="@{/analysis}">기사 분석</a></div>
+    </div>
 </nav>
+
 
 <footer th:fragment="fragment-footer" id="footer">
     <div><h2>LOGO</h2>
@@ -137,6 +81,18 @@
         <span></span>
     </div>
 </footer>
+
+<nav th:fragment="mobile-nav">
+    <div class="space-bottom-menu"></div>
+    <div class="bottom-menu">
+        <div style="float: left">
+            <img th:src="@{/menu.png}">
+        </div>
+        <div style="float: right">
+            <img th:src="@{/person.png}">
+        </div>
+    </div>
+</nav>
 
 </body>
 </html>

@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <body>
 
+<header th:replace="fragments.html :: fragment-header"></header>
+<!--mebubar fragment-->
+<nav th:replace="fragments.html :: fragment-nav"></nav>
+
+<!--
 <div class="translation-form">
     <form th:action="@{/}" method="post" onsubmit="return translateAndSubmit()">
         <label for="sentence">번역할 문장을 입력하세요:</label>
@@ -101,7 +106,7 @@
         <li><a href="analysis.html">기사 분석</a></li>
     </ul>
 </nav>
-
+-->
 
 <div id="section-wrap">
 
@@ -323,7 +328,3 @@
 </footer>
 </body>
 </html>
-
-
-
-
