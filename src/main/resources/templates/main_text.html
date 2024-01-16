@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>기사 본문</title>
 </head>
@@ -13,7 +14,7 @@
 <nav th:replace="fragments.html :: fragment-nav"></nav>
 
 
-<div th:if="${news}" class="news-main-border-box">
+<div th:if="${news}" id="newsSection" class="news-main-border-box">
     <table>
         <tr><td colspan="5" class="news-main-title">
             <span th:text="${news.newsTitle}">기사 제목</span>
@@ -57,19 +58,110 @@
             <img th:src="${news.newsImageURL}" alt="뉴스 이미지" class="news-image">
         </td></tr>
         <tr><td colspan="5" style="padding: 30px">
-            <span id="news-body" th:text="${news.newsContents}">
+            <span id="originalContent" th:if="${news.newsContents != null}" th:text="${news.newsContents}">
                 기사 본문
             </span>
             <script type="text/javascript">
                 function insert_new_body() {
-                    var str = document.getElementById('news-body').textContent;
+                    var str = document.getElementById('originalContent').textContent;
                     var change = str.replaceAll("/", "<br><br>");
-                    document.getElementById('news-body').innerHTML = change;
+                    document.getElementById('originalContent').innerHTML = change;
                 }
                 insert_new_body();
             </script>
         </td></tr>
     </table>
+</div>
+
+
+<form th:action="@{/news/{newsId}(newsId=${news.newsId})}" method="post" onsubmit="return translateNews()">
+    <!-- newsId를 숨은 필드로 추가 -->
+    <input type="hidden" name="title" th:if="${news}" th:value="${news.newsTitle}" />
+    <input type="hidden" name="content" th:if="${news}" th:value="${news.newsContents}" />
+    <button type="submit">번역</button>
+</form>
+
+
+<!-- 번역된 제목과 내용을 출력할 섹션 -->
+<div id="translatedSection">
+    <h1 id="translatedTitle" th:if="${translatedTitle != null}" th:text="${translatedTitle}"></h1>
+
+    <!-- 추가된 부분: 기사 이미지와 날짜 (조건부 렌더링) -->
+    <p th:if="${news != null}">
+        <img th:src="${news.newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
+    </p>
+    <p th:if="${news != null}" th:text="${news.newsDate}"></p>
+
+    <div id="translatedContent" th:if="${translatedContent != null}">
+        <p th:text="${translatedContent}"></p>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function translateNews() {
+        // 폼 데이터 가져오기
+        var formData = new FormData(document.forms[0]);
+
+        // 명시적으로 "title"과 "content" 파라미터 추가
+        formData.append("title", newsTitle);
+        formData.append("content", newsContents);
+        // newsId를 추가
+        formData.append("newsId", newsId);
+
+        // 섹션 감추기
+        document.getElementById('translatedSection').style.display = 'none';
+        document.getElementById('newsSection').style.display = 'none';
+
+        // 서버로 데이터 전송
+        fetch('/news?newsId=' + newsId,  {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 번역된 제목과 내용이 있는 경우 동적으로 섹션을 보이도록 변경
+                if (data.translatedTitle && data.translatedContent) {
+                    // 섹션 보이도록 변경
+                    document.getElementById('translatedSection').style.display = 'block';
+
+                    // 번역된 제목 추가
+                    document.getElementById('translatedTitle').innerText = data.translatedTitle;
+
+                    // 번역된 내용 추가
+                    var translatedContentElement = document.getElementById('translatedContent');
+                    translatedContentElement.innerHTML = '<p>' + data.translatedContent + '</p>';
+
+                    // 추가된 부분: 기사 이미지와 날짜 (조건부 렌더링)
+                    if (data.news) {
+                        var newsImageElement = document.getElementById('newsImage');
+                        newsImageElement.src = data.news.newsImageURL;
+
+                        var newsDateElement = document.getElementById('newsDate');
+                        newsDateElement.innerText = data.news.newsDate;
+                    }
+                } else {
+                    // 섹션 감추도록 변경
+                    console.error('번역된 내용이 없습니다.');
+                    alert('번역된 내용이 없습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('번역 중 오류가 발생했습니다.');
+            });
+
+        // 폼 제출 방지
+        return false;
+    }
+    /*]]>*/
+</script>
+
+
+
+<div id="footer">
+    <p>< footer ></p>
+
 </div>
 
 <!-- 모바일 하단 메뉴 -->

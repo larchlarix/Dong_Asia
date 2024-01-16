@@ -1,43 +1,68 @@
-/*
-
 package com.example.DongAisa.config;
 
-import com.example.DongAisa.config.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@RequiredArgsConstructor
+public class SecurityConfig  {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/user/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/user/signup").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilter(new JwtAuthenticationFilter())
-                .logout()
-                .logoutSuccessHandler((request, response, authentication) -> response.setStatus(200))
-                .and()
-                .formLogin().disable();
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws  Exception{
+
+        http
+                .csrf((csrfConfig) ->
+                        csrfConfig.disable()
+                )
+
+                .authorizeHttpRequests((authorizeRequests) ->
+                  authorizeRequests
+                    .requestMatchers("/swagger-resources/**").permitAll()
+                    .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
+                    .anyRequest().permitAll()
+                )
+
+                .headers((headerConfig)->
+                        headerConfig.frameOptions(frameOptionsConfig->
+                                frameOptionsConfig.disable()
+
+                        )
+
+                )
+
+
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .sessionManagement((sessionManagement) ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                .formLogin(AbstractHttpConfigurer::disable);
+
+        return http.build();
+
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+
 }
 
-*/
+
 
 
 

@@ -63,9 +63,20 @@
 
 </div>
 
+
 <div id="resultContainer">
     <!-- 그래프를 출력할 곳 -->
 </div>
+
+<!-- 그래프 번역 버튼 폼 -->
+<form id="graphForm" onsubmit="return translateGraph()">
+    <!-- 그래프 텍스트를 숨은 필드로 추가 -->
+    <input type="hidden" id="graphText" name="graphText" />
+    <button type="submit">번역</button>
+</form>
+
+<!-- 번역 결과를 출력할 곳 -->
+<div id="translatedResult"></div>
 
 <script>
     // 초기 상태 설정
@@ -198,6 +209,53 @@
             width: '100%'
         });
     }
+
+    // 그래프 번역 버튼 클릭 시 호출되는 함수
+    // 번역 서비스 호출 함수
+    function translateGraph() {
+        // 그래프의 텍스트 추출
+        var graphText = $('#resultContainer').text().trim();
+
+        // 그래프 텍스트가 비어 있으면 알림 후 종료
+        if (!graphText) {
+            alert('그래프 텍스트가 없습니다.');
+            return;
+        }
+
+        // 번역 서비스 호출
+        $.ajax({
+            type: 'POST',
+            url: '/analysis',  // 적절한 엔드포인트로 변경
+            contentType: 'application/json',
+            data: JSON.stringify({graphText: graphText}),
+            dataType: 'json',
+            success: function (response) {
+                // 서버에서 받은 번역 결과를 처리
+                if (response && response.message && response.message.result && response.message.result.translatedText) {
+                    // 번역된 결과를 어딘가에 표시하거나 활용
+                    $('#translatedResult').text('번역 결과: ' + response.message.result.translatedText);
+                } else {
+                    $('#translatedResult').text('번역된 결과가 없습니다.');
+                }
+            },
+            error: function (request, status, error) {
+                console.error('번역 서비스 호출 실패', error);
+                alert('번역 서비스 호출 실패');
+            }
+        });
+
+        // 번역 결과를 표시하는 함수
+        function showTranslationResult(result) {
+            // 번역 결과를 #translatedResult에 출력
+            $('#translatedResult').text('번역 결과: ' + result);
+        }
+
+        // 번역 버튼 클릭 시 번역 서비스 호출
+        $('#translateGraphBtn').click(function () {
+            translateGraph();
+        });
+    }
+
 </script>
 
 </body>

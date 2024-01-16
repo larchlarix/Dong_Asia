@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/d3@6"></script>
     <script src="https://unpkg.com/d3-cloud@1.2.5/build/d3.layout.cloud.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
-</head>
+
+
     <title>Keyword Analysis</title>
     <style>
         .graph-container,
         .wordcloud-container {
-            width: 800px;
-            height: 400px;
+            width: 1200px;
+            height: 800px;
             margin: 20px auto;
         }
-
     </style>
 </head>
 <body>
@@ -51,7 +50,7 @@
     </form>
 </div>
 
-<div id="wordCloudContainer" class="wordcloud-container"></div>
+<div id="mindMapContainer" class="wordcloud-container"></div>
 <div id="graphContainer" class="graph-container"></div>
 
 <script>
@@ -84,10 +83,21 @@
                 contentType: 'application/json'
             });
 
-            $.when(request1, request2).done(function (response1, response2) {
-                console.log("response1",response1)
-                console.log("response1[0]",response1[0])
-                // response2데이터 변환 함수
+            var request3 = $.ajax({
+                type: 'POST',
+                url: '/keyword_posinega',
+                data: JSON.stringify(requestData),
+                dataType: 'json',
+                contentType: 'application/json'
+            });
+
+            $.when(request1, request2, request3).done(function (response1, response2, response3) {
+                console.log("response1", response1);
+                console.log("response1[0]", response1[0]);
+                console.log("response2:", response2);
+                console.log("response3:", response3);
+
+                // response2 데이터 변환 함수
                 function transformData(data) {
                     // JSON 문자열을 JavaScript 객체로 파싱
                     var parsedData = JSON.parse(data);
@@ -104,71 +114,145 @@
 
                 // WordCloud 생성
                 var similarWords = JSON.parse(response1[0]).map(item => [item[0], item[1], item[2]]);
-                renderWordCloud(keyWord, similarWords);
-
+                renderMindMap(keyWord, similarWords);
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error('Error from /keyword_process:', jqXHR.responseText);
             });
         });
-        function renderWordCloud(keyword, similarWords) {
-            var wordCloudContainer = d3.select("#wordCloudContainer");
-            wordCloudContainer.html(""); // 기존 내용 지우기
 
-            // WordCloud 렌더링 함수
-            function drawWordCloud(words) {
-                d3.layout.cloud().size([800, 400])
-                    .words(words)
-                    .rotate(function () { return ~~(Math.random() * 2) * 90; })
-                    .font("Impact")
-                    .fontSize(function (d) { return d.size; })
-                    .on("end", function (wordCloudWords) {
-                        d3.select("#wordCloudContainer").append("svg")
-                            .attr("width", 800)
-                            .attr("height", 400)
-                            .append("g")
-                            .attr("transform", "translate(400,200)")
-                            .selectAll("text")
-                            .data(wordCloudWords)
-                            .enter().append("text")
-                            .style("font-size", function (d) { return d.size + "px"; })
-                            .style("font-weight", function (d) { return d.sentiment === "user-keyword" ? "bold" : "normal"; })
-                            .style("fill", function (d) {
-                                if (d.sentiment === "positive") {
-                                    return "blue";
-                                } else if (d.sentiment === "negative") {
-                                    return "red";
-                                } else if (d.sentiment === "neutral") {
-                                    return "black";
-                                } else {
-                                    return "green"; // 사용자가 입력한 키워드 색상
-                                }
-                            })
-                            .attr("text-anchor", "middle")
-                            .attr("transform", function (d) {
-                                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                            })
-                            .text(function (d) { return d.text; });
+        function renderMindMap(keyword, similarWords) {
+            var mindMapContainer = d3.select("#mindMapContainer");
+            mindMapContainer.html(""); // 기존 내용 지우기
+
+            function drawMindMap(root) {
+                var width = 800;
+                var height = 400;
+
+                var svg = d3.select("#mindMapContainer").append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+                // 레이아웃 설정
+                var simulation = d3.forceSimulation()
+                    .force("center", d3.forceCenter(width / 2, height / 2))
+                    .force("charge", d3.forceManyBody().strength(-10))
+                    .force("link", d3.forceLink().id(function (d) { return d.id; }))
+                    .force("collision", d3.forceCollide().radius(function (d) { return d.radius + 5; }))
+                    .nodes(root.descendants());
+
+                // 연결선 그리기
+                svg.selectAll(".link")
+                    .data(root.links())
+                    .enter().append("line")
+                    .attr("class", "link")
+                    .attr("x1", function (d) { return d.source.x; })
+                    .attr("y1", function (d) { return d.source.y; })
+                    .attr("x2", function (d) { return d.target.x; })
+                    .attr("y2", function (d) { return d.target.y; });
+
+                // 노드 그리기
+                var node = svg.selectAll(".node")
+                    .data(root.descendants())
+                    .enter().append("g")
+                    .attr("class", "node")
+                    .call(d3.drag()
+                        .on("start", dragstarted)
+                        .on("drag", dragged)
+                        .on("end", dragended));
+
+                // 노드 원형 그리기
+                node.append("circle")
+                    .attr("r", function (d) {
+                        return d.data.size / 2;
                     })
-                    .start();
+                    .style("fill", function (d) {
+                        return d.data.sentimentColor;
+                    });
+
+                // 노드 라벨 그리기
+                node.append("text")
+                    .attr("dy", ".35em")
+                    .style("text-anchor", "middle")
+                    .text(function (d) {
+                        return d.data.text;
+                    });
+
+                // 강제배치 업데이트
+                simulation.on("tick", function () {
+                    node.attr("transform", function (d) {
+                        return "translate(" + d.x + "," + d.y + ")";
+                    });
+
+                    svg.selectAll(".link")
+                        .attr("x1", function (d) { return d.source.x; })
+                        .attr("y1", function (d) { return d.source.y; })
+                        .attr("x2", function (d) { return d.target.x; })
+                        .attr("y2", function (d) { return d.target.y; });
+                });
+
+                function dragstarted(d) {
+                    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+                    d.fx = d.x;
+                    d.fy = d.y;
+                }
+
+                function dragged(d) {
+                    d.fx = d3.event.x;
+                    d.fy = d3.event.y;
+                }
+
+                function dragended(d) {
+                    if (!d3.event.active) simulation.alphaTarget(0);
+                    d.fx = null;
+                    d.fy = null;
+                }
             }
 
-            // WordCloud 데이터 설정
-            var wordCloudData = [
-                { text: keyword, size: 60, sentiment: "user-keyword" }, // 사용자가 입력한 키워드 크게 표시
-                ...similarWords.map(word => ({ text: word[0], size: word[1] * 40, sentiment: word[2] })),
-            ];
 
-            drawWordCloud(wordCloudData);
+            // MindMap 계층 구성
+            var mindMapData = {
+                text: keyword,
+                size: 60,
+                sentiment: "user-keyword",
+                sentimentColor: "green", // 사용자 키워드 색상
+                children: similarWords.map(word => ({
+                    text: word[0],
+                    size: word[1] * 40,
+                    sentiment: word[2],
+                    sentimentColor: getSentimentColor(word[2]) // 감성 색상 가져오는 함수
+                }))
+            };
+
+            var root = d3.hierarchy(mindMapData);
+            drawMindMap(root);
         }
+
+
+        function getSentimentColor(sentiment) {
+            switch (sentiment) {
+                case "positive":
+                    return "blue";
+                case "negative":
+                    return "red";
+                case "neutral":
+                    return "purple";
+                default:
+                    return "gray";
+            }
+        }
+
         function renderGraph(data) {
             var graphContainer = d3.select("#graphContainer");
-            graphContainer.html(""); // 기존 내용 지우기
+            graphContainer.html(""); // 이전 내용 지우기
 
             // D3.js 그래프 생성
-            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+            var margin = { top: 20, right: 20, bottom: 30, left: 50 },
                 width = 800 - margin.left - margin.right,
                 height = 400 - margin.top - margin.bottom;
+
+            // 시간 형식 지정
+            //var parseTime = d3.timeParse("%b %d");
 
             var x = d3.scaleTime()
                 .domain(d3.extent(data, d => d.date))
@@ -188,18 +272,24 @@
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+            // 선만 그리기
             svg.append("path")
                 .data([data])
                 .attr("class", "line")
-                .attr("d", line);
+                .attr("d", line)
+                .style("fill", "none")
+                .style("stroke", "blue"); // 선의 색상을 지정합니다. 원하는 색상으로 변경해주세요.
 
+            // x축에 시간 형식 적용
             svg.append("g")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x));
+                .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%m-%d")));
 
             svg.append("g")
                 .call(d3.axisLeft(y));
         }
+
+
 
     });
 </script>

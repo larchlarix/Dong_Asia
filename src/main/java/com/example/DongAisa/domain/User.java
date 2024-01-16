@@ -1,8 +1,11 @@
 package com.example.DongAisa.domain;
 
+import com.example.DongAisa.constant.Role;
+import com.example.DongAisa.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -29,7 +32,22 @@ public class User {
     @JoinColumn(name="news_id")
     private News news;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
+    public static User createUser(UserDto userDto, PasswordEncoder passwordEncoder){
+        User user = new User();
+        user.setUserEmail(userDto.getUserEmail());
+        user.setUserName(userDto.getUserName());
+        String userPassword = passwordEncoder.encode(userDto.getUserPassword());
+        user.setUserPassword((userPassword));
+        user.setRole(Role.USER);
+        return user;
+    }
+
+
+
+    public User(){};
 
     public News getNews() {
         return news;
@@ -39,7 +57,6 @@ public class User {
         this.news = news;
     }
 
-    public User(){};
 
     public Long getUserId() {
         return userId;
@@ -73,6 +90,12 @@ public class User {
         this.userPassword = userPassword;
     }
 
+    public Role getRole() {
+        return role;
+    }
 
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
 }

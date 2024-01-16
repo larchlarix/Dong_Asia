@@ -1,7 +1,6 @@
 package com.example.DongAisa.service;
 
 // MyWebClient.java
-import com.example.DongAisa.ImageDataResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;

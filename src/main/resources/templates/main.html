@@ -36,8 +36,7 @@
     /*<![CDATA[*/
     function translateAndSubmit() {
         var sentenceInput = document.getElementById('sentence');
-        var translatedSentenceDiv = document.getElementById('translatedSentence');
-        var translatedSentence = translatedSentenceDiv.textContent.trim();
+        var translatedSentence = translatedSentence.textContent.trim();
 
         // 번역된 결과를 검색 상자에 설정
         document.getElementById('searchKeyword').value = translatedSentence;

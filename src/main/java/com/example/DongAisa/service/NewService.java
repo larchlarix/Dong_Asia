@@ -75,6 +75,18 @@ public ResponseEntity<String> sendDataToFlask(FormData formData) {
 
         return ResponseEntity.ok(responseEntity.getBody());
     }
+    public ResponseEntity<String> sendPosinegaData(KeywordData keywordData) {
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<KeywordData> requestEntity = new HttpEntity<>(keywordData, headers);
+
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(flaskUrl+"/keyword_posinega", requestEntity, String.class);
+
+        return ResponseEntity.ok(responseEntity.getBody());
+    }
 /*
     public String processFormData(String formData) {
         // 받은 데이터를 Flask 서버에 전송

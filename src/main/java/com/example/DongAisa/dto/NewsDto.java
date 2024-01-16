@@ -16,6 +16,7 @@ public class NewsDto {
 
     Long newsPublisher;
 
+
     public Long getNewsId() {
         return newsId;
     }
@@ -65,7 +66,6 @@ public class NewsDto {
     }
 
 
-
     public Long getNewsPublisher() {
         return newsPublisher;
     }
@@ -81,4 +81,5 @@ public class NewsDto {
     public void setNewsImageURL(String newsImageURL) {
         this.newsImageURL = newsImageURL;
     }
+
 }

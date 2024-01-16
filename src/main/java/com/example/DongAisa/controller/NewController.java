@@ -4,18 +4,27 @@ import com.example.DongAisa.dto.FormData;
 import com.example.DongAisa.dto.KeywordData;
 import com.example.DongAisa.dto.NewsData;
 import com.example.DongAisa.service.NewService;
+import com.example.DongAisa.service.TranslateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 
 @Controller
 public class NewController {
 
     private final NewService newService;
+
+    @Autowired
+    TranslateService translateService;
 
     @Autowired
     public NewController(NewService newService) {
@@ -39,6 +48,17 @@ public ResponseEntity<String> processForm(@RequestBody FormData formData) {
     public String analysis() {
         return "analysis_test"; // HTML 폼을 보여주는 페이지로 이동
     }
+    @PostMapping(value = "/analysis", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getTranslatedAnalysis(@RequestBody Map<String, String> requestData) {
+        try {
+            String graphText = requestData.get("graphText");
+            String translatedGraph = translateService.getTranslatedAnalysis(graphText);
+            return translatedGraph;
+        } catch (RuntimeException e) {
+            return "번역 중 오류가 발생했습니다.";
+        }
+
+    }
 
     @PostMapping("/process")
     public ResponseEntity<String> process(@RequestBody NewsData newsData) {
@@ -57,6 +77,11 @@ public ResponseEntity<String> processForm(@RequestBody FormData formData) {
     public ResponseEntity<String> keyword_amount_process(@RequestBody KeywordData keywordData) {
         // 두 번째 엔드포인트에 대한 로직 추가
         return newService.sendAmountData(keywordData);
+    }
+    @PostMapping("/keyword_posinega")
+    public ResponseEntity<String> keyword_posinega(@RequestBody KeywordData keywordData) {
+        // 두 번째 엔드포인트에 대한 로직 추가
+        return newService.sendPosinegaData(keywordData);
     }
 
 /*
