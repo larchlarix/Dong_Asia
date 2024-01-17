@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,6 +7,8 @@
 </head>
 <body>
 <!-- <div id="logoHead"><div class="slogan">한국 이슈에 대한 일본과 중국의 시각을 한 눈에!</div> -->
+
+<!-- header -->
 <header th:fragment="fragment-header">
 
     <table class="header-table">
@@ -66,15 +68,42 @@
     </script>
 </header>
 
-
+<!-- nav-bar -->
 <nav th:fragment="fragment-nav">
     <div class="nav-bar">
         <div><a th:href ="@{/news}">기사 보기</a></div>
-        <div><a th:href="@{/analysis}">기사 분석</a></div>
+        <div class="nav-bar-analysis"><a>기사 분석</a></div>
     </div>
+    <ul class="nav-bar-sub-menu">
+        <li>
+            <a th:href="@{/analysis}">언급량 분석</a>
+        </li>
+        <li>
+            <a th:href="@{/keyword_analysis}">키워드 분석</a>
+        </li>
+    </ul>
+
+    <script>
+        const menu=document.querySelector(".nav-bar-analysis");
+        const subBar=document.querySelector(".nav-bar-sub-menu");
+
+        let subToggle=true;
+        function show_sub(){
+            if(subToggle){
+                subBar.style.height="40px";
+                subBar.style.borderBottomColor="grey";
+                subToggle=!subToggle;
+            }else{
+                subBar.style.height="0px";
+                subBar.style.borderBottomColor="white";
+                subToggle=!subToggle;
+            }
+        }
+        menu.addEventListener("click",show_sub);
+    </script>
 </nav>
 
-
+<!-- 푸터 -->
 <footer th:fragment="fragment-footer" id="footer">
     <div><h2>LOGO</h2>
         <span>팀 동아시아 제작</span>
@@ -82,14 +111,15 @@
     </div>
 </footer>
 
-<nav th:fragment="mobile-nav">
+<!-- 모바일 하단 메뉴 -->
+<nav th:fragment="mobile-nav" class="mobile-nav">
     <div class="space-bottom-menu"></div>
     <div class="bottom-menu">
-        <div style="float: left">
-            <img th:src="@{/img/menu.png}">
+        <div class="left-menu-btn" style="float: left">
+            <a><img th:src="@{/img/menu.png}"></a>
         </div>
         <div style="float: right">
-            <img th:src="@{/img/person.png}">
+            <a><img th:src="@{/img/person.png}"></a>
         </div>
     </div>
 </nav>
