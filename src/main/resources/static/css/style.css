@@ -18,7 +18,7 @@ li {list-style: none;}
 }
 
 #footer {
-    bottom: 0;
+    bottom: -100%;
 
     display: block;
     background-color: #dfdfdf;
@@ -261,7 +261,8 @@ div.headerSection>div.login{
 /*main.html css*/
 
 .ques-icon {
-    margin-bottom: -5px;
+    margin-left: 15px;
+    margin-bottom: -10px;
     width : 18px;
     height: 18px;
 }
@@ -584,6 +585,11 @@ p.moreInfo {
     top: 300px;
     left: 800px;
 }
+
+#ques3 {
+    align-items: center;
+    margin-left: 15px;
+}
 .one-icon {
     display: inline-block;
     width : 82px;
@@ -655,37 +661,36 @@ p.moreInfo {
     left: 36%;
 }
 
-#selcnt1 > button {
+div#section-wrap > div#weekly-keyword > #selcnt1 > button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 }
-#selcnt1 > button img.jp-button {
-    width : 50px;
-    height: 35px;
-
-}
-
-div#selcnt1 > button img.cn-button {
+div#section-wrap > div#weekly-keyword > #selcnt1 > button img.jp-button {
     width : 50px;
     height: 35px;
 }
-div#selcnt1 > button img.exch-button {
+
+div#section-wrap > div#weekly-keyword > #selcnt1 > button img.cn-button {
+    width : 50px;
+    height: 35px;
+}
+div#section-wrap > div#weekly-keyword > #selcnt1 > button img.exch-button {
     width : 20px;
     height: 20px;
 }
 
-div#selcnt2 > button img.jp-button {
+div#section-wrap > div#recent-news > #selcnt2 > button img.jp-button {
     width: 50px;
     height: 35px;
 }
 
-div#selcnt2 > button img.cn-button {
+div#section-wrap div#recent-news #selcnt2 > button img.cn-button {
     width: 50px;
     height: 35px;
 }
 
-div#selcnt2 > button img.exch-button {
+div#section-wrap div#recent-news #selcnt2 > button img.exch-button {
     width: 20px;
     height: 20px;
 }

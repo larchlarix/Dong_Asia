@@ -37,7 +37,7 @@
                 </div>
                 &nbsp;&nbsp;
                 <div>
-                    <img th:src="@{/ques.png}" width="12" height="12">
+                    <img th:src="@{/img/ques.png}" width="12" height="12">
                 </div>
             </td>
             <td class="td3">
@@ -70,36 +70,8 @@
 <nav th:fragment="fragment-nav">
     <div class="nav-bar">
         <div><a th:href ="@{/news}">기사 보기</a></div>
-        <div class="nav-bar-analysis"><a>기사 분석</a></div>
+        <div><a th:href="@{/analysis}">기사 분석</a></div>
     </div>
-    <ul class="nav-bar-sub-menu">
-        <li>
-            <a th:href="@{/analysis}">언급량 분석</a>
-        </li>
-        <li>
-            <a th:href="@{/keyword_analysis}">키워드 분석</a>
-        </li>
-    </ul>
-
-    <script>
-        const menu=document.querySelector(".nav-bar-analysis");
-        const subBar=document.querySelector(".nav-bar-sub-menu");
-
-        let subToggle=true;
-        function show_sub(){
-            if(subToggle){
-                subBar.style.height="40px";
-                subBar.style.borderBottomColor="grey";
-                subToggle=!subToggle;
-            }else{
-                subBar.style.height="0px";
-                subBar.style.borderBottomColor="white";
-                subToggle=!subToggle;
-            }
-        }
-
-        menu.addEventListener("click",show_sub);
-    </script>
 </nav>
 
 
@@ -110,22 +82,16 @@
     </div>
 </footer>
 
-<!-- 모바일 하단 메뉴 -->
-<nav th:fragment="mobile-nav" class="mobile-nav">
+<nav th:fragment="mobile-nav">
     <div class="space-bottom-menu"></div>
     <div class="bottom-menu">
-        <div class="left-menu-btn" style="float: left">
-            <a><img th:src="@{/menu.png}"></a>
+        <div style="float: left">
+            <img th:src="@{/img/menu.png}">
         </div>
         <div style="float: right">
-            <a><img th:src="@{/person.png}"></a>
+            <img th:src="@{/img/person.png}">
         </div>
     </div>
-
-
-
-
-
 </nav>
 
 </body>

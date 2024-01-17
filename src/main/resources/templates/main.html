@@ -112,14 +112,14 @@
     <br>
     <div id="weekly-keyword">
         <div id="selcnt1" onclick="ChangeImg()">
-            <img class="jp-button" src="/japan.jpeg" />
-            <img class="exch-button" src="/exchange-arrow.png" />
-            <img class="cn-button" src="/china.jpeg" />
+            <button type="button"><img class="jp-button" src="/img/japan.jpeg"></button>
+            <button><img class="exch-button" src="/img/exchange-arrow.png" /></button>
+            <button><img class="cn-button" src="/img/china.jpeg" /></button>
         </div>
 
-        <img id="la1" src="/left-arrow.png" />
+        <img id="la1" src="/img/left-arrow.png" />
         <h4 class="section-title">일본 주간 키워드</h4>
-        <img class="ques-icon" id="ques1" src="/ques.png" />
+        <img class="ques-icon" id="ques1" src="/img/ques.png" />
         <p class="moreInfo1">최근 기사 수집일 기준으로 일주일 동안 기사에서 가장 많이 언급된 단어 다섯 개를 보여줍니다.</p>
         <!-- '?' img -->
         <p>2023.10.02 ~ 2023.10.08</p>
@@ -170,14 +170,14 @@
 
     <div id="recent-news">
         <div id="selcnt2">
-            <img class="jp-button" src="/japan.jpeg" />
-            <img class="exch-button" src="/exchange-arrow.png" />
-            <img class="cn-button" src="/china.jpeg" />
+            <button><img class="jp-button" src="/img/japan.jpeg" /></button>
+            <button><img class="exch-button" src="/img/exchange-arrow.png" /></button>
+            <button><img class="cn-button" src="/img/china.jpeg" /></button>
         </div>
 
         <h4 class="section-title">일본 최신 뉴스</h4>
-        <img id="la2" src="/left-arrow.png" />
-        <img class="ques-icon" id="ques2" src="/ques.png" />
+        <img id="la2" src="/img/left-arrow.png" />
+        <img class="ques-icon" id="ques2" src="/img/ques.png" />
         <p class="moreInfo">기사 수집 날(매주 월, 수) 기준, 최신순으로 기사가 제공됩니다.</p>
         <a id="translate-button">번역</a>
 
@@ -190,7 +190,7 @@
                         <div class="one-news">
                             <img class="news-img" th:src="${filteredNews[0].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
                             <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[0].newsId})}" th:text="${filteredNews[0].newsTitle}"></a></h5>
-                            <img class="small-icon" src="/asahi.png" />
+                            <img class="small-icon" src="/img/asahi.png" />
                             <p class="publisher">아사히</p>
                             <p class="one-news-date" th:text="${filteredNews[0].newsDate}"></p>
                         </div>
@@ -203,7 +203,7 @@
                         <div class="one-news">
                             <img class="news-img" th:src="${filteredNews[2].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
                             <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[2].newsId})}" th:text="${filteredNews[2].newsTitle}"></a></h5>
-                            <img class="small-icon" src="/nhk.png" />
+                            <img class="small-icon" src="/img/nhk.png" />
                             <p class="publisher">NHK</p>
                             <p class="one-news-date" th:text="${filteredNews[2].newsDate}"></p>
                         </div>
@@ -217,7 +217,7 @@
                         <div class="one-news">
                             <img class="news-img" th:src="${filteredNews[1].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
                             <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[1].newsId})}" th:text="${filteredNews[1].newsTitle}"></a></h5>
-                            <img class="small-icon" src="/sankei.png" />
+                            <img class="small-icon" src="/img/sankei.png" />
                             <p class="publisher">산케이</p>
                             <p class="one-news-date" th:text="${filteredNews[1].newsDate}"></p>
                         </div>
@@ -231,7 +231,7 @@
                         <div class="one-news">
                             <img class="news-img" th:src="${filteredNews[2].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
                             <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[2].newsId})}" th:text="${filteredNews[2].newsTitle}"></a></h5>
-                            <img class="small-icon" src="/mainichi.png" />
+                            <img class="small-icon" src="/img/mainichi.png" />
                             <p class="publisher">마이니치</p>
                             <p class="one-news-date" th:text="${filteredNews[2].newsDate}"></p>
                         </div>
@@ -245,40 +245,40 @@
 
     <div id="go-to-websites">
         <h4 class="section-title">원문 바로가기</h4>
-        <img class="ques-icon" id="ques3" src="/ques.png" />
+        <img class="ques-icon" id="ques3" src="/img/ques.png" />
         <p class="moreInfo">본 사이트가 수집하는 기사들의 출처 사이트로 연결됩니다.</p>
 
         <div class="six-icons" id="si1">
             <div class="one-icon">
                 <a href="https://www.yomiuri.co.jp/" target="_blank">
-                    <img class="icon" src="/yomiuri.png" />
+                    <img class="icon" src="/img/yomiuri.png" />
                 </a>
                 <p class="icon-pub">요미우리</p>
             </div>
             <div class="one-icon">
                 <a href="https://www.nhk.or.jp/" targer="_blank">
-                    <img class="icon" src="/nhk.png" />
+                    <img class="icon" src="/img/nhk.png" />
                 </a>
                 <p class="icon-pub">NHK</p>
             </div>
             <div class="one-icon">
                 <a href="https://www.nikkei.com/" target="_blank">
-                    <img class="icon" src="/nikkei.png" /></a>
+                    <img class="icon" src="/img/nikkei.png" /></a>
                 <p class="icon-pub">닛케이</p>
             </div>
             <div class="one-icon">
                 <a href="https://mainichi.jp/" target="_blank">
-                    <img class="icon" src="/mainichi.png" /></a>
+                    <img class="icon" src="/img/mainichi.png" /></a>
                 <p class="icon-pub">마이니치</p>
             </div>
             <div class="one-icon">
                 <a href="https://www.asahi.com/" target="_blank">
-                    <img class="icon" src="/asahi.png" /></a>
+                    <img class="icon" src="/img/asahi.png" /></a>
                 <p class="icon-pub">아사히</p>
             </div>
             <div class="one-icon">
                 <a href="https://www.sankei.com/" target="_blank">
-                    <img class="icon" src="/sankei.png" /></a>
+                    <img class="icon" src="/img/sankei.png" /></a>
                 <p class="icon-pub">산케이</p>
             </div>
         </div>
@@ -287,32 +287,32 @@
         <div class="six-icons" id="si2">
             <div class="one-icon">
                 <a href="www.peopledaily.com.cn" target="_blank">
-                    <img class="icon" src="/inmin.png" /></a>
+                    <img class="icon" src="/img/inmin.png" /></a>
                 <p class="icon-pub">인민일보</p>
             </div>
             <div class="one-icon">
                 <a href="http://www.bjnews.com.cn/" target="_blank">
-                    <img class="icon" src="/shinkyungbo.png" /></a>
+                    <img class="icon" src="/img/shinkyungbo.png" /></a>
                 <p class="icon-pub">신경보</p>
             </div>
             <div class="one-icon">
                 <a href="https://www.huanqiu.com/" target="_blank">
-                    <img class="icon" src="/hwangu.png" /></a>
+                    <img class="icon" src="/img/hwangu.png" /></a>
                 <p class="icon-pub">환구시보</p>
             </div>
             <div class="one-icon">
                 <a href="http://global.chinadaily.com.cn/" target="_blank">
-                    <img class="icon" src="/jungguk.png" /></a>
+                    <img class="icon" src="/img/jungguk.png" /></a>
                 <p class="icon-pub">중국일보</p>
             </div>
             <div class="one-icon">
                 <a href="http://www.cyol.net/" target="_blank">
-                    <img class="icon" src="/junggukchungnyun.png" /></a>
+                    <img class="icon" src="/img/junggukchungnyun.png" /></a>
                 <p class="icon-pub">중국청년보</p>
             </div>
             <div class="one-icon">
                 <a href="http://www.cankaoxiaoxi.com/" target="_blank">
-                    <img class="icon" src="/chamgo.png" /></a>
+                    <img class="icon" src="/img/chamgo.png" /></a>
                 <p class="icon-pub">참고소식</p>
             </div>
         </div>
@@ -322,11 +322,6 @@
 
 <br>
 
-<footer id="footer">
-    <div><h2>LOGO</h2>
-        <span>팀 동아시아 제작</span>
-        <span></span>
-    </div>
-</footer>
+<footer th:replace="fragments.html :: fragment-footer" id="footer"></footer>
 </body>
 </html>
