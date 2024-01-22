@@ -31,7 +31,9 @@
                 <input class="login-input" type="password" id="userPassword" name="userPassword" placeholder="비밀번호를 입력해주세요">
             </div>
 
-            <p th:if="${loginErrorMsg}" th:text="${loginErrorMsg}"></p>
+            <div th:if="error">
+                <p id="valid" style="color: red; font-size:12px;"><a th:text="${exception}"></a></p>
+            </div>
 
             <button class="login-btn">로그인</button>
             <br>
@@ -43,6 +45,7 @@
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         </form>
     </div>
+
 
 </div>
 

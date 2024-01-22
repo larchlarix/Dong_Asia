@@ -51,7 +51,12 @@ public class UserController {
     }
 
     @GetMapping(value="/login")
-    public String loginUser(){
+    public String loginUser
+        (@RequestParam(value = "error", required = false) String error,
+                @RequestParam(value = "exception", required = false) String exception,
+                Model model) {
+            model.addAttribute("error", error);
+            model.addAttribute("exception", exception);
         return "login";
     }
 
@@ -60,32 +65,18 @@ public class UserController {
         // Spring Security에서 자동으로 처리되므로 별도의 로그인 처리는 필요 없습니다.
         return "redirect:/";
     }
+
+    /*
     @GetMapping(value = "/login/error")
     public String loginError(Model model){
         model.addAttribute("loginErrorMsg","아이디 또는 비밀번호를 확인해주세요");
         return "login";
     }
 
-
-
-
-/*
-// 회원가입 엔드포인트
-    @GetMapping("/signup")
-    public String signUp(Model model){
-        //model.addAttribute("message", "User already exists");
-        model.addAttribute("userDto", new UserDto());
-        return "signup";
-    }
-    @PostMapping("/signup")
-    public String signUp(UserDto userDto) {
-        userService.signUp(userDto);
-            // 회원가입 성공 시 메인 페이지
-        return "redirect:/";
-
-
-   }
 */
+
+
+
 }
 
 

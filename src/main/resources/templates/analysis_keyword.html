@@ -5,13 +5,15 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://unpkg.com/d3@6"></script>
     <script src="https://unpkg.com/d3-cloud@1.2.5/build/d3.layout.cloud.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
 
 
     <title>Keyword Analysis</title>
     <style>
         .graph-container,
-        .wordcloud-container {
+        .wordcloud-container,
+        .BarGraph-container{
             width: 1200px;
             height: 800px;
             margin: 20px auto;
@@ -52,6 +54,7 @@
 
 <div id="mindMapContainer" class="wordcloud-container"></div>
 <div id="graphContainer" class="graph-container"></div>
+<div id="BarGraph" class="BarGraph-container"></div>
 
 <script>
     $(document).ready(function () {
@@ -108,7 +111,7 @@
                         .map(([date, value]) => ({ date: new Date(date), value: +value }));
                 }
 
-                // D3.js 그래프 생성
+                // D3.js 꺾은선 그래프 생성
                 var transformedData = transformData(response2[0]);
                 renderGraph(transformedData);
 
@@ -116,10 +119,17 @@
                 var similarWords = JSON.parse(response1[0]).map(item => [item[0], item[1], item[2]]);
                 renderMindMap(keyWord, similarWords);
 
+                var BarData = JSON.parse(response3[0]);
+                const categories = Object.keys(BarData);
+                var BarGraph = d3.select("#BarGraph");
+                renderBarGraph(BarGraph, categories, BarData);
+
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error('Error from /keyword_process:', jqXHR.responseText);
             });
         });
+
+
 
         function renderMindMap(keyword, similarWords) {
             var mindMapContainer = d3.select("#mindMapContainer");
@@ -288,10 +298,74 @@
             svg.append("g")
                 .call(d3.axisLeft(y));
         }
+        function renderBarGraph(BarGraph,categories, BarData) {
+            BarGraph.html(""); // 이전 내용 지우기
 
+            // 실제 HTML 엘리먼트에 접근
+            const canvasElement = BarGraph.append("canvas").node();
+            const ctx = canvasElement.getContext("2d");
 
+            const chartData = {
+                labels: categories,
+                datasets: [{
+                    label: '긍정',
+                    backgroundColor: 'blue',
+                    data: categories.map(key => BarData[key][0][0]),
+                }, {
+                    label: '부정',
+                    backgroundColor: 'red',
+                    data: categories.map(key => BarData[key][0][1]),
+                }, {
+                    label: '중립',
+                    backgroundColor: 'green',
+                    data: categories.map(key => BarData[key][0][2]),
+                }],
+            };
 
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                        },
+                        afterDraw: function (chart) {
+                            const datasets = chart.data.datasets;
+                            const ctx = chart.ctx;
+
+                            datasets.forEach(function (dataset, i) {
+                                const meta = chart.getDatasetMeta(i);
+                                if (!meta.hidden) {
+                                    meta.data.forEach(function (bar, index) {
+                                        const data = dataset.data[index];
+                                        const fontSize = 12;
+                                        const fontStyle = 'bold';
+                                        const fontFamily = 'Arial';
+                                        ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+                                        ctx.fillStyle = 'black';
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'bottom';
+                                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                    });
+                                }
+                            });
+                        },
+                    },
+                },
+            });
+
+        }
     });
+
 </script>
 </body>
 </html>
