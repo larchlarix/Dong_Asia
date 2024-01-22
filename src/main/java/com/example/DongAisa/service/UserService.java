@@ -13,21 +13,34 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     //유저 조회
@@ -49,34 +62,53 @@ public class UserService {
     }
     private  void validateDuplicateUser(User user){
         Optional<User> existingUser = userRepository.findByUserEmail(user.getUserEmail());
-        if(existingUser != null){
+        if(existingUser.isPresent()){ // Optional이 비어있지 않으면 중복된 사용자가 존재
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
     }
 
+    //로그인
 
-/*
-    // 사용자 회원가입
-    public boolean signUp(UserDto userDto) {
-        // 이메일을 통한 중복 체크
-        Optional<User> existingUser = userRepository.findByUserEmail(userDto.getUserEmail());
 
+    @Override
+    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+        Optional<User> existingUser = userRepository.findByUserEmail(userEmail);
         if (existingUser.isEmpty()) {
-            // 새로운 사용자 생성
-            User user = User.builder()
-                    .userEmail(userDto.getUserEmail())
-                    .userName(userDto.getUserName())
-                    .userPassword(passwordEncoder.encode(userDto.getUserPassword()))
-                    .build();
-
-            // 데이터베이스에 저장
-            userRepository.save(user);
-            return true;
-        } else {
-            // 이미 등록된 이메일이라면 회원가입 실패
-            return false;
+            throw new UsernameNotFoundException(userEmail);
         }
+        User user = existingUser.get();
+
+
+        // 역할을 SimpleGrantedAuthority로 생성
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().toString()));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUserEmail(),
+                user.getUserPassword(),
+                authorities
+        );
     }
 
- */
+
 }
+
+
+    /*
+    @Override
+    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException{
+        Optional<User> existingUser = userRepository.findByUserEmail(userEmail);
+        if(existingUser.isEmpty()){
+            throw new UsernameNotFoundException(userEmail);
+        }
+        User user = existingUser.get();
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUserEmail())
+                .password(user.getUserPassword())
+                .roles(user.getRole().toString())
+                .build();
+    }
+
+
+     */
+
+

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+
+      layout:decorate="~{layouts/layout1}">
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 <head>
     <meta charset="UTF-8">
@@ -13,20 +15,24 @@
     
 <h2 th:text="${message}"></h2>
 
-<!-- 로그인 폼 -->
-<form method="post">
-    <label for="loginUserEmail">Email:</label>
-    <input type="email" id="loginUserEmail" name="userEmail" required>
+<div layout:fragment="content">
 
-    <label for="loginUserPassword">Password:</label>
-    <input type="password" id="loginUserPassword" name="userPassword" required>
+    <form role="form" method="post" action="/user/login">
+        <div class="form-group">
+            <label th:for="userEmail">이메일주소</label>
+            <input type="email" id="userEmail" name="userEmail" class="form-control" placeholder="이메일을 입력해주세요">
+        </div>
+        <div class="form-group">
+            <label th:for="userPassword">비밀번호</label>
+            <input type="password" id="userPassword" name="userPassword"  class="form-control" placeholder="비밀번호 입력">
+        </div>
+        <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+        <button class="btn btn-primary">로그인</button>
+        <button type="button" class="btn btn-primary" onClick="location.href='/user/signup'">회원가입</button>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    </form>
 
-    <button type="submit">Login</button>
-</form>
+</div>
 
-<!-- 로그아웃 폼 -->
-<form action="/logout" method="post">
-    <button type="submit">Logout</button>
-</form>
 </body>
 </html>

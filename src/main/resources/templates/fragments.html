@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -42,11 +44,15 @@
                     <img th:src="@{/img/ques.png}" width="12" height="12">
                 </div>
             </td>
-            <td class="td3">
-                <a>로그인</a>
+            <td class="td3" sec:authorize="isAnonymous()">
+                <a href="/user/signup">회원가입</a>
+            </td>
                 &nbsp;&nbsp;·&nbsp;&nbsp;
-                <a>회원가입</a>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+            <td class="td4" sec:authorize="isAnonymous()">
+                <a href="/user/login">로그인</a>
+            </td>
+            <td class="td5" sec:authorize="isAuthenticated()">
+                <a href="/user/logout">로그아웃</a>
             </td>
         </tr>
     </table>
