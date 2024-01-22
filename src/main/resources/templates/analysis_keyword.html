@@ -12,8 +12,8 @@
     <title>Keyword Analysis</title>
     <style>
         .graph-container,
-        .wordcloud-container,
-        .BarGraph-container{
+        .wordcloud-container
+        {
             width: 1200px;
             height: 800px;
             margin: 20px auto;
@@ -292,35 +292,50 @@
 
             // x축에 시간 형식 적용
             svg.append("g")
+
+
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%m-%d")));
 
             svg.append("g")
                 .call(d3.axisLeft(y));
         }
-        function renderBarGraph(BarGraph,categories, BarData) {
+
+        function renderBarGraph(BarGraph, categories, BarData) {
             BarGraph.html(""); // 이전 내용 지우기
 
-            // 실제 HTML 엘리먼트에 접근
-            const canvasElement = BarGraph.append("canvas").node();
-            const ctx = canvasElement.getContext("2d");
+            // 데이터 가공
+            const processedData = categories.map((key) => {
+                const total = BarData[key][0][3]; // 총 개수
+                const ratios = [
+                    BarData[key][0][1], // 부정 비율
+                    BarData[key][0][0], // 긍정 비율
+                    BarData[key][0][2], // 중립 비율
+                ];
+                return { total, ratios };
+            });
 
+            // 각 비율을 총 개수에 맞게 조정
             const chartData = {
                 labels: categories,
                 datasets: [{
                     label: '긍정',
                     backgroundColor: 'blue',
-                    data: categories.map(key => BarData[key][0][0]),
+                    data: processedData.map(data => data.ratios[1] * data.total),
                 }, {
                     label: '부정',
                     backgroundColor: 'red',
-                    data: categories.map(key => BarData[key][0][1]),
+                    data: processedData.map(data => data.ratios[0] * data.total),
                 }, {
                     label: '중립',
                     backgroundColor: 'green',
-                    data: categories.map(key => BarData[key][0][2]),
+                    data: processedData.map(data => data.ratios[2] * data.total),
                 }],
             };
+
+            // 실제 HTML 엘리먼트에 접근
+            const canvasElement = BarGraph.append("canvas").node();
+            const ctx = canvasElement.getContext("2d");
 
             const myChart = new Chart(ctx, {
                 type: 'bar',
@@ -347,6 +362,7 @@
                                 if (!meta.hidden) {
                                     meta.data.forEach(function (bar, index) {
                                         const data = dataset.data[index];
+                                        const total = processedData[index].total; // 총 개수
                                         const fontSize = 12;
                                         const fontStyle = 'bold';
                                         const fontFamily = 'Arial';
@@ -354,7 +370,9 @@
                                         ctx.fillStyle = 'black';
                                         ctx.textAlign = 'center';
                                         ctx.textBaseline = 'bottom';
-                                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+
+                                        // 각 막대 그래프 위에 숫자로 총 개수 표시
+                                        ctx.fillText(`${data.toFixed(2)}\n(${total})`, bar._model.x, bar._model.y - 5);
                                     });
                                 }
                             });
@@ -362,8 +380,85 @@
                     },
                 },
             });
-
         }
+
+
+
+
+
+
+
+        /*
+                function renderBarGraph(BarGraph, categories, BarData) {
+                    BarGraph.html(""); // 이전 내용 지우기
+
+                    const chartData = {
+                        labels: categories,
+                        datasets: [{
+                            label: '긍정',
+                            backgroundColor: 'blue',
+                            data: categories.map(key => BarData[key][0][0]),
+                        }, {
+                            label: '부정',
+                            backgroundColor: 'red',
+                            data: categories.map(key => BarData[key][0][1]),
+                        }, {
+                            label: '중립',
+                            backgroundColor: 'green',
+                            data: categories.map(key => BarData[key][0][2]),
+                        }],
+                    };
+
+                    // 실제 HTML 엘리먼트에 접근
+                    const canvasElement = BarGraph.append("canvas").node();
+                    const ctx = canvasElement.getContext("2d");
+
+                    const myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: chartData,
+                        options: {
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                },
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                },
+                                afterDraw: function (chart) {
+                                    const datasets = chart.data.datasets;
+                                    const ctx = chart.ctx;
+
+                                    datasets.forEach(function (dataset, i) {
+                                        const meta = chart.getDatasetMeta(i);
+                                        if (!meta.hidden) {
+                                            meta.data.forEach(function (bar, index) {
+                                                const data = dataset.data[index];
+                                                const total = BarData[categories[index]][0][3]; // 총 개수
+                                                const fontSize = 12;
+                                                const fontStyle = 'bold';
+                                                const fontFamily = 'Arial';
+                                                ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+                                                ctx.fillStyle = 'black';
+                                                ctx.textAlign = 'center';
+                                                ctx.textBaseline = 'bottom';
+
+                                                // 각 막대 그래프 위에 숫자로 총 개수 표시
+                                                ctx.fillText(`${data}\n(${total})`, bar._model.x, bar._model.y - 5);
+                                            });
+                                        }
+                                    });
+                                },
+                            },
+                        },
+                    });
+                }
+        */
+
     });
 
 </script>
