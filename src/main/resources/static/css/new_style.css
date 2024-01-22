@@ -188,8 +188,20 @@
     text-align: right;
     font-size: 12px;
 }
+.header-table .td3 a {
+    text-decoration-line: none;
+    color: black;
+}
+.header-table .td3 a:link {
+    color: black;
+}
+.header-table .td3 a:hover {
+    color: black;
+}
+.header-table .td3 a:active {
+    color: black;
+}
 .nav-bar {
-    padding-left: 50px;
     background-color: #414141;
     width: 100%;
     height: 50px;
@@ -230,7 +242,7 @@
 .nav-bar-sub-menu a:active {
     text-decoration-line: underline;
 }
-  .nav-bar div a{
+  .nav-bar div a {
     text-decoration-line: none;
     color: white;
     height: 50px;
@@ -258,6 +270,60 @@
 }
 .bottom-menu {
     display: none;
+}
+.login {
+    text-align: center;
+}
+.login .title {
+    text-decoration-line: none;
+    font-size: 28px;
+    font-family: Josefin Slab;
+    text-align: center;
+    color: #851212;
+    display: block;
+    padding: 20px;
+}
+.login .login-form {
+    border-radius: 20px;
+    border: 1px solid grey;
+    width: 250px;
+    display: inline-block;
+    padding-left: 75px;
+    padding-right: 75px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.login .login-form .login-input {
+    width: 250px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid grey;
+    margin-bottom: 10px;
+}
+.login .login-btn {
+    border: 1px solid #851212;
+    border-radius: 5px;
+    color: white;
+    background-color: #851212;
+    width: 250px;
+    height: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.login .login-form p {
+    font-size: 12px;
+    width: 250px;
+}
+.login .login-form .login-signup {
+    font-size: 12px;
+    width: 250px;
+}
+.login .login-form .login-signup span {
+    float: left;
+}
+.login .login-form .login-signup a {
+    float: right;
+    color: black;
 }
 
 /* 모바일에 최적화된 예외 CSS 코드*/

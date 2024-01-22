@@ -24,18 +24,18 @@ public class NewService {
         this.restTemplate = restTemplate;
     }
 
-public ResponseEntity<String> sendDataToFlask(FormData formData) {
+    public ResponseEntity<String> sendDataToFlask(FormData formData) {
 
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-    HttpEntity<FormData> requestEntity = new HttpEntity<>(formData, headers);
+        HttpEntity<FormData> requestEntity = new HttpEntity<>(formData, headers);
 
-    ResponseEntity<String> responseEntity = restTemplate.postForEntity(flaskUrl+"/processData", requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(flaskUrl+"/processData", requestEntity, String.class);
 
-    return ResponseEntity.ok(responseEntity.getBody());
-}
+        return ResponseEntity.ok(responseEntity.getBody());
+    }
 
     public ResponseEntity<String> sendData(NewsData newsData) {
 
