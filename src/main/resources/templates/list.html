@@ -7,9 +7,10 @@
     <title>기사 보기</title>
 </head>
 <body>
-    
+
+<!-- header fragment -->
 <header th:replace="fragments.html :: fragment-header"></header>
-<!--mebubar fragment-->
+<!-- mebubar fragment -->
 <nav th:replace="fragments.html :: fragment-nav"></nav>
 
 <div class="page-section option">
@@ -84,9 +85,7 @@
     </h2>
 
     <!-- 기사 목록 -->
-    <h4 style="margin: 50px;" th:if="${#lists.isEmpty(newsList)}">검색 결과가 없습니다.</h4>
-
-    <table class="list-table" th:unless="${#lists.isEmpty(newsList)}" th:each="news : ${newsList}">
+    <table class="list-table" th:each="news : ${newsList}">
         <tr>
             <td th:unless="${news.newsImageURL == ''}" rowspan="2" width="200">
                 <img class="news-img" th:src="${news.newsImageURL}" alt="뉴스 이미지">

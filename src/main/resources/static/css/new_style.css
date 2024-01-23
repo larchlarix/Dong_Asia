@@ -286,7 +286,7 @@
 .login .login-form {
     border-radius: 20px;
     border: 1px solid grey;
-    width: 250px;
+    width: 300px;
     display: inline-block;
     padding-left: 75px;
     padding-right: 75px;
@@ -294,7 +294,7 @@
     padding-bottom: 50px;
 }
 .login .login-form .login-input {
-    width: 250px;
+    width: 300px;
     height: 30px;
     border-radius: 5px;
     border: 1px solid grey;
@@ -305,18 +305,18 @@
     border-radius: 5px;
     color: white;
     background-color: #851212;
-    width: 250px;
+    width: 300px;
     height: 30px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 .login .login-form p {
     font-size: 12px;
-    width: 250px;
+    width: 300px;
 }
 .login .login-form .login-signup {
     font-size: 12px;
-    width: 250px;
+    width: 300px;
 }
 .login .login-form .login-signup span {
     float: left;
@@ -324,6 +324,66 @@
 .login .login-form .login-signup a {
     float: right;
     color: black;
+}
+.mypage a.title {
+    text-decoration-line: none;
+    font-size: 28px;
+    font-family: Josefin Slab;
+    color: #851212;
+    display: inline-block;
+    padding: 20px;
+}
+.mypage .mypage-title {
+    font-size: 16px;
+}
+.mypage main .con {
+    display: none;
+}
+.mypage main ul {
+    border-bottom: 1px solid grey;
+}
+.mypage main ul li {
+    display: inline-block;
+    line-height: 50px;
+    width: 200px;
+    text-align: center;
+    font-size: 16px;
+}
+.mypage main ul li.on {
+    display: inline-block;
+    line-height: 50px;
+    border-bottom: 5px solid lightcoral;
+}
+.mypage main.change_profile,
+.mypage main.bookmarked_news {
+    display: block;
+    margin: 50px;
+    margin-top: 0;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 80%;
+    border: 1px solid grey;
+    border-radius: 20px;
+}
+.mypage main.change_profile .con1,
+.mypage main.bookmarked_news .con2 {
+    font-size: 16px;
+    display: block;
+}
+.mypage .con1 {
+    margin: 20px;
+}
+.mypage .con1 h4 {
+    display: inline-block;
+}
+.mypage .prof-btn {
+    color: #851212;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: white;
+    border: 0;
 }
 
 /* 모바일에 최적화된 예외 CSS 코드*/
@@ -398,6 +458,29 @@
     }
     .news-info {
         border-bottom: 0;
+    }
+
+    /* 마이페이지 */
+    .mypage main ul li {
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        line-height: 50px;
+        width: 49%;
+        text-align: center;
+        font-size: 16px;
+    }
+    .mypage main ul {
+        border-top: 1px solid grey;
+        border-bottom: 1px solid grey;
+    }
+    .mypage main.change_profile,
+    .mypage main.bookmarked_news {
+        margin: 0;
+        padding: 0;
+        display: block;
+        width: 100%;
+        border: 0;
     }
 }
 

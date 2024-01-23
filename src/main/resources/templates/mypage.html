@@ -2,31 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
+    <title>마이페이지</title>
 </head>
-<body>
-<header th:replace="fragments.html :: fragment-header"></header>
-<nav th:replace="fragments.html :: fragment-nav"></nav>
+<body class="mypage">
 
-<aside class="myPageMenu">
+<a href="/" class="title">Dongasians'</a>
+<span class="mypage-title">마이페이지</span>
+
+<main class='change_profile'>
     <ul>
-        <li>스크랩</li>
-        <li>내 정보</li>
+        <li class="change_profile on" onclick="setNew('change_profile')">내정보 수정</li>
+        <li class="bookmarked_news" onclick="setNew('bookmarked_news')">내가 북마크한 기사</li>
     </ul>
-</aside>
 
-<div class="scrapBox">
-    <!--북마크한 기사 목록-->
-</div>
+    <!-- '내정보 수정' 선택 시 노출 -->
+    <div class="con con1">
+        <div>
+            <h4>닉네임　&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <span>(닉네임) 님</span>&nbsp;&nbsp;&nbsp;&nbsp;<button class="prof-btn">변경</button>
+        </div>
+        <br>
+        <div>
+            <h4>이메일　&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <span>test@test.com</span>
+        </div>
+        <br>
+        <div>
+            <h4>비밀번호&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <button class="prof-btn">변경</button>
+        </div>
+    </div>
 
-<div class="userInfo">
-    <!--유저 정보
-    이메일
-    아이디
-    비밀번호
-    -->
-</div>
+    <!-- '내가 북마크한 기사' 선택 시 노출 -->
+    <!-- 백 작성 후 수정 필요!!!!!!!! -->
+    <div class="con con2">
+        <!-- 기사 목록 -->
+        <h4 style="margin: 50px;" th:if="${#lists.isEmpty(newsList)}">북마크한 기사가 없습니다.</h4>
+
+        <table class="list-table" th:unless="${#lists.isEmpty(newsList)}" th:each="news : ${newsList}">
+            <tr>
+                <td th:unless="${news.newsImageURL == ''}" rowspan="2" width="200">
+                    <img class="news-img" th:src="${news.newsImageURL}" alt="뉴스 이미지">
+                </td>
+                <td colspan="3" class="news-title"><a th:href="@{/news/{newsId}(newsId=${news.newsId})}" th:text="${news.newsTitle}">기사 제목</a></td>
+            </tr>
+            <tr height="50" style="font-size: 14px">
+                <td width="40">
+                <span th:switch="${news.newsPublisher}">
+                        <span th:case="0"><img class="news-icon" th:src="@{/img/nhk.png}"></span>
+                        <span th:case="1"><img class="news-icon" th:src="@{/img/mainichi.png}"></span>
+                        <span th:case="2"><img class="news-icon" th:src="@{/img/asahi.png}"></span>
+                        <span th:case="3"><img class="news-icon" th:src="@{/img/sankei.png}"></span>
+                </span>
+                </td>
+                <td>
+                <span th:switch="${news.newsPublisher}">
+                        <span th:case="0">NHK</span>
+                        <span th:case="1">마이니치</span>
+                        <span th:case="2">아사히</span>
+                        <span th:case="3">산케이</span>
+                </span>
+                </td>
+                <td th:text="${news.newsDate}" style="text-align:right; color: grey">기사 일자</td>
+            </tr>
+        </table>
+    </div>
+</main>
+
+<!-- 모바일 하단 메뉴 -->
+<nav th:replace="fragments.html :: mobile-nav"></nav>
+
+<script>
+    function setNew (_menu) {
+        var menus = document.querySelectorAll('li');
+        menus.forEach(function (menu) {
+            menu.classList.remove('on');
+        })
+        document.querySelector('li.' + _menu).classList.add('on');
+
+        element = document.querySelector("main");
+        element.className = '';
+        element.classList.add(_menu);
+    }
+</script>
 
 </body>
 </html>
