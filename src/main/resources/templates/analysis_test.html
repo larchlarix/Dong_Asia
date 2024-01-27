@@ -5,78 +5,86 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
-    <title>뉴스 데이터 선택</title>
+    <title>기사 분석 :: 언급량 분석</title>
 </head>
 <body>
-
+<!-- header fragment -->
 <header th:replace="fragments.html :: fragment-header"></header>
-<!--mebubar fragment-->
+<!-- mebubar fragment -->
 <nav th:replace="fragments.html :: fragment-nav"></nav>
 
-<div class="nums-of-mention2">
-    <div class="dateSelect">
-        기간
-        <label class="dateBox" for="startdate1">
-            <input type="date" id="startdate1" max="2050-12-31" min="2000-01-01">
-        </label>
-        ~
-        <label class="dateBox" for="enddate1">
-            <input type="date" id="enddate1" max="2050-12-31" min="2000-01-01">
-        </label>
-    </div>
-    <br>
+<div class="page-section option">
 
-    <div class="btn-group" role="group" aria-label="기본 체크박스 토글 버튼 그룹">
-        <!-- 주제로 전환 버튼 -->
-        <button id="switchToTopicBtn">전환</button>
+    <h2>언급량 분석</h2>
 
-        <!-- 언론사 체크박스 그룹 -->
-        <div id="publisherCheckboxes">
-            언론사
-            <input type="checkbox" class="btn-check publisher-checkbox" id="btncheck0" data-publisher-index="0" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck0">NHK</label>
-            <input type="checkbox" class="btn-check publisher-checkbox" id="btncheck1" data-publisher-index="1" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck1">마이니치</label>
-            <input type="checkbox" class="btn-check publisher-checkbox" id="btncheck2" data-publisher-index="2" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck2">아사히</label>
-            <input type="checkbox" class="btn-check publisher-checkbox" id="btncheck3" data-publisher-index="3" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck3">산케이</label>
-        </div>
-
-        <!-- 주제 체크박스 그룹 (초기에는 숨김) -->
-        <div id="topicCheckboxes" style="display: none;">
-            주제
-            <input type="checkbox" class="btn-check topic-checkbox" id="btncheck00" data-topic-index="0" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck00">그외</label>
-            <input type="checkbox" class="btn-check topic-checkbox" id="btncheck01" data-topic-index="1" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck01">국제사회</label>
-            <input type="checkbox" class="btn-check topic-checkbox" id="btncheck02" data-topic-index="2" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck02">스포츠</label>
-            <input type="checkbox" class="btn-check topic-checkbox" id="btncheck03" data-topic-index="3" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck03">사회문화</label>
-            <input type="checkbox" class="btn-check topic-checkbox" id="btncheck04" data-topic-index="4" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck04">경제</label>
-        </div>
-
-        <input class="btn-check-submit" type="button" value="조회" id="btnSubmit">
-    </div>
-
+    <!-- 기사 옵션 ⌵ -->
+    <table class="news-option">
+        <tr>
+            <td width="100">
+                <span>기간</span>
+            </td>
+            <td>
+                <label class="dateBox" for="startdate1">
+                    <input type="date" id="startdate1" max="2050-12-31" min="2000-01-01">
+                </label>
+                ~
+                <label class="dateBox" for="enddate1">
+                    <input type="date" id="enddate1" max="2050-12-31" min="2000-01-01">
+                </label>
+            </td>
+            <td rowspan="3" style="text-align: right"><input class="btn-check-submit long_btn" type="button" value="조회" id="btnSubmit"></td>
+        </tr>
+        <tr id="publisherCheckboxes">
+            <td>
+                <span>언론사</span>&nbsp;&nbsp;<button class="switchToTopicBtn"><img src="/img/change.png"></button>
+            </td>
+            <td>
+                <input type="radio" class="btn-check publisher-checkbox" id="btncheckall" name="publisher" data-publisher-index="-1" autocomplete="off" checked="checked">
+                <label for="btncheckall">전체</label>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input type="radio" class="btn-check publisher-checkbox" id="btncheck0" name="publisher" data-publisher-index="0" autocomplete="off">
+                <label for="btncheck0">NHK</label>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input type="radio" class="btn-check publisher-checkbox" id="btncheck1" name="publisher" data-publisher-index="1" autocomplete="off">
+                <label for="btncheck1">마이니치</label>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input type="radio" class="btn-check publisher-checkbox" id="btncheck2" name="publisher" data-publisher-index="2" autocomplete="off">
+                <label for="btncheck2">아사히</label>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input type="radio" class="btn-check publisher-checkbox" id="btncheck3" name="publisher" data-publisher-index="3" autocomplete="off">
+                <label for="btncheck3">산케이</label>
+            </td>
+        </tr>
+        <tr id="topicCheckboxes" style="display: none">
+            <td>
+                <span>주제</span>&nbsp;&nbsp;<button class="switchToTopicBtn"><img src="/img/change.png"></button>
+            </td>
+            <td>
+                <input type="radio" class="btn-check topic-checkbox" id="btncheck0all" name="topic" data-topic-index="-1" autocomplete="off" checked="checked">
+                <label for="btncheck0all">전체</label>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input type="radio" class="btn-check topic-checkbox" id="btncheck01" name="topic" data-topic-index="1" autocomplete="off">
+                <label for="btncheck01">국제·정치</label>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input type="radio" class="btn-check topic-checkbox" id="btncheck04" name="topic" data-topic-index="4" autocomplete="off">
+                <label for="btncheck04">경제</label>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input type="radio" class="btn-check topic-checkbox" id="btncheck02" name="topic" data-topic-index="2" autocomplete="off">
+                <label for="btncheck02">스포츠</label>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input type="radio" class="btn-check topic-checkbox" id="btncheck03" name="topic" data-topic-index="3" autocomplete="off">
+                <label for="btncheck03">사회·문화</label>
+            </td>
+        </tr>
+    </table>
 </div>
 
+<br>
 
-<div id="resultContainer">
-    <!-- 그래프를 출력할 곳 -->
+<div class="page-section">
+    <div id="resultContainer"><p class="bf_result">이곳에 분석 결과가 나옵니다.</p></div>
 </div>
 
-<!-- 그래프 번역 버튼 폼 -->
-<form id="graphForm" onsubmit="return translateGraph()">
-    <!-- 그래프 텍스트를 숨은 필드로 추가 -->
-    <input type="hidden" id="graphText" name="graphText" />
-    <button type="submit">번역</button>
-</form>
-
-<!-- 번역 결과를 출력할 곳 -->
-<div id="translatedResult"></div>
 
 <script>
     // 초기 상태 설정
@@ -85,17 +93,20 @@
     // 주제 체크박스 그룹 숨기기
     $('#topicCheckboxes').hide();
 
-    $('#switchToTopicBtn').click(function () {
+    $('.switchToTopicBtn').click(function () {
         // 언론사와 주제 모드를 전환
         isPublisherMode = !isPublisherMode;
 
         // 언론사와 주제 체크박스 그룹을 각각 표시 또는 감춤
         if (isPublisherMode) {
+            $('#btncheck0all').prop('checked', true);
+            $('#btncheckall').prop('checked', true);
             $('#publisherCheckboxes').show();
             $('#topicCheckboxes').hide();
         } else {
             // 언론사 모드로 전환할 때, 선택된 언론사 체크박스를 초기화
-            $('.publisher-checkbox:checked').prop('checked', false);
+            $('#btncheck0all').prop('checked', true);
+            $('#btncheckall').prop('checked', true);
             $('#publisherCheckboxes').hide();
             $('#topicCheckboxes').show();
         }
@@ -105,6 +116,8 @@
     });
 
     $('#btnSubmit').click(function () {
+        document.getElementById('resultContainer').innerHTML = ''; // 기존 내용 지우기
+
         var startDate = $('#startdate1').val();
         var endDate = $('#enddate1').val();
 
@@ -153,6 +166,7 @@
 
     // 워드클라우드를 그리는 함수
     function drawWordCloud(data) {
+
         // Flask에서 받은 데이터를 ZingChart 워드클라우드 형식에 맞게 변환
         var wordsData = data.map(function (item) {
             return {
@@ -204,59 +218,15 @@
         // 워드클라우드 차트 렌더링
         zingchart.render({
             id: 'resultContainer',
-            data: myConfig,
-            height: 400,
-            width: '100%'
+            data: myConfig
+           //height: 400,
+            //width: '100%'
         });
     }
-
-    // 그래프 번역 버튼 클릭 시 호출되는 함수
-    // 번역 서비스 호출 함수
-    function translateGraph() {
-        // 그래프의 텍스트 추출
-        var graphText = $('#resultContainer').text().trim();
-
-        // 그래프 텍스트가 비어 있으면 알림 후 종료
-        if (!graphText) {
-            alert('그래프 텍스트가 없습니다.');
-            return;
-        }
-
-        // 번역 서비스 호출
-        $.ajax({
-            type: 'POST',
-            url: '/analysis',  // 적절한 엔드포인트로 변경
-            contentType: 'application/json',
-            data: JSON.stringify({graphText: graphText}),
-            dataType: 'json',
-            success: function (response) {
-                // 서버에서 받은 번역 결과를 처리
-                if (response && response.message && response.message.result && response.message.result.translatedText) {
-                    // 번역된 결과를 어딘가에 표시하거나 활용
-                    $('#translatedResult').text('번역 결과: ' + response.message.result.translatedText);
-                } else {
-                    $('#translatedResult').text('번역된 결과가 없습니다.');
-                }
-            },
-            error: function (request, status, error) {
-                console.error('번역 서비스 호출 실패', error);
-                alert('번역 서비스 호출 실패');
-            }
-        });
-
-        // 번역 결과를 표시하는 함수
-        function showTranslationResult(result) {
-            // 번역 결과를 #translatedResult에 출력
-            $('#translatedResult').text('번역 결과: ' + result);
-        }
-
-        // 번역 버튼 클릭 시 번역 서비스 호출
-        $('#translateGraphBtn').click(function () {
-            translateGraph();
-        });
-    }
-
 </script>
+
+
+
 
 </body>
 </html>

@@ -8,25 +8,53 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
 
-
-    <title>Keyword Analysis</title>
-    <style>
-        .graph-container,
-        .wordcloud-container
-        {
-            width: 1200px;
-            height: 800px;
-            margin: 20px auto;
-        }
-    </style>
+    <title>기사 분석 :: 키워드 분석</title>
 </head>
-<body>
-
+<body class="keyword_ana">
+<!-- header fragment -->
 <header th:replace="fragments.html :: fragment-header"></header>
-<!--mebubar fragment-->
+<!-- mebubar fragment -->
 <nav th:replace="fragments.html :: fragment-nav"></nav>
 
 
+<div class="page-section option">
+
+    <h2>키워드 분석</h2>
+
+    <table class="news-option">
+        <tr>
+            <td width="100">
+                <span>기간</span>
+            </td>
+            <td>
+                <label class="dateBox" for="startdate2">
+                    <input type="date" id="startdate2" max="2050-12-31" min="2000-01-01">
+                </label>
+                ~
+                <label class="dateBox" for="enddate2">
+                    <input type="date" id="enddate2" max="2050-12-31" min="2000-01-01">
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><form>
+                <input type="text" name="query" value="" placeholder="키워드를 입력하세요" id="keyword">
+                <button type="submit" id="btnSubmit" class="short_btn">검색</button>
+            </form></td>
+        </tr>
+        <tr class="suggested_keywords">
+            <td colspan="2">
+                <p style="text-align: center; font-size: 12px">추천 키워드</p>
+                <span>추천키워드1</span> <span>추천키워드2</span> <span>추천키워드3</span>
+                <span>추천키워드1</span> <span>추천키워드2</span> <span>추천키워드3</span>
+                <span>추천키워드1</span> <span>추천키워드2</span> <span>추천키워드3</span>
+                <span>추천키워드1</span> <span>추천키워드2</span> <span>추천키워드3</span>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!--
 <div class="analysisOfKeywordBox">
     <div class="dateCheckBox">
         <span>기간</span>
@@ -51,12 +79,47 @@
         <button type="submit" id="btnSubmit">조회</button>
     </form>
 </div>
+-->
+<br>
 
-<div id="mindMapContainer" class="wordcloud-container"></div>
-<div id="graphContainer" class="graph-container"></div>
-<div id="BarGraph" class="BarGraph-container"></div>
+<div class="page-section">
+    <main class='ana1'>
+        <ul>
+            <li class="ana1 on" onclick="setNew('ana1')">언급량 추이</li>
+            <li class="ana2" onclick="setNew('ana2')">연관어 및 긍ㆍ부정 분석</li>
+            <li class="ana3" onclick="setNew('ana3')">언론사별 긍ㆍ부정 경향</li>
+        </ul>
+
+        <!-- '언급량 추이' 선택 시 노출 -->
+        <div class="con con1">
+            <div id="graphContainer" class="graph-container"><p class="bf_result">키워드를 입력하면 분석 결과가 나옵니다.</p></div>
+        </div>
+
+        <!-- '연관어 및 긍ㆍ부정 분석' 선택 시 노출 -->
+        <div class="con con2">
+            <div id="mindMapContainer" class="wordcloud-container"><p class="bf_result">키워드를 입력하면 분석 결과가 나옵니다.</p></div>
+        </div>
+
+        <!-- '언론사별 긍ㆍ부정 경향' 선택 시 노출 -->
+        <div class="con con3">
+            <div id="BarGraph" class="BarGraph-container"><p class="bf_result">키워드를 입력하면 분석 결과가 나옵니다.</p></div>
+        </div>
+    </main>
+</div>
 
 <script>
+    function setNew (_menu) {
+        var menus = document.querySelectorAll('li');
+        menus.forEach(function (menu) {
+            menu.classList.remove('on');
+        })
+        document.querySelector('li.' + _menu).classList.add('on');
+
+        element = document.querySelector("main");
+        element.className = '';
+        element.classList.add(_menu);
+    }
+
     $(document).ready(function () {
         $('#btnSubmit').click(function (event) {
             event.preventDefault();
@@ -136,8 +199,8 @@
             mindMapContainer.html(""); // 기존 내용 지우기
 
             function drawMindMap(root) {
-                var width = 800;
-                var height = 400;
+                var width = 600; //800
+                var height = 300; //400
 
                 var svg = d3.select("#mindMapContainer").append("svg")
                     .attr("width", width)
@@ -225,7 +288,7 @@
                 text: keyword,
                 size: 60,
                 sentiment: "user-keyword",
-                sentimentColor: "green", // 사용자 키워드 색상
+                sentimentColor: "grey", // 사용자 키워드 색상
                 children: similarWords.map(word => ({
                     text: word[0],
                     size: word[1] * 40,
@@ -242,13 +305,13 @@
         function getSentimentColor(sentiment) {
             switch (sentiment) {
                 case "positive":
-                    return "blue";
+                    return "#53C0D8";
                 case "negative":
-                    return "red";
+                    return "#FF7B7B";
                 case "neutral":
-                    return "purple";
+                    return "#FF9F46";
                 default:
-                    return "gray";
+                    return "grey";
             }
         }
 
@@ -258,8 +321,10 @@
 
             // D3.js 그래프 생성
             var margin = { top: 20, right: 20, bottom: 30, left: 50 },
-                width = 800 - margin.left - margin.right,
-                height = 400 - margin.top - margin.bottom;
+                //width = 800 - margin.left - margin.right,
+                //height = 400 - margin.top - margin.bottom;
+                width = 600 - margin.left - margin.right,
+                height = 300 - margin.top - margin.bottom;
 
             // 시간 형식 지정
             //var parseTime = d3.timeParse("%b %d");
@@ -288,7 +353,7 @@
                 .attr("class", "line")
                 .attr("d", line)
                 .style("fill", "none")
-                .style("stroke", "blue"); // 선의 색상을 지정합니다. 원하는 색상으로 변경해주세요.
+                .style("stroke", "#851212"); // 선의 색상을 지정합니다. 원하는 색상으로 변경해주세요.
 
             // x축에 시간 형식 적용
             svg.append("g")
@@ -320,15 +385,15 @@
                 labels: categories,
                 datasets: [{
                     label: '긍정',
-                    backgroundColor: 'blue',
+                    backgroundColor: '#53C0D8',
                     data: processedData.map(data => data.ratios[1] * data.total),
                 }, {
                     label: '부정',
-                    backgroundColor: 'red',
+                    backgroundColor: '#FF7B7B',
                     data: processedData.map(data => data.ratios[0] * data.total),
                 }, {
                     label: '중립',
-                    backgroundColor: 'green',
+                    backgroundColor: '#FF9F46',
                     data: processedData.map(data => data.ratios[2] * data.total),
                 }],
             };
