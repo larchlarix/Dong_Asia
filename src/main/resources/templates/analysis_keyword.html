@@ -72,6 +72,7 @@
                    min="2000-01-01">
         </label>
     </div>
+    <p th:if="${keyword_suggested != null}" th:text="${keyword_suggested}"></p>
 
     <form>
         키워드 입력
@@ -106,6 +107,10 @@
         </div>
     </main>
 </div>
+
+<h1>News List</h1>
+<ul id="newsList"></ul>
+
 
 <script>
     function setNew (_menu) {
@@ -157,11 +162,19 @@
                 contentType: 'application/json'
             });
 
-            $.when(request1, request2, request3).done(function (response1, response2, response3) {
+            var request4 = $.ajax({
+                type: 'POST',
+                url: '/keyword_related_news',
+                data: JSON.stringify(requestData),
+                dataType: 'json',
+                contentType: 'application/json'
+            });
+
+            $.when(request1, request2, request3, request4).done(function (response1, response2, response3, response4) {
                 console.log("response1", response1);
-                console.log("response1[0]", response1[0]);
                 console.log("response2:", response2);
                 console.log("response3:", response3);
+                console.log("response4:", response4);
 
                 // response2 데이터 변환 함수
                 function transformData(data) {
@@ -186,6 +199,25 @@
                 const categories = Object.keys(BarData);
                 var BarGraph = d3.select("#BarGraph");
                 renderBarGraph(BarGraph, categories, BarData);
+
+                // response4가 문자열인 경우에 대한 처리
+                if (typeof response4[0] === 'string') {
+                    // 문자열을 파싱하여 배열로 변환
+                    var newsIds = JSON.parse(response4[0]);
+
+                    // 각 newsId에 대한 상세 정보를 서버에서 조회하고 출력
+                    fetchNewsList(newsIds);
+                } else {
+                    // response4가 객체인 경우에 대한 처리
+                    for (var key in response4[0]) {
+                        if (response4[0].hasOwnProperty(key)) {
+                            var newsId = response4[0][key];
+                            // newsId를 문자열로 변환하지 않고 그대로 보내기
+                            fetchNewsDetail(newsId);
+                        }
+                    }
+                }
+
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error('Error from /keyword_process:', jqXHR.responseText);
@@ -447,83 +479,59 @@
             });
         }
 
+        // News 목록을 가져와서 출력하는 함수
+        function fetchNewsList(newsIds) {
+            var newsList = $('#newsList');
 
+            // 각 newsId에 대한 상세 정보를 서버에서 조회하고 출력
+            $.each(newsIds, function (index, newsId) {
+                fetchNewsDetail(newsId);
+            });
+        }
 
+        // News 상세 정보를 가져와서 출력하는 함수
+        function fetchNewsDetail(newsId) {
+            console.log("NewsId type:", typeof newsId);
+            // newsId가 배열인 경우에 대한 처리
+            if (Array.isArray(newsId)) {
+                // 각 newsId에 대한 상세 정보를 서버에서 조회하고 출력
+                $.each(newsId, function (index, singleNewsId) {
+                    fetchNewsDetail(singleNewsId);
+                });
+                return; // 함수 종료
+            }
 
+            // 그 외의 경우 에러 처리
+            if (typeof newsId !== 'number') {
+                console.error("Invalid newsId format:", newsId);
+                return; // 함수 종료
+            }
 
+            // newsId를 인코딩하지 않고 그대로 보내기
+            var requestDetail = $.ajax({
+                type: 'GET',
+                url: '/get_news_detail',
+                data: { newsId: newsId },
+                dataType: 'json',
+                contentType: 'application/json'
+            });
 
+            // 상세 정보를 가져온 후 처리
+            requestDetail.done(function (responseDetail) {
+                var listItem = $('<li>').text("Title: " + responseDetail.newsTitle + ", Date: " + responseDetail.newsDate);
+                $('#newsList').append(listItem);
+            });
 
-        /*
-                function renderBarGraph(BarGraph, categories, BarData) {
-                    BarGraph.html(""); // 이전 내용 지우기
-
-                    const chartData = {
-                        labels: categories,
-                        datasets: [{
-                            label: '긍정',
-                            backgroundColor: 'blue',
-                            data: categories.map(key => BarData[key][0][0]),
-                        }, {
-                            label: '부정',
-                            backgroundColor: 'red',
-                            data: categories.map(key => BarData[key][0][1]),
-                        }, {
-                            label: '중립',
-                            backgroundColor: 'green',
-                            data: categories.map(key => BarData[key][0][2]),
-                        }],
-                    };
-
-                    // 실제 HTML 엘리먼트에 접근
-                    const canvasElement = BarGraph.append("canvas").node();
-                    const ctx = canvasElement.getContext("2d");
-
-                    const myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: chartData,
-                        options: {
-                            scales: {
-                                x: {
-                                    stacked: true,
-                                },
-                                y: {
-                                    stacked: true,
-                                },
-                            },
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                },
-                                afterDraw: function (chart) {
-                                    const datasets = chart.data.datasets;
-                                    const ctx = chart.ctx;
-
-                                    datasets.forEach(function (dataset, i) {
-                                        const meta = chart.getDatasetMeta(i);
-                                        if (!meta.hidden) {
-                                            meta.data.forEach(function (bar, index) {
-                                                const data = dataset.data[index];
-                                                const total = BarData[categories[index]][0][3]; // 총 개수
-                                                const fontSize = 12;
-                                                const fontStyle = 'bold';
-                                                const fontFamily = 'Arial';
-                                                ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
-                                                ctx.fillStyle = 'black';
-                                                ctx.textAlign = 'center';
-                                                ctx.textBaseline = 'bottom';
-
-                                                // 각 막대 그래프 위에 숫자로 총 개수 표시
-                                                ctx.fillText(`${data}\n(${total})`, bar._model.x, bar._model.y - 5);
-                                            });
-                                        }
-                                    });
-                                },
-                            },
-                        },
-                    });
+            // 에러 처리
+            requestDetail.fail(function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 404) {
+                    console.error("News not found");
+                    // 추가적인 처리를 여기에 추가할 수 있습니다.
+                } else {
+                    console.error("Error fetching news detail:", errorThrown);
                 }
-        */
-
+            });
+        }
     });
 
 </script>

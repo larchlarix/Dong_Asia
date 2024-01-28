@@ -87,6 +87,19 @@ public class NewService {
 
         return ResponseEntity.ok(responseEntity.getBody());
     }
+
+    public ResponseEntity<String> sendRelatedNewsData(KeywordData keywordData) {
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<KeywordData> requestEntity = new HttpEntity<>(keywordData, headers);
+
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(flaskUrl+"/keyword_related_news", requestEntity, String.class);
+
+        return ResponseEntity.ok(responseEntity.getBody());
+    }
 /*
     public String processFormData(String formData) {
         // 받은 데이터를 Flask 서버에 전송

@@ -9,6 +9,7 @@ import com.example.DongAisa.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class NewsService {
@@ -47,6 +48,11 @@ public class NewsService {
         }
         List<NewsDto> newsDtos = NewsMapper.convertToDtoList(news);
         return newsDtos;
+    }
+    public NewsDto getNewsDetail(Long newsId) {
+        Optional<News> newsOptional = newsRepository.findById(newsId);
+
+        return newsOptional.map(NewsMapper::convertToDto).orElse(null);
     }
 
     /*
