@@ -8,11 +8,12 @@
 </head>
 <body>
 
-<!-- header fragment -->
 <header th:replace="fragments.html :: fragment-header"></header>
-<!-- mebubar fragment -->
+<!--
 <nav th:replace="fragments.html :: fragment-nav"></nav>
+-->
 
+<div class="page-right">
 <div class="page-section option">
 
     <h2>옵션</h2>
@@ -98,124 +99,29 @@
         </tr>
         <tr height="50" style="font-size: 14px">
             <td width="40">
-            <span th:switch="${news.newsPublisher}">
-                <span th:case="0"><img class="news-icon" th:src="@{/img/nhk.png}"></span>
-                <span th:case="1"><img class="news-icon" th:src="@{/img/mainichi.png}"></span>
-                <span th:case="2"><img class="news-icon" th:src="@{/img/asahi.png}"></span>
-                <span th:case="3"><img class="news-icon" th:src="@{/img/sankei.png}"></span>
-            </span>
-            </td>
-            <td>
-            <span th:switch="${news.newsPublisher}">
-                <span th:case="0">NHK</span>
-                <span th:case="1">마이니치</span>
-                <span th:case="2">아사히</span>
-                <span th:case="3">산케이</span>
-            </span>
-            </td>
-            <td th:text="${news.newsDate}" style="text-align:right; color: grey">기사 일자</td>
-        </tr>
-    </table>
-  <!--원래
-     기사 옵션 ⌵
-    <form method="get" action="">
-        <table class="news-option">
-            <tr>
-                <td width="100">
-                    <span>국가</span>
-                </td>
-                <td>
-                    <input type="radio" name="country" value="0" id="jpn" checked="checked">
-                    <label for="jpn">일본</label>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <input type="radio" name="country" value="1" id="ch">
-                    <label for="ch">중국</label>
-                </td>
-                <td rowspan="3" style="text-align: right"><input type="submit" value="조회" class="long_btn"></td>
-            </tr>
-            <tr>
-                <td>
-                    <span>주제</span>
-                </td>
-                <td>
-                    <input type="checkbox" name="category" value="1" id="cate1">
-                    <label for="cate1">국제·정치</label>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <input type="checkbox" name="category" value="3" id="cate3">
-                    <label for="cate3">경제</label>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <input type="checkbox" name="category" value="4" id="cate4">
-                    <label for="cate4">사회·문화</label>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <input type="checkbox" name="category" value="2" id="cate2">
-                    <label for="cate2">스포츠</label>
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    <span>언론사</span>
-                </td>
-                <td>
-                    <input type="checkbox" name="publisher" value="0" id="pub0">
-                    <label for="pub0">NHK</label>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <input type="checkbox" name="publisher" value="2" id="pub2">
-                    <label for="pub2">아사히</label>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <input type="checkbox" name="publisher" value="3" id="pub3">
-                    <label for="pub3">산케이</label>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <input type="checkbox" name="publisher" value="1" id="pub1">
-                    <label for="pub1">마이니치</label>
-                </td>
-            </tr>
-        </table>
-    </form>
-</div>
-
-<br>
-
-<div class="page-section">
-
-    <h2>
-        <span>기사 보기</span>
-        &nbsp;&nbsp;
-        <span class="translate_btn">번역</span>
-    </h2>
-
-     기사 목록
-    <table class="list-table" th:each="news : ${newsList}">
-        <tr>
-            <td th:unless="${news.newsImageURL == ''}" rowspan="2" width="200">
-                <img class="news-img" th:src="${news.newsImageURL}" alt="뉴스 이미지">
-            </td>
-            <td colspan="3" class="news-title"><a th:href="@{/news/{newsId}(newsId=${news.newsId})}" th:text="${news.newsTitle}">기사 제목</a></td>
-        </tr>
-        <tr height="50" style="font-size: 14px">
-            <td width="40">
                 <span th:switch="${news.newsPublisher}">
-                        <span th:case="0"><img class="news-icon" th:src="@{/img/nhk.png}"></span>
-                        <span th:case="1"><img class="news-icon" th:src="@{/img/mainichi.png}"></span>
-                        <span th:case="2"><img class="news-icon" th:src="@{/img/asahi.png}"></span>
-                        <span th:case="3"><img class="news-icon" th:src="@{/img/sankei.png}"></span>
+                    <span th:case="0"><img class="news-icon" th:src="@{/img/nhk.png}"></span>
+                    <span th:case="1"><img class="news-icon" th:src="@{/img/mainichi.png}"></span>
+                    <span th:case="2"><img class="news-icon" th:src="@{/img/asahi.png}"></span>
+                    <span th:case="3"><img class="news-icon" th:src="@{/img/sankei.png}"></span>
                 </span>
             </td>
             <td>
                 <span th:switch="${news.newsPublisher}">
-                        <span th:case="0">NHK</span>
-                        <span th:case="1">마이니치</span>
-                        <span th:case="2">아사히</span>
-                        <span th:case="3">산케이</span>
+                    <span th:case="0">NHK</span>
+                    <span th:case="1">마이니치</span>
+                    <span th:case="2">아사히</span>
+                    <span th:case="3">산케이</span>
                 </span>
             </td>
             <td th:text="${news.newsDate}" style="text-align:right; color: grey">기사 일자</td>
         </tr>
     </table>
 </div>
--->
+</div>
+
 <!-- 모바일 하단 메뉴 -->
 <nav th:replace="fragments.html :: mobile-nav"></nav>
 
- </body>
+</body>
 </html>

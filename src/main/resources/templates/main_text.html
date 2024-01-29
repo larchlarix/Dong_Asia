@@ -11,9 +11,9 @@
 
 <header th:replace="fragments.html :: fragment-header"></header>
 <!--mebubar fragment-->
-<nav th:replace="fragments.html :: fragment-nav"></nav>
+<!--<nav th:replace="fragments.html :: fragment-nav"></nav>-->
 
-
+<div class="page-right">
 <div th:if="${news}" class="news-main-border-box">
     <table>
         <tr><td colspan="5" class="news-main-title">
@@ -87,6 +87,7 @@
 
         </td></tr>
     </table>
+</div>
 </div>
 
 <!-- 모바일 하단 메뉴 -->

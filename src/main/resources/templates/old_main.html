@@ -1,0 +1,478 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<meta charset="UTF-8">
+<body>
+
+<header th:replace="fragments.html :: fragment-header"></header>
+<!--mebubar fragment-->
+<nav th:replace="fragments.html :: fragment-nav"></nav>
+
+<!--
+<div class="translation-form">
+    <form th:action="@{/}" method="post" onsubmit="return translateAndSubmit()">
+        <label for="sentence">번역할 문장을 입력하세요:</label>
+        <input type="text" id="sentence" name="sentence" required>
+        <button type="submit">번역</button>
+    </form>
+
+    <div th:if="${translatedSentence != null and not #strings.isEmpty(translatedSentence)}">
+
+    </div>
+</div>
+
+<div class="search-form">
+    <form th:action="@{/news/search}" method="get">
+        <label for="searchKeyword">검색할 키워드:</label>
+        <input type="text" id="searchKeyword" name="keyword" placeholder="뉴스 검색" th:value="${translatedSentence}" required>
+        <button type="submit">검색</button>
+    </form>
+</div>
+
+
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function translateAndSubmit() {
+        var sentenceInput = document.getElementById('sentence');
+        var translatedSentence = translatedSentence.textContent.trim();
+
+        // 번역된 결과를 검색 상자에 설정
+        document.getElementById('searchKeyword').value = translatedSentence;
+
+        // 폼을 제출하여 페이지 이동을 막습니다.
+        return false;
+    }
+    /*]]>*/
+</script>
+
+
+
+
+<a href="/user/signup">회원 가입</a>
+<a href="/user/login">로그인</a>
+
+
+
+<nav>
+    <ul class="nav">
+        <li><a th:href ="@{/news}">기사 보기</a>
+            <div><span>국가</span>
+                <input type="checkbox" class="menu-btn-chk" id="japan">
+                <label class="menu-btn-label" for="japan">일본</label>
+                <input type="checkbox" class="menu-btn-chk" id="china">
+                <label class="menu-btn-label" for="china">중국</label>
+                <br>
+                <br>
+                <span>주제</span>
+                <input type="checkbox" class="menu-btn-chk" id="economics">
+                <label class="menu-btn-label" for="economics">경제</label>
+                <input type="checkbox" class="menu-btn-chk" id="politics">
+                <label class="menu-btn-label" for="politics">정치</label>
+                <input type="checkbox" class="menu-btn-chk" id="culture">
+                <label class="menu-btn-label" for="culture">사회 문화</label>
+                <input type="checkbox" class="menu-btn-chk" id="sports">
+                <label class="menu-btn-label" for="sports">스포츠</label>
+                <br>
+                <br>
+                <span>일본 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="nikkei">
+                <label class="menu-btn-label" for="nikkei">닛케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="mainichi">
+                <label class="menu-btn-label" for="mainichi">마이니치</label>
+                <input type="checkbox" class="menu-btn-chk" id="sankei">
+                <label class="menu-btn-label" for="sankei">산케이</label>
+                <input type="checkbox" class="menu-btn-chk" id="asahi">
+                <label class="menu-btn-label" for="asahi">아사히</label>
+                <input type="checkbox" class="menu-btn-chk" id="yomiuri">
+                <label class="menu-btn-label" for="yomiuri">요미우리</label>
+                <input type="checkbox" class="menu-btn-chk" id="nhk">
+                <label class="menu-btn-label" for="nhk">NHK</label>
+                <br>
+                <br>
+                <span>중국 언론사</span>
+                <br>
+                <br>
+                <input type="checkbox" class="menu-btn-chk" id="jp">
+                <label class="menu-btn-label" for="jp">인민일보</label>
+                <br>
+                <button type="submit">조회</button>
+            </div>
+        </li>
+        <li><a href="analysis.html">기사 분석</a></li>
+    </ul>
+</nav>
+-->
+
+<div id="section-wrap">
+
+    <br>
+    <div id="weekly-keyword">
+        <div id="selcnt1" onclick="ChangeImg()">
+            <button type="button"><img class="jp-button" src="/img/japan.jpeg"></button>
+            <button><img class="exch-button" src="/img/exchange-arrow.png" /></button>
+            <button><img class="cn-button" src="/img/china.jpeg" /></button>
+        </div>
+
+        <img id="la1" src="/img/left-arrow.png" />
+        <h4 class="section-title">일본 주간 키워드</h4>
+        <img class="ques-icon" id="ques1" src="/img/ques.png" />
+        <p class="moreInfo1">최근 기사 수집일 기준으로 일주일 동안 기사에서 가장 많이 언급된 단어 다섯 개를 보여줍니다.</p>
+        <!-- '?' img -->
+        <!--
+        <p th:if="${topKeywordData != null}" th:text="${topKeywordData['startdate'] + ' ~ ' + topKeywordData['enddate']}"></p>
+        <ul class="keyword-list" id="keywordList" th:if="${topKeywordData != null}">
+            JavaScript로 동적으로 추가될 키워드 리스트
+        </ul>
+        -->
+        <!--<p th:if="${topKeywordData != null and topKeywordData.startdate != null and topKeywordData.enddate != null}" th:text="${topKeywordData.startdate} + ' ~ ' + ${topKeywordData.enddate}"></p>-->
+        <p th:if="${topKeywordData != null}" th:text="${topKeywordData.startdate + ' ~ ' + topKeywordData.enddate}"></p>
+        <ul class="keyword-list" id="keywordList">
+            <!-- JavaScript로 동적으로 추가될 키워드 리스트 -->
+        </ul>
+        <script th:inline="javascript">
+            // Thymeleaf에서 받은 JSON 데이터
+            var topKeywordData = /*[[${topKeywordData}]]*/ null;
+
+            if (topKeywordData) {
+                // JavaScript로 동적으로 키워드 리스트 생성
+                var keywordList = document.getElementById("keywordList");
+
+                for (var key in topKeywordData) {
+                    if (key !== 'startdate' && key !== 'enddate') {
+                        var li = document.createElement("li");
+                        li.classList.add("keyword-item");
+
+                        var divKeyword = document.createElement("div");
+                        divKeyword.classList.add("keyword");
+                        divKeyword.textContent = key;
+
+                        var divNum = document.createElement("div");
+                        divNum.classList.add("num");
+                        divNum.textContent = topKeywordData[key] + "건";
+
+                        li.appendChild(divKeyword);
+                        li.appendChild(divNum);
+
+                        keywordList.appendChild(li);
+                    }
+                }
+            }
+        </script>
+        <!--
+        <script th:inline="javascript">
+            // Thymeleaf에서 받은 JSON 데이터
+            var topKeywordData = /*[[${topKeywordData}]]*/ null;
+
+            // JSON 문자열을 객체로 변환
+            if (topKeywordData && topKeywordData.startdate && topKeywordData.enddate) {
+                topKeywordData = JSON.parse(topKeywordData);
+
+                // JavaScript로 동적으로 키워드 리스트 생성
+                var keywordList = document.getElementById("keywordList");
+
+                for (var key in topKeywordData) {
+                    if (key !== 'startdate' && key !== 'enddate') {
+                        var li = document.createElement("li");
+                        li.classList.add("keyword-item");
+
+                        var divKeyword = document.createElement("div");
+                        divKeyword.classList.add("keyword");
+                        divKeyword.textContent = key;
+
+                        var divNum = document.createElement("div");
+                        divNum.classList.add("num");
+                        divNum.textContent = topKeywordData[key] + "건";
+
+                        li.appendChild(divKeyword);
+                        li.appendChild(divNum);
+
+                        keywordList.appendChild(li);
+                    }
+                }
+            }
+        </script>-->
+        <!--
+        <script th:inline="javascript">
+            // Thymeleaf에서 받은 JSON 데이터
+            var topKeywordData = /*[[${topKeywordData}]]*/ null;
+
+            if (topKeywordData) {
+                // JavaScript로 동적으로 키워드 리스트 생성
+                var keywordList = document.getElementById("keywordList");
+
+                // 디버깅을 위한 로그
+                console.log('Received JSON Data:', topKeywordData);
+
+                // 'startdate'와 'enddate' 직접 접근
+                var startDate = topKeywordData['startdate'];
+                var endDate = topKeywordData['enddate'];
+
+                // 사용할 경우에 대한 예시
+                console.log('Start Date:', startDate);
+                console.log('End Date:', endDate);
+
+                for (var key in topKeywordData) {
+                    if (key !== 'startdate' && key !== 'enddate') {
+                        var li = document.createElement("li");
+                        li.classList.add("keyword-item");
+
+                        var divKeyword = document.createElement("div");
+                        divKeyword.classList.add("keyword");
+                        divKeyword.textContent = key;
+
+                        var divNum = document.createElement("div");
+                        divNum.classList.add("num");
+                        divNum.textContent = topKeywordData[key] + "건";
+
+                        li.appendChild(divKeyword);
+                        li.appendChild(divNum);
+
+                        keywordList.appendChild(li);
+                    }
+                }
+            }
+        </script>-->
+        <!--
+        <p th:if="${topKeywordData != null}" th:text="${topKeywordData.startdate + ' ~ ' + topKeywordData.enddate}"></p>
+        <ul class="keyword-list" id="keywordList">
+
+        </ul>
+        <script th:inline="javascript">
+            // Thymeleaf에서 받은 JSON 데이터
+            var topKeywordData = /*[[${topKeywordData}]]*/ null;
+
+            if (topKeywordData) {
+                // JavaScript로 동적으로 키워드 리스트 생성
+                var keywordList = document.getElementById("keywordList");
+
+                for (var key in topKeywordData) {
+                    if (key !== 'startdate' && key !== 'enddate') {
+                        var li = document.createElement("li");
+                        li.classList.add("keyword-item");
+
+                        var divKeyword = document.createElement("div");
+                        divKeyword.classList.add("keyword");
+                        divKeyword.textContent = key;
+
+                        var divNum = document.createElement("div");
+                        divNum.classList.add("num");
+                        divNum.textContent = topKeywordData[key] + "건";
+
+                        li.appendChild(divKeyword);
+                        li.appendChild(divNum);
+
+                        keywordList.appendChild(li);
+                    }
+                }
+            }
+        </script>-->
+
+        <!--
+        <p>2023.10.02 ~ 2023.10.08</p>
+
+        <ul>
+            <li>
+                <div class="keyword">
+                    아시안 게임
+                </div>
+                <div class="num">
+                    574건
+                </div>
+            </li>
+            <li class="even">
+                <div class="keyword">
+                    김정은
+                </div>
+                <div class="num">
+                    496건
+                </div>
+            </li>
+            <li>
+                <div class="keyword">
+                    한류 드라마
+                </div>
+                <div class="num">
+                    368건
+                </div>
+            </li>
+            <li class="even">
+                <div class="keyword">
+                    아이돌
+                </div>
+                <div class="num">
+                    297건
+                </div>
+            </li>
+            <li>
+                <div class="keyword">
+                    한일관계
+                </div>
+                <div class="num">
+                    253건
+                </div>
+            </li>
+        </ul>
+        -->
+    </div>
+
+    <div id="recent-news">
+        <div id="selcnt2">
+            <button><img class="jp-button" src="/img/japan.jpeg" /></button>
+            <button><img class="exch-button" src="/img/exchange-arrow.png" /></button>
+            <button><img class="cn-button" src="/img/china.jpeg" /></button>
+        </div>
+
+        <h4 class="section-title">일본 최신 뉴스</h4>
+        <img id="la2" src="/img/left-arrow.png" />
+        <img class="ques-icon" id="ques2" src="/img/ques.png" />
+        <p class="moreInfo">기사 수집 날(매주 월, 수) 기준, 최신순으로 기사가 제공됩니다.</p>
+        <a id="translate-button">번역</a>
+
+        <div id="four-news">
+            <div th:if="${newsList != null and not #lists.isEmpty(newsList)}">
+                <div th:with="filteredNews=${newsList.?[newsPublisher == 2]}">
+                    <!-- 필터된 뉴스가 비어 있지 않은지 확인 -->
+                    <div th:if="${not #lists.isEmpty(filteredNews)}">
+                        <!-- 첫 번째 publisher가 2인 뉴스 표시 -->
+                        <div class="one-news">
+                            <img class="news-img" th:src="${filteredNews[0].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
+                            <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[0].newsId})}" th:text="${filteredNews[0].newsTitle}"></a></h5>
+                            <img class="small-icon" src="/img/asahi.png" />
+                            <p class="publisher">아사히</p>
+                            <p class="one-news-date" th:text="${filteredNews[0].newsDate}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div th:with="filteredNews=${newsList.?[newsPublisher == 0]}">
+                    <!-- 필터된 뉴스가 비어 있지 않은지 확인 -->
+                    <div th:if="${not #lists.isEmpty(filteredNews)}">
+                        <!-- 첫 번째 publisher가 0인 뉴스 표시 -->
+                        <div class="one-news">
+                            <img class="news-img" th:src="${filteredNews[2].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
+                            <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[2].newsId})}" th:text="${filteredNews[2].newsTitle}"></a></h5>
+                            <img class="small-icon" src="/img/nhk.png" />
+                            <p class="publisher">NHK</p>
+                            <p class="one-news-date" th:text="${filteredNews[2].newsDate}"></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- newsPublisher가 3인 아이템만 필터링 -->
+                <div th:with="filteredNews=${newsList.?[newsPublisher == 3]}">
+                    <!-- 필터된 뉴스가 비어 있지 않은지 확인 -->
+                    <div th:if="${not #lists.isEmpty(filteredNews)}">
+                        <!-- 첫 번째 publisher가 3인 뉴스 표시 -->
+                        <div class="one-news">
+                            <img class="news-img" th:src="${filteredNews[1].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
+                            <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[1].newsId})}" th:text="${filteredNews[1].newsTitle}"></a></h5>
+                            <img class="small-icon" src="/img/sankei.png" />
+                            <p class="publisher">산케이</p>
+                            <p class="one-news-date" th:text="${filteredNews[1].newsDate}"></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- newsPublisher가 1인 아이템만 필터링 -->
+                <div th:with="filteredNews=${newsList.?[newsPublisher == 1]}">
+                    <!-- 필터된 뉴스가 비어 있지 않은지 확인 -->
+                    <div th:if="${not #lists.isEmpty(filteredNews)}">
+                        <!-- 첫 번째 publisher가 1인 뉴스 표시 -->
+                        <div class="one-news">
+                            <img class="news-img" th:src="${filteredNews[2].newsImageURL}" alt="뉴스 이미지" width="300" height="200" />
+                            <h5> <a th:href="@{/news/{newsId}(newsId=${filteredNews[2].newsId})}" th:text="${filteredNews[2].newsTitle}"></a></h5>
+                            <img class="small-icon" src="/img/mainichi.png" />
+                            <p class="publisher">마이니치</p>
+                            <p class="one-news-date" th:text="${filteredNews[2].newsDate}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <a id="more-button" th:href="@{/news}">최신 뉴스 더보기</a>
+    </div>
+
+    <div id="go-to-websites">
+        <h4 class="section-title">원문 바로가기</h4>
+        <img class="ques-icon" id="ques3" src="/img/ques.png" />
+        <p class="moreInfo">본 사이트가 수집하는 기사들의 출처 사이트로 연결됩니다.</p>
+
+        <div class="six-icons" id="si1">
+            <div class="one-icon">
+                <a href="https://www.yomiuri.co.jp/" target="_blank">
+                    <img class="icon" src="/img/yomiuri.png" />
+                </a>
+                <p class="icon-pub">요미우리</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.nhk.or.jp/" target="_blank">
+                    <img class="icon" src="/img/nhk.png" />
+                </a>
+                <p class="icon-pub">NHK</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.nikkei.com/" target="_blank">
+                    <img class="icon" src="/img/nikkei.png" /></a>
+                <p class="icon-pub">닛케이</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://mainichi.jp/" target="_blank">
+                    <img class="icon" src="/img/mainichi.png" /></a>
+                <p class="icon-pub">마이니치</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.asahi.com/" target="_blank">
+                    <img class="icon" src="/img/asahi.png" /></a>
+                <p class="icon-pub">아사히</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.sankei.com/" target="_blank">
+                    <img class="icon" src="/img/sankei.png" /></a>
+                <p class="icon-pub">산케이</p>
+            </div>
+        </div>
+        <div id="icon-line"></div>
+
+        <div class="six-icons" id="si2">
+            <div class="one-icon">
+                <a href="www.peopledaily.com.cn" target="_blank">
+                    <img class="icon" src="/img/inmin.png" /></a>
+                <p class="icon-pub">인민일보</p>
+            </div>
+            <div class="one-icon">
+                <a href="http://www.bjnews.com.cn/" target="_blank">
+                    <img class="icon" src="/img/shinkyungbo.png" /></a>
+                <p class="icon-pub">신경보</p>
+            </div>
+            <div class="one-icon">
+                <a href="https://www.huanqiu.com/" target="_blank">
+                    <img class="icon" src="/img/hwangu.png" /></a>
+                <p class="icon-pub">환구시보</p>
+            </div>
+            <div class="one-icon">
+                <a href="http://global.chinadaily.com.cn/" target="_blank">
+                    <img class="icon" src="/img/jungguk.png" /></a>
+                <p class="icon-pub">중국일보</p>
+            </div>
+            <div class="one-icon">
+                <a href="http://www.cyol.net/" target="_blank">
+                    <img class="icon" src="/img/junggukchungnyun.png" /></a>
+                <p class="icon-pub">중국청년보</p>
+            </div>
+            <div class="one-icon">
+                <a href="http://www.cankaoxiaoxi.com/" target="_blank">
+                    <img class="icon" src="/img/chamgo.png" /></a>
+                <p class="icon-pub">참고소식</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<br>
+
+<footer th:replace="fragments.html :: fragment-footer" id="footer"></footer>
+</body>
+</html>

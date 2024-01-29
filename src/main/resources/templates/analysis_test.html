@@ -11,8 +11,9 @@
 <!-- header fragment -->
 <header th:replace="fragments.html :: fragment-header"></header>
 <!-- mebubar fragment -->
-<nav th:replace="fragments.html :: fragment-nav"></nav>
+<!--<nav th:replace="fragments.html :: fragment-nav"></nav>-->
 
+<div class="page-right">
 <div class="page-section option">
 
     <h2>언급량 분석</h2>
@@ -32,7 +33,7 @@
                     <input type="date" id="enddate1" max="2050-12-31" min="2000-01-01">
                 </label>
             </td>
-            <td rowspan="3" style="text-align: right"><input class="btn-check-submit long_btn" type="button" value="조회" id="btnSubmit"></td>
+            <td rowspan="2" style="text-align: right"><input class="btn-check-submit long_btn" type="button" value="조회" id="btnSubmit"></td>
         </tr>
         <tr id="publisherCheckboxes">
             <td>
@@ -85,6 +86,7 @@
     <div id="resultContainer"><p class="bf_result">이곳에 분석 결과가 나옵니다.</p></div>
 </div>
 
+</div>
 
 <script>
     // 초기 상태 설정

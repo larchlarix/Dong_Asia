@@ -14,9 +14,9 @@
 <!-- header fragment -->
 <header th:replace="fragments.html :: fragment-header"></header>
 <!-- mebubar fragment -->
-<nav th:replace="fragments.html :: fragment-nav"></nav>
+<!--<nav th:replace="fragments.html :: fragment-nav"></nav>-->
 
-
+<div class="page-right">
 <div class="page-section option">
 
     <h2>키워드 분석</h2>
@@ -38,8 +38,10 @@
         </tr>
         <tr>
             <td colspan="2"><form>
-                <input type="text" name="query" value="" placeholder="키워드를 입력하세요" id="keyword">
-                <button type="submit" id="btnSubmit" class="short_btn">검색</button>
+                <div class="ana-search-form">
+                    <input type="text" name="query" value="" placeholder="키워드를 입력하세요" id="keyword">
+                    <button type="submit" id="btnSubmit" class="short_btn">검색</button>
+                </div>
             </form></td>
         </tr>
         <tr class="suggested_keywords">
@@ -54,33 +56,6 @@
     </table>
 </div>
 
-<!--
-<div class="analysisOfKeywordBox">
-    <div class="dateCheckBox">
-        <span>기간</span>
-        <label for="startdate2">
-            <input type="date"
-                   id="startdate2"
-                   max="2050-12-31"
-                   min="2000-01-01">
-        </label>
-        <span>~</span>
-        <label for="enddate2">
-            <input type="date"
-                   id="enddate2"
-                   max="2050-12-31"
-                   min="2000-01-01">
-        </label>
-    </div>
-    <p th:if="${keyword_suggested != null}" th:text="${keyword_suggested}"></p>
-
-    <form>
-        키워드 입력
-        <input type="text" name="query" value="" id="keyword">
-        <button type="submit" id="btnSubmit">조회</button>
-    </form>
-</div>
--->
 <br>
 
 <div class="page-section">
@@ -108,9 +83,15 @@
     </main>
 </div>
 
-<h1>News List</h1>
-<ul id="newsList"></ul>
+<br>
 
+<!-- 관련 기사 목록 -->
+<div class="page-section" style="display: none">
+    <div id="newsList">
+        <p>관련 기사</p>
+    </div>
+</div>
+</div>
 
 <script>
     function setNew (_menu) {
@@ -489,6 +470,24 @@
             });
         }
 
+        function numToPub(num) {
+            if (num == 0) {
+                return "NHK";
+            }
+            else if (num == 1) {
+                return "마이니치";
+            }
+            else if (num == 2) {
+                return "아사히";
+            }
+            else if (num == 3) {
+                return "산케이";
+            }
+            else {
+                return "미분류";
+            }
+        }
+
         // News 상세 정보를 가져와서 출력하는 함수
         function fetchNewsDetail(newsId) {
             console.log("NewsId type:", typeof newsId);
@@ -518,8 +517,15 @@
 
             // 상세 정보를 가져온 후 처리
             requestDetail.done(function (responseDetail) {
-                var listItem = $('<li>').text("Title: " + responseDetail.newsTitle + ", Date: " + responseDetail.newsDate);
-                $('#newsList').append(listItem);
+                //var listItem = $('<li>').text("Title: " + responseDetail.newsTitle + ", Date: " + responseDetail.newsDate);
+                //$('#newsList').append(listItem);
+
+                var item = '<table class="list-table-related"><tr><td class="news-title" style="height: 40px"><a href="/news/' + responseDetail.newsId.toString() + '">'
+                    + responseDetail.newsTitle + '</a></td></tr><tr style="font-size: 14px"><td style="text-align:right; color: grey">'
+                    + numToPub(responseDetail.newsPublisher) + '&nbsp&nbsp·&nbsp&nbsp' + responseDetail.newsDate + '</td></tr></table>';
+                $('#newsList').append(item);
+
+                document.getElementsByClassName('page-section')[2].style.display='block';
             });
 
             // 에러 처리

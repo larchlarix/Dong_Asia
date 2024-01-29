@@ -1,19 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@700&display=swap');
+body {
+    display: flex;
+}
 * {
     margin: 0;
     padding: 0;
 }
+.page-right {
+    width: 100%;
+}
+
 .page-section {
-    margin-left: 50px;
+    margin: 0 auto 0 auto;
+    width: 80%;
+    /* margin-left: 50px; */
 }
 .page-section h2 {
-    margin: 20px;
+    margin: 20px 20px 20px -10px;
 }
 .list-table {
-    width: 80%;
+    width: 100%;
     border-spacing: 10px;
     border-bottom: 1px solid darkgray;
-    margin-left: 50px;
+    /* margin-left: 50px; */
 }
 .news-img {
     height: 120px;
@@ -33,7 +42,7 @@
     color: black;
 }
 .news-title a:visited {
-    color: grey;
+    color: black;
 }
 .news-title a:hover {
     color: lightpink;
@@ -47,11 +56,11 @@
     border-radius:15px;
 }
 .news-option {
-    width: 80%;
+    width:100%;
     border: 1px solid grey;
     border-radius: 20px;
     border-spacing: 15px;
-    margin-left: 50px;
+    /* margin-left: 50px; */
 }
 .news-option tr {
     height: 40px;
@@ -104,7 +113,7 @@
     border-bottom: 1px solid grey;
 }
 .news-main-border-box {
-    margin: 50px;
+    margin: 50px auto 50px auto;
     padding: 30px;
     width: 80%;
     border: 1px solid grey;
@@ -325,17 +334,6 @@
     float: right;
     color: black;
 }
-.mypage a.title {
-    text-decoration-line: none;
-    font-size: 28px;
-    font-family: Josefin Slab;
-    color: #851212;
-    display: inline-block;
-    padding: 20px;
-}
-.mypage .mypage-title {
-    font-size: 16px;
-}
 .mypage main .con {
     display: none;
 }
@@ -357,13 +355,8 @@
 .mypage main.change_profile,
 .mypage main.bookmarked_news {
     display: block;
-    margin: 50px;
-    margin-top: 0;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 80%;
+    padding: 10px 0 10px 0;
+    width: 100%;
     border: 1px solid grey;
     border-radius: 20px;
 }
@@ -418,18 +411,26 @@
     color: #851212;
 }
 #resultContainer {
-    margin-left: 50px;
+    /* margin-left: 50px; */
     margin-bottom: 50px;
     border: 1px solid grey;
     border-radius: 20px;
-    width: 80%;
+    width: 100%;
     height: 400px;
 }
-.news-option input[type=text] {
+.ana-search-form {
     border: 1px solid grey;
     border-radius: 10px;
-    height: 24px;
-    width: 90%;
+    width: 100%;
+    height: 30px;
+}
+.news-option input[type=text] {
+    border-radius: 10px;
+    border: 0;
+    height: 28px;
+}
+.news-option input[type=text]:focus {
+    outline: none;
 }
 .suggested_keywords {
     background-color: lightgrey;
@@ -449,12 +450,18 @@
 }
 .news-option .short_btn {
     height: 24px;
+    margin: 3px;
     width: 48px;
     background-color: #FF8D8D;
     border: 1px solid #FF8D8D;
     border-radius: 10px;
     color: #851212;
     font-weight: bolder;
+    float: right;
+}
+.news-option .short_btn:active,
+.news-option .short_btn:hover {
+    background-color: #FF6F6F;
 }
 .keyword_ana main .con {
     display: none;
@@ -478,9 +485,9 @@
 .keyword_ana main.ana2,
 .keyword_ana main.ana3 {
     display: block;
-    margin: 0 0 50px 50px;
-    padding: 10px 0 10px 0;
-    width: 80%;
+    /* margin: 0 0 0 50px; */
+    padding: 10px 0 0 0;
+    /* width: 80%; */
     border: 1px solid grey;
     border-radius: 20px;
 }
@@ -505,7 +512,135 @@
 .BarGraph-container {
     width: 600px;
 }
+#newsList {
+    border: 1px solid grey;
+    border-radius: 20px;
+    margin: 0 0 50px 0;
+    /* width: 80%; */
+}
+#newsList p {
+    border-bottom: 1px solid grey;
+    display: block;
+    padding: 20px;
+}
+.list-table-related {
+    border-bottom: 1px solid darkgray;
+    margin: 0 auto 5px auto;
+    width: 95%;
+}
 
+/* 사이드 헤더 */
+.side-bar {
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background-color: #FFC9C9;
+    box-shadow: 3px 0 10px 0 grey;
+}
+.under-side-bar {
+    width: 300px;
+    height: 100%;
+    flex: auto;
+}
+.logo {
+    margin: 20px;
+    display: inline-block;
+}
+.logo a {
+    text-decoration-line: none;
+    font-size: 28px;
+    font-family: Josefin Slab;
+    color: #851212;
+}
+.menu {
+    display: block;
+    margin: 25px 25px 25px 50px;
+    font-size: 24px;
+    font-weight: bold;
+}
+.sub-menu {
+    display: block;
+    margin: 25px 25px 25px 100px;
+    font-size: 18px;
+}
+.menu a, .sub-menu a {
+    text-decoration-line: none;
+    color: black;
+}
+.line {
+    display: block;
+    width: 80%;
+    height: 1px;
+    margin: 0 auto 0 auto;
+    background-color: #851212;
+}
+
+
+
+
+/* 새 메인페이지 */
+.mainpage-box {
+    box-shadow: 0 0 0 1px grey inset;
+    border-radius: 20px;
+    width: 100%;
+}
+.mainpage-box-1 p {
+    text-align: right;
+    font-size: 14px;
+    padding: 15px 15px 0 15px;
+    color: #444444;
+}
+.mainpage-box-1 ul {
+    list-style-type: none;
+    padding: 20px 0;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+.mainpage-box-1 ul li {
+    display: inline-block;
+    width: 20%;
+    box-shadow: 3px 0 0 -2px grey inset;
+
+}
+.mainpage-box-1 .keyword {
+    display: inline-block;
+    font-size: 22px;
+    text-align: center;
+    width: 100%;
+}
+.mainpage-box-1 .num {
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+    width: 100%;
+}
+.mainpage-box div.keyword,
+.mainpage-box div.num {
+    display: inline-block;
+}
+.mainpage-box .list-table {
+    padding: 10px;
+}
+.more-news-btn {
+    text-decoration-line: none;
+    color: #851212;
+    border-radius: 0 0 20px 20px;
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    display: block;
+    background-color: #FFC9C9;
+}
+.more-news-btn:hover {
+    background-color: #FF8D8D;
+}
 
 
 /* 모바일에 최적화된 예외 CSS 코드*/
