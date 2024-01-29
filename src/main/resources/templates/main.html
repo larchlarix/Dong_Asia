@@ -122,10 +122,54 @@
         <img class="ques-icon" id="ques1" src="/img/ques.png" />
         <p class="moreInfo1">최근 기사 수집일 기준으로 일주일 동안 기사에서 가장 많이 언급된 단어 다섯 개를 보여줍니다.</p>
         <!-- '?' img -->
+        <p th:if="${topKeywordData != null}" th:text="${topKeywordData['startdate'] + ' ~ ' + topKeywordData['enddate']}"></p>
+        <ul class="keyword-list" id="keywordList" th:if="${topKeywordData != null}">
+            <!-- JavaScript로 동적으로 추가될 키워드 리스트 -->
+        </ul>
+        <script th:inline="javascript">
+            // Thymeleaf에서 받은 JSON 데이터
+            var topKeywordData = /*[[${topKeywordData}]]*/ null;
 
+            if (topKeywordData) {
+                // JavaScript로 동적으로 키워드 리스트 생성
+                var keywordList = document.getElementById("keywordList");
+
+                // 디버깅을 위한 로그
+                console.log('Received JSON Data:', topKeywordData);
+
+                // 'startdate'와 'enddate' 직접 접근
+                var startDate = topKeywordData['startdate'];
+                var endDate = topKeywordData['enddate'];
+
+                // 사용할 경우에 대한 예시
+                console.log('Start Date:', startDate);
+                console.log('End Date:', endDate);
+
+                for (var key in topKeywordData) {
+                    if (key !== 'startdate' && key !== 'enddate') {
+                        var li = document.createElement("li");
+                        li.classList.add("keyword-item");
+
+                        var divKeyword = document.createElement("div");
+                        divKeyword.classList.add("keyword");
+                        divKeyword.textContent = key;
+
+                        var divNum = document.createElement("div");
+                        divNum.classList.add("num");
+                        divNum.textContent = topKeywordData[key] + "건";
+
+                        li.appendChild(divKeyword);
+                        li.appendChild(divNum);
+
+                        keywordList.appendChild(li);
+                    }
+                }
+            }
+        </script>
+        <!--
         <p th:if="${topKeywordData != null}" th:text="${topKeywordData.startdate + ' ~ ' + topKeywordData.enddate}"></p>
         <ul class="keyword-list" id="keywordList">
-            <!-- JavaScript로 동적으로 추가될 키워드 리스트 -->
+
         </ul>
         <script th:inline="javascript">
             // Thymeleaf에서 받은 JSON 데이터
@@ -155,8 +199,7 @@
                     }
                 }
             }
-        </script>
-
+        </script>-->
 
         <!--
         <p>2023.10.02 ~ 2023.10.08</p>

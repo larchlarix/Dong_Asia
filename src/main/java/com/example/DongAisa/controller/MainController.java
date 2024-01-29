@@ -1,6 +1,7 @@
 package com.example.DongAisa.controller;
 
 import com.example.DongAisa.dto.NewsDto;
+import com.example.DongAisa.dto.TopKeywordData;
 import com.example.DongAisa.service.NewsService;
 import com.example.DongAisa.service.TopKeywordService;
 import com.example.DongAisa.service.TranslateService;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,10 +49,11 @@ public class MainController {
 
         // Flask에서 받은 JSON 데이터를 변환하여 모델에 추가
         String responseData = topKeywordService.getFlaskData();
-        Map<String, Object> topKeywordData = convertJsonToMap(responseData);
+        TopKeywordData topKeywordData = convertJsonToTopKeywordData(responseData);
         model.addAttribute("topKeywordData", topKeywordData);
         return "main";
     }
+    /*
     private Map<String, Object> convertJsonToMap(String jsonData) {
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -61,6 +64,18 @@ public class MainController {
             e.printStackTrace();
             // 예외 처리: JSON 변환 실패
             return Collections.emptyMap(); // 빈 Map 반환 또는 다른 처리 방법 선택
+        }
+    }
+
+     */
+    private TopKeywordData convertJsonToTopKeywordData(String jsonData) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(jsonData, TopKeywordData.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 예외 처리: JSON 변환 실패
+            return new TopKeywordData(); // 빈 객체 반환 또는 다른 처리 방법 선택
         }
     }
 
