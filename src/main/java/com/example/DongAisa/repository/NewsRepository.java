@@ -11,4 +11,7 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     List<News> findByNewsTitleContainingOrderByNewsDateDesc(String Keyword);
     List<News> findByNewsTitleContaining(String Keyword);
 
+    List<News> findByNewsCategoryInAndNewsPublisherIn(List<Long> categories, List<Long> publishers);
+
+
 }

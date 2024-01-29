@@ -65,6 +65,12 @@ public class NewsService {
     }
 
      */
+    public List<News> getFilteredNews(List<Long> categories, List<Long> publishers) {
+        // 필터링된 뉴스를 데이터베이스에서 조회
+        return newsRepository.findByNewsCategoryInAndNewsPublisherIn(categories, publishers);
+    }
+
+    //검색
     public List<NewsDto> searchNews(String keyword) {
         System.out.println("Processing search for keyword: " + keyword);
 

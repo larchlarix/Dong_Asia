@@ -75,53 +75,36 @@ public class NewsController {
             return "main_text"; // 예외 발생 시에도 같은 페이지를 반환하도록 처리
         }
     }
-    /*
-    @PostMapping("/translate")
-    public String getTranslatedNews(
-            @RequestParam String title,
-            @RequestParam String content,
+
+    //뉴스리스트(카테고리, 언론사)
+    @PostMapping("")
+    public String getFilteredNews(
+            @RequestParam(value = "category", required = false) List<Long> categories,
+            @RequestParam(value = "publisher", required = false) List<Long> publishers,
             Model model
     ) {
-        try {
-            TranslationDto translationDto = translateNewsService.getTranslatedNews(title, content);
-            model.addAttribute("translatedNews", translationDto);
-            return "main_text"; // 여기에 반환할 페이지의 이름을 넣어주세요
-        } catch (RuntimeException e) {
-            model.addAttribute("translatedNews", new TranslationDto("번역 중 오류가 발생했습니다.", ""));
-            return "main_text"; // 예외 발생 시에도 같은 페이지를 반환하도록 처리
-        }
+        List<News> filteredNews = newsService.getFilteredNews(categories, publishers);
+        model.addAttribute("isFiltering", true); // 추가된 부분
+        model.addAttribute("newsFilterList", filteredNews);
+        return "list";
     }
 
-*/
 
 
-    /*뉴스 생성
-    @RequestMapping(value="",method = RequestMethod.POST)
-    public ResponseEntity<NewsDto> createNews(@RequestBody final NewsDto newsDto) throws IOException {
-    NewsDto savedNewsDto = newsService.createNews(newsDto);
-    return new ResponseEntity<>(savedNewsDto, HttpStatus.OK);
-    }
-    */
 
 
-    /*
-    @RequestMapping(value="",method= RequestMethod.GET)
-    public ResponseEntity<List<NewsDto>>
-    getNewsList(@RequestParam(value ="keyword", required = false,defaultValue ="" )final String keyword,
-                @RequestParam(value = "sort", required = false,defaultValue = "byDate") final String sort){
-        List<NewsDto> newsDtos = newsService.getNewsList(keyword, sort);
-        return new ResponseEntity<>(newsDtos, HttpStatus.OK);
-    }
-
-     */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String getNewsList(Model model,
                               @RequestParam(value = "keyword", required = false, defaultValue = "") final String keyword,
                               @RequestParam(value = "sort", required = false, defaultValue = "byDate") final String sort) {
         List<NewsDto> newsDtos = newsService.getNewsList(keyword, sort);
+        // isFiltering 변수 추가 및 초기화
+        boolean isFiltering = false;
+
         // 로그에 출력
         System.out.println("NewsDtos: " + newsDtos);
         model.addAttribute("newsList", newsDtos);
+        model.addAttribute("isFiltering", isFiltering);
         return "list";
     }
 
@@ -132,16 +115,7 @@ public class NewsController {
         NewsDto deleteNewsDto = newsService.deleteNews(newsId);
         return new ResponseEntity<>(deleteNewsDto, HttpStatus.OK);
     }
-/*
-    //뉴스 검색
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String search(@RequestParam(value = "keyword") String keyword, Model model){
-        List<NewsDto> newsDtoList = newsService.searchNews(keyword);
-        model.addAttribute("newsList",newsDtoList);
-        return "list";
-    }
 
- */
 @RequestMapping(value = "/search", method = RequestMethod.GET)
 public String search(@RequestParam(value = "keyword") String keyword, Model model){
     // 로그 추가
