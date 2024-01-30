@@ -631,7 +631,7 @@ body {
     display: inline-block;
 }
 .mainpage-box .list-table {
-    padding: 0 0 10px 0;
+    padding: 10px 10px 0 10px;
 }
 .more-news-btn {
     text-decoration-line: none;
@@ -783,25 +783,63 @@ body {
     background-color: #fcebeb;
 }
 
+/* 모바일 메뉴 숨기기 */
+.mobile-nav {
+    display: none;
+}
+.mobile-side-bar {
+    top: 0;
+    left: -300px;
+    width: 300px;
+    height: 100%;
+    position: fixed;
+    background-color: #FFC9C9;
+    transition: all 0.5s;
+    overflow: hidden;
+    z-index: 9;
+}
+.mobile-under-side-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-color: #999999;
+    transition: all 0.5s;
+    z-index: 8;
+}
+.mobile-menu button {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    display: none;
+    border: 0;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 10;
+    transition: all 0.5s;
+}
+.mobile-menu img {
+    opacity: 0.7;
+    width: 50px;
+    height: 50px;
+}
 
 /* 모바일에 최적화된 예외 CSS 코드*/
 @media (max-width: 768px) {
-    /* 헤더, nav 프레그먼트 */
-    .header-table {
-        border-bottom: 1px solid grey;
-    }
-    .header-table .td2 {
-        text-align: right;
-        padding-right: 20px;
-    }
-    .header-table .td3 {
-        display: none;
-    }
-    .nav-bar {
+    .side-header {
         display: none;
     }
 
     /* 모바일 하단 메뉴 */
+    .mobile-nav {
+        display: block;
+    }
+    .mobile-menu button {
+        display: inline-block;
+    }
+
+
     .space-bottom-menu {
         display: block;
         height: 50px;
@@ -833,16 +871,10 @@ body {
 
 
     /* 리스트 페이지 */
-    .option {
-        display: none;
-    }
     .list-table {
         width: 100%;
         border-spacing: 15px;
         border-bottom: 1px solid darkgray;
-        margin-left: 0;
-    }
-    .page-section {
         margin-left: 0;
     }
 

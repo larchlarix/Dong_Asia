@@ -122,6 +122,10 @@ public String search(@RequestParam(value = "keyword") String keyword, Model mode
     System.out.println("Search keyword: " + keyword);
     List<NewsDto> newsDtoList = newsService.searchNews(keyword);
     model.addAttribute("newsList", newsDtoList);
+
+    boolean isFiltering = false;
+    model.addAttribute("isFiltering", isFiltering);
+
     return "list";
 }
 

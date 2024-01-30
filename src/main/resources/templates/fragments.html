@@ -78,7 +78,7 @@
 </header>
 -->
 
-<header th:fragment="fragment-header">
+<header th:fragment="fragment-header" class="side-header">
     <div class="side-bar">
         <span class="logo"><a th:href="@{/#}">Dongasians'</a></span>
 
@@ -147,6 +147,65 @@
 
 <!-- 모바일 하단 메뉴 -->
 <nav th:fragment="mobile-nav" class="mobile-nav">
+
+    <div class="mobile-menu">
+        <button id="mobile-menu-btn"><img id="mobile-menu-btn-img" src="/img/circle-menu.png"></button>
+    </div>
+
+
+    <div class="mobile-side-bar">
+        <span class="logo"><a th:href="@{/#}">Dongasians'</a></span>
+
+        <span class="menu"><a th:href="@{/news}">기사 보기</a></span>
+        <span class="menu">기사 분석</span>
+        <span class="sub-menu"><a th:href="@{/analysis}">언급량 분석</a></span>
+        <span class="sub-menu"><a th:href="@{/keyword_analysis}">키워드 분석</a></span>
+
+        <span class="line"></span>
+
+        <span sec:authorize="isAnonymous()">
+            <span class="menu"><a href="/user/login">로그인</a></span>
+            <span class="menu"><a href="/user/signup">회원가입</a></span>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <span class="menu"><a href="/user/mypage">마이페이지</a></span>
+            <span class="menu"><a href="/user/logout">로그아웃</a></span>
+        </span>
+    </div>
+
+    <div class="mobile-under-side-bar"></div>
+
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        var menuOpened = false;
+
+        btn.addEventListener("click", function () {
+            if (!menuOpened) {
+                const menu = document.getElementsByClassName('mobile-side-bar')[0];
+                menu.style.left = "0"
+
+                document.getElementsByClassName('mobile-under-side-bar')[0].style.opacity = "0.5";
+
+                document.getElementById('mobile-menu-btn-img').setAttribute( 'src', '/img/x.png');
+
+                menuOpened = true;
+            }
+            else {
+                const menu = document.getElementsByClassName('mobile-side-bar')[0];
+                menu.style.left = "-300px"
+
+                document.getElementsByClassName('mobile-under-side-bar')[0].style.opacity = "0";
+
+                document.getElementById('mobile-menu-btn-img').setAttribute( 'src', '/img/circle-menu.png');
+
+                menuOpened = false;
+            }
+
+        });
+    </script>
+
+    <!--
+
     <div class="space-bottom-menu"></div>
     <div class="bottom-menu">
         <div class="left-menu-btn" style="float: left">
@@ -156,6 +215,7 @@
             <a><img th:src="@{/img/person.png}"></a>
         </div>
     </div>
+    -->
 </nav>
 
 </body>
