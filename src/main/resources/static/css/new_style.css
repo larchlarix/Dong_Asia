@@ -16,6 +16,8 @@ body {
     /* margin-left: 50px; */
 }
 .page-section h2 {
+    line-height: 36px;
+    display: inline-block;
     margin: 20px 20px 20px -10px;
 }
 .list-table {
@@ -585,6 +587,11 @@ body {
     box-shadow: 0 0 0 1px grey inset;
     border-radius: 20px;
     width: 100%;
+
+    /* inline-block 사이의 미세한 여백 제거를 위함 */
+    font-size: 0;
+    letter-spacing: 0;
+    word-spacing: 0;
 }
 .mainpage-box-1 p {
     text-align: right;
@@ -606,7 +613,6 @@ body {
     display: inline-block;
     width: 20%;
     box-shadow: 3px 0 0 -2px grey inset;
-
 }
 .mainpage-box-1 .keyword {
     display: inline-block;
@@ -625,11 +631,12 @@ body {
     display: inline-block;
 }
 .mainpage-box .list-table {
-    padding: 10px;
+    padding: 0 0 10px 0;
 }
 .more-news-btn {
     text-decoration-line: none;
     color: #851212;
+    font-size: 16px;
     border-radius: 0 0 20px 20px;
     width: 100%;
     height: 45px;
@@ -640,6 +647,140 @@ body {
 }
 .more-news-btn:hover {
     background-color: #FF8D8D;
+}
+.go-to-site {
+    margin: 20px;
+    width: 90px;
+    height: 120px;
+    display: inline-block;
+
+    /* inline-block 사이의 미세한 여백 제거를 위함 */
+    font-size: 0;
+    letter-spacing: 0;
+    word-spacing: 0;
+}
+.go-to-site a,
+.go-to-site a:visited {
+    text-decoration-line: none;
+    color: black;
+}
+.go-to-site a:hover,
+.go-to-site a:active {
+    color: grey;
+}
+.go-to-site img {
+    display: inline-block;
+    width: 90px;
+    height: 90px;
+    border-radius: 20px;
+}
+.go-to-site span {
+    display: inline-block;
+    width: 90px;
+    height: 30px;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+}
+.go-to-site-line {
+    display: block;
+    margin: 0 auto;
+    width: 96%;
+    height: 1px;
+    background-color: grey;
+}
+
+/* 나라 바꾸기 버튼(메인페이지) */
+* {
+     user-select: none;
+     -webkit-tap-highlight-color: transparent;
+ }
+*:focus {
+    outline: none;
+}
+.country-button {
+    position: relative;
+    width: 74px;
+    height: 36px;
+    margin: 20px 0;
+    overflow: hidden;
+    border-radius: 2px;
+}
+.country-button.r,
+.country-button.r .layer {
+    border-radius: 100px;
+}
+.country-checkbox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;
+}
+.knobs {
+    z-index: 2;
+}
+.layer {
+    width: 100%;
+    background-color: #EEEEEE;
+    transition: 0.3s ease all;
+    z-index: 1;
+}
+.knobs,
+.layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+/* Button 10 */
+.button-10 .knobs:before,
+.button-10 .knobs:after,
+.button-10 .knobs span {
+    position: absolute;
+    top: 4px;
+    width: 20px;
+    height: 10px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    padding: 9px 4px;
+    border-radius: 2px;
+    transition: 0.3s ease all;
+}
+.button-10 .knobs:before {
+    content: "";
+    left: 4px;
+    background-color: #fff;
+}
+.button-10 .knobs:after {
+    content: "중국";
+    right: 4px;
+    color: #4e4e4e;
+}
+.button-10 .knobs span {
+    display: inline-block;
+    left: 4px;
+    color: #D41D1D;
+    z-index: 1;
+}
+.button-10 .country-checkbox:checked + .knobs span {
+    color: #4e4e4e;
+}
+.button-10 .country-checkbox:checked + .knobs:before {
+    left: 42px;
+    background-color: #f44336;
+}
+.button-10 .country-checkbox:checked + .knobs:after {
+    color: #F1E819;
+}
+.button-10 .country-checkbox:checked ~ .layer {
+    background-color: #fcebeb;
 }
 
 
