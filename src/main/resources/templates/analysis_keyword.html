@@ -37,7 +37,18 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2"><form>
+            <!--번역 기능-->
+            <div class="translation-form">
+                <form th:action="@{/translateSubmit}" method="post" onsubmit="return translateSubmit(event)">
+                    <input type="text" id="sentence" name="sentence" placeholder="번역할 단어 입력하기" required>
+                    <button type="submit">
+                        ➜
+                    </button>
+                </form>
+            </div>
+            <td colspan="2">
+                <!--검색 기능-->
+                <form>
                 <div class="ana-search-form">
                     <input type="text" name="query" value="" placeholder="키워드를 입력하세요" id="keyword">
                     <button type="submit" id="btnSubmit" class="short_btn">검색</button>
@@ -108,6 +119,51 @@
     </div>
 </div>
 </div>
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //번역 기능 함수
+    async function translateSubmit(event) {
+        event.preventDefault(); // 기본 동작 중지
+
+        var sentenceInput = document.getElementById('sentence');
+        var translatedSentenceDiv = document.getElementById('translatedSentence');
+
+        try {
+            var response = await fetch('/translateSubmit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'sentence': sentenceInput.value,
+                }),
+            });
+
+            if (response.ok) {
+                var result = await response.json();
+
+                if (result.translatedSentence) {
+                    // 번역된 결과를 검색 상자에 설정
+                    document.getElementById('keyword').value = result.translatedSentence;
+
+                    // 번역 결과를 화면에 표시
+                    translatedSentenceDiv.textContent = result.translatedSentence;
+                } else if (result.error) {
+                    console.error('번역 오류:', result.error);
+                }
+            } else {
+                console.error('번역 요청 실패:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('번역 요청 중 오류 발생:', error);
+        }
+
+        return false;
+    }
+    /*]]>*/
+</script>
 
 <script>
     function setNew (_menu) {

@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -82,110 +79,48 @@ public class MainController {
         }
     }
 
-/*
-@PostMapping
-public String getTranslatedSentence(@RequestParam(required = false) String sentence,
-                                    @RequestParam(required = false) String title,
-                                    Model model) {
+//번역+검색 기능 합친 것
+@PostMapping("/translateAndSearch")
+@ResponseBody
+public ResponseEntity<Map<String, Object>> translateAndSearch(@RequestParam(required = false) String sentence) {
+    Map<String, Object> result = new HashMap<>();
     try {
         if (sentence != null) {
+            // 번역
             String translatedSentence = translateService.getTranslatedSentence(sentence);
-            model.addAttribute("translatedSentence", translatedSentence);
-        }
+            result.put("translatedSentence", translatedSentence);
 
-        if (title != null) {
-            String translatedTitle = translateTitleService.getTranslatedTitle(title);
-            model.addAttribute("translatedTitle", translatedTitle);
+            // 검색
+            List<NewsDto> newsDtoList = newsService.searchNews(translatedSentence);
+            result.put("newsList", newsDtoList);
+            result.put("isFiltering", true);
         }
     } catch (RuntimeException e) {
-        model.addAttribute("translatedSentence", "검색 번역 중 오류가 발생했습니다.");
-        model.addAttribute("translatedTitle", "제목 번역 중 오류가 발생했습니다.");
+        result.put("error", "번역 및 검색 중 오류가 발생했습니다.");
     }
 
-    // 이 부분은 필요에 따라 뷰 이름을 조정할 수 있습니다.
-    return "main";
+    return ResponseEntity.ok(result);
 }
 
- */
-
-    @PostMapping
-    public String getTranslatedSentence(@RequestParam(required = false) String sentence,
-
-                                        Model model) {
+//검색창 번역기능
+    @PostMapping("/translateSubmit")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> translate(@RequestParam(required = false) String sentence) {
+        Map<String, String> result = new HashMap<>();
         try {
             if (sentence != null) {
                 String translatedSentence = translateService.getTranslatedSentence(sentence);
-                model.addAttribute("translatedSentence", translatedSentence);
+                result.put("translatedSentence", translatedSentence);
             }
-
-
         } catch (RuntimeException e) {
-            model.addAttribute("translatedSentence", "검색 번역 중 오류가 발생했습니다.");
-
+            result.put("error", "번역 중 오류가 발생했습니다.");
         }
 
-        // 이 부분은 필요에 따라 뷰 이름을 조정할 수 있습니다.
-        return "main";
+        return ResponseEntity.ok(result);
     }
 
-    /*
-    @PostMapping("/translatedtitles")
-    public ModelAndView getTranslatedtitles( @RequestParam(required = false) String title,
-                                             Model model,
-                                             @RequestParam(value = "keyword", required = false, defaultValue = "") final String keyword,
-                                             @RequestParam(value = "sort", required = false, defaultValue = "byDate") final String sort){
-        ModelAndView modelAndView = new ModelAndView("main");
-        List<NewsDto> newsDtos = newsService.getNewsList(keyword, sort);
 
-        model.addAttribute("newsList", newsDtos);
-        try {
-
-            if (title != null) {
-                List<String> originalTitles = Arrays.asList(title.split(","));
-                List<String> translatedTitles = translateTitleService.getTranslatedTitles(originalTitles);
-                modelAndView.addObject("translatedTitles", translatedTitles);
-                // 로깅 추가
-                logger.info("Original Titles: " + originalTitles);
-                logger.info("Translated Titles: " + translatedTitles);
-            }
-        } catch (RuntimeException e) {
-
-            model.addAttribute("translatedTitles", Collections.emptyList());
-            // 오류 로깅 추가
-            logger.error("Error during translation", e);
-        }
-
-        return modelAndView;
-
-    }*/
-
-/*
-    @PostMapping("/translatedtitles")
-    public String getTranslatedtitles(
-            @RequestParam(value = "originalTitles", required = false) String[] originalTitles,
-            @RequestParam(value = "keyword", required = false, defaultValue = "") final String keyword,
-            @RequestParam(value = "sort", required = false, defaultValue = "byDate") final String sort,
-            Model model
-    ) {
-        try {
-            if (originalTitles != null && originalTitles.length > 0) {
-                TranslationTitleDto translationTitleDto = translateTitleService.getTranslatedTitles(originalTitles);
-                // 로그 추가
-                logger.info("번역된 제목: " + translationTitleDto);
-                model.addAttribute("translatedTitles", translationTitleDto.getTitles());
-            }
-
-            return "main";
-        } catch (RuntimeException e) {
-            // 오류 로깅 추가
-            logger.error("번역 중 오류 발생", e);
-            return "main";
-        }
-
-    }
-
- */
-
+//기사 제목 번역 기능
 @PostMapping("/translatedtitles")
 public ResponseEntity<TranslationTitleDto> getTranslatedTitles(@RequestParam(value = "originalTitles", required = false) String[] originalTitles) {
     try {
