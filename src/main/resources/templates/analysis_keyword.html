@@ -44,17 +44,33 @@
                 </div>
             </form></td>
         </tr>
-        <tr class="suggested_keywords">
-            <td colspan="2">
+        <tr class="suggested_keywords" >
+
+            <td colspan="2" id = suggestedKeywords>
                 <p style="text-align: center; font-size: 12px">추천 키워드</p>
-                <span>추천키워드1</span> <span>추천키워드2</span> <span>추천키워드3</span>
-                <span>추천키워드1</span> <span>추천키워드2</span> <span>추천키워드3</span>
-                <span>추천키워드1</span> <span>추천키워드2</span> <span>추천키워드3</span>
-                <span>추천키워드1</span> <span>추천키워드2</span> <span>추천키워드3</span>
+                <script th:inline="javascript">
+                    // Thymeleaf에서 받은 JSON 데이터
+                    var keyword_suggested = /*[[${keyword_suggested}]]*/ null;
+
+                    if (keyword_suggested) {
+                        // JavaScript로 동적으로 키워드 리스트 생성
+                        var suggestedKeywords = document.getElementById("suggestedKeywords");
+
+                        for (var i = 0; i < keyword_suggested.length; i++) {
+                            var spanKeyword = document.createElement("span");
+                            spanKeyword.classList.add("keyword");
+                            spanKeyword.textContent = keyword_suggested[i];
+
+                            suggestedKeywords.appendChild(spanKeyword);
+                        }
+                    }
+                </script>
             </td>
+
         </tr>
     </table>
 </div>
+
 
 <br>
 

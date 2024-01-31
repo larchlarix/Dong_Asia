@@ -7,6 +7,7 @@
 <header th:replace="fragments.html :: fragment-header"></header>
 
 <div class="page-right">
+
 <div class="page-section">
 
     <div style="display: flex">
@@ -78,39 +79,50 @@
 
     </div>
 
-  <div class="mainpage-box">
-    <!-- 최신 기사 목록 (5개) -->
-    <table class="list-table" th:unless="${#lists.isEmpty(newsList)}" th:each="news, index : ${newsList}" th:if="${index.index} < 5">
-      <tr>
-        <td th:unless="${news.newsImageURL == ''}" rowspan="2" width="200">
-          <img class="news-img" th:src="${news.newsImageURL}" alt="뉴스 이미지">
-        </td>
-        <td colspan="3" class="news-title">
-          <a th:href="@{/news/{newsId}(newsId=${news.newsId})}" th:text="${news.newsTitle}">기사 제목</a>
-        </td>
-      </tr>
-      <tr height="50" style="font-size: 14px">
-        <td width="40">
+    <div class="mainpage-box">
+        <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
+            <th:block th:each="news, index : ${newsList}" th:if="${index.index} < 5">
+                <input type="hidden" name="originalTitles" th:value="${news.newsTitle}"/>
+            </th:block>
+            <button type="submit" class="translate-button">번역</button>
+        </form>
+        <!-- 최신 기사 목록 (5개) -->
+        <table class="list-table" th:unless="${#lists.isEmpty(newsList)}" th:each="news, index : ${newsList}" th:if="${index.index} < 5">
+            <tr>
+                <td th:unless="${news.newsImageURL == ''}" rowspan="2" width="200">
+                    <img class="news-img" th:src="${news.newsImageURL}" alt="뉴스 이미지">
+                </td>
+                <td colspan="3" class="news-title">
+                    <a th:href="@{/news/{newsId}(newsId=${news.newsId})}" data-news-title="${news.newsTitle}">
+                        <span th:if="${not #lists.isEmpty(newsList)}" th:text="${news.newsTitle}" class="after-translation"></span>
+                        <span th:if="${translatedTitles != null}" th:text="${translatedTitles[index.index]}" ></span>
+
+                    </a>
+                </td>
+            </tr>
+            <tr height="50" style="font-size: 14px">
+                <td width="40">
                 <span th:switch="${news.newsPublisher}">
                     <span th:case="0"><img class="news-icon" th:src="@{/img/nhk.png}"></span>
                     <span th:case="1"><img class="news-icon" th:src="@{/img/mainichi.png}"></span>
-                    <span th:case="2"><img class="news-icon" th:src="@{/img/asahi.png}" style="border: 1px solid grey"></span>
-                    <span th:case="3"><img class="news-icon" th:src="@{/img/sankei.png}" style="border: 1px solid grey"></span>
+                    <span th:case="2"><img class="news-icon" th:src="@{/img/asahi.png}"></span>
+                    <span th:case="3"><img class="news-icon" th:src="@{/img/sankei.png}"></span>
                 </span>
-        </td>
-        <td>
+                </td>
+                <td>
                 <span th:switch="${news.newsPublisher}">
                     <span th:case="0">NHK</span>
                     <span th:case="1">마이니치</span>
                     <span th:case="2">아사히</span>
                     <span th:case="3">산케이</span>
                 </span>
-        </td>
-        <td th:text="${news.newsDate}" style="text-align:right; color: grey">기사 일자</td>
-      </tr>
-    </table>
-    <a class="more-news-btn" th:href="@{/news}">최신 뉴스 더보기</a>
-  </div>
+                </td>
+                <td th:text="${news.newsDate}" style="text-align:right; color: grey">기사 일자</td>
+            </tr>
+
+        </table>
+        <a class="more-news-btn" th:href="@{/news}">최신 뉴스 더보기</a>
+    </div>
 </div>
 
 <div class="page-section">
@@ -184,9 +196,65 @@
   </div>
 </div>
 </div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+
+    function translateAndSubmit(event) {
+        var formData = new FormData(document.forms[0]);
+
+        // 모든 뉴스 제목을 FormData에 추가
+        var newsTitles = document.getElementsByName("originalTitles");
+        for (var i = 0; i < newsTitles.length; i++) {
+            formData.append("originalTitles", newsTitles[i].value);
+        }
+
+        event.preventDefault();
+
+
+        fetch('/translatedtitles', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('fetch 함수에서 받아온 데이터:', data);
+                var translatedTitles = Array.from(new Set(data.titles)).slice(0, 5); // 중복 제거 및 최대 5개만 선택
+                updateTranslatedTitles(translatedTitles);
+            })
+            .catch(error => {
+                console.error('오류:', error);
+                alert('번역 중 오류가 발생했습니다.');
+            });
+        console.log('새로운 뉴스 추가됨');
+    }
+
+
+    function updateTranslatedTitles(translatedTitles) {
+        console.log('updateTranslatedTitles 함수 내에서의 번역 결과:', translatedTitles);
+
+        var elements = document.getElementsByClassName("after-translation");
+
+        // 확인용 로그
+        console.log('찾은 엘리먼트 수:', elements.length);
+
+        // 번역된 결과를 각 뉴스에 적용
+        for (var i = 0; i < elements.length; i++) {
+            // 확인용 로그
+            console.log('현재 인덱스:', i);
+            console.log('번역 결과:', translatedTitles[i]);
+
+            elements[i].textContent = translatedTitles[i];  // innerHTML 대신 textContent 사용
+        }
+    }
+
+
+    /*]]>*/
+</script>
 
 <!-- 모바일 하단 메뉴 -->
 <nav th:replace="fragments.html :: mobile-nav"></nav>
 
 </body>
+
 </html>
