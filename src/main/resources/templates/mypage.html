@@ -22,16 +22,17 @@
         <!-- '내정보 수정' 선택 시 노출 -->
         <div class="con con1">
             <div>
-                <h4>닉네임　&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <span>(닉네임) 님</span>&nbsp;&nbsp;&nbsp;&nbsp;<button class="prof-btn">변경</button>
+                <h4>닉네임　&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <span th:text="${userDto.userName}"> 님</span>
             </div>
             <br>
             <div>
-                <h4>이메일　&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <span>test@test.com</span>
+                <h4>이메일　&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <span th:text="${userDto.userEmail}"></span>
             </div>
             <br>
             <div>
-                <h4>비밀번호&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <button class="prof-btn">변경</button>
+                <h4>비밀번호&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4>  <span> </span>
             </div>
+            <button class="prof-btn"> <a href="/user/edit">회원정보 수정</a></button>
         </div>
 
 
@@ -72,6 +73,7 @@
     </main>
 </div>
 </div>
+
 
 <!-- 모바일 하단 메뉴 -->
 <nav th:replace="fragments.html :: mobile-nav"></nav>

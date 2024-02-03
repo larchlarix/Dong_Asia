@@ -60,9 +60,13 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
 
     }
-    private  void validateDuplicateUser(User user){
+
+    //중복 이메일
+    private void validateDuplicateUser(User user) {
         Optional<User> existingUser = userRepository.findByUserEmail(user.getUserEmail());
-        if(existingUser.isPresent()){ // Optional이 비어있지 않으면 중복된 사용자가 존재
+
+        // 수정 중인 경우, 현재 사용자의 이메일은 무시
+        if (existingUser.isPresent() && !existingUser.get().getUserId().equals(user.getUserId())) {
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
     }
@@ -90,27 +94,16 @@ public class UserService implements UserDetailsService {
                 authorities
         );
     }
-
-
-}
-
-
-    /*
-    @Override
-    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException{
+    public User getUserByEmail(String userEmail) {
         Optional<User> existingUser = userRepository.findByUserEmail(userEmail);
-        if(existingUser.isEmpty()){
+        if (existingUser.isEmpty()) {
             throw new UsernameNotFoundException(userEmail);
         }
-        User user = existingUser.get();
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUserEmail())
-                .password(user.getUserPassword())
-                .roles(user.getRole().toString())
-                .build();
+        return existingUser.get();
     }
 
 
-     */
+
+}
 
 

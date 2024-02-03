@@ -4,6 +4,7 @@ import com.example.DongAisa.domain.User;
 import com.example.DongAisa.dto.BookMarkDto;
 import com.example.DongAisa.service.BookMarkService;
 import com.example.DongAisa.service.CustomUserDetails;
+import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -78,11 +79,21 @@ public class UserController {
 
 
 
+//마이페이지 북마크 기능 + (기존)회원 정보 나타내기
+
     @GetMapping(value = "/mypage")
-    public String showBookmarks(Model model) {
+    public String BookmarksAndUser(Model model,  Authentication authentication) {
+
+        //북마크 기능
         Long userId = getCurrentUserId();
         List<BookMarkDto> bookmarks = bookMarkService.getBookmarksByUserId(userId);
         model.addAttribute("bookmarks", bookmarks);
+
+        //기존 회원 정보 나타내기
+        String userEmail = authentication.getName();
+        User user = userService.getUserByEmail(userEmail);
+        model.addAttribute("userDto", user);
+
         return "mypage";
     }
 
@@ -92,6 +103,39 @@ public class UserController {
             return ((CustomUserDetails) authentication.getPrincipal()).getUserId();
         }
         return null;
+    }
+
+    // 마이페이지 회원정보 수정(userName, userPassword)
+    @PostMapping(value = "/edit")
+    public ResponseEntity<String> editUser(@RequestBody UserDto userDto, Authentication authentication) {
+        String userEmail = authentication.getName();
+        User existingUser = userService.getUserByEmail(userEmail);
+
+        // 변경된 사용자 이름 업데이트
+        if (!StringUtils.isEmpty(userDto.getUserName())) {
+            existingUser.setUserName(userDto.getUserName());
+        }
+
+        // 변경된 비밀번호 업데이트 (비밀번호가 비어있지 않은 경우에만 업데이트)
+        if (!StringUtils.isEmpty(userDto.getUserPassword())) {
+            String encodedPassword = passwordEncoder.encode(userDto.getUserPassword());
+            existingUser.setUserPassword(encodedPassword);
+        }
+
+        userService.saveUser(existingUser);
+        return ResponseEntity.ok("Success");
+    }
+
+    @GetMapping(value = "/edit")
+    public String UserAndBookmarks(Model model) {
+
+        //북마크 기능
+        Long userId = getCurrentUserId();
+        List<BookMarkDto> bookmarks = bookMarkService.getBookmarksByUserId(userId);
+        model.addAttribute("bookmarks", bookmarks);
+
+
+        return "editUser";
     }
 
 }
