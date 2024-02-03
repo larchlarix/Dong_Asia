@@ -61,7 +61,7 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	implementation 'com.querydsl:querydsl-core'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	compileOnly 'org.projectlombok:lombok'

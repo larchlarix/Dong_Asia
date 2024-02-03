@@ -467,7 +467,7 @@
 
             // 각 비율을 총 개수에 맞게 조정
             const chartData = {
-                labels: categories,
+                labels: categories.map(key => numToPub(key)), // x 축 라벨 변환//categories,
                 datasets: [{
                     label: '긍정',
                     backgroundColor: '#53C0D8',

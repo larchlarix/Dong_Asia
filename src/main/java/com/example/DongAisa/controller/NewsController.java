@@ -4,12 +4,16 @@ package com.example.DongAisa.controller;
 import com.example.DongAisa.domain.News;
 import com.example.DongAisa.dto.NewsDto;
 import com.example.DongAisa.dto.TranslationDto;
+import com.example.DongAisa.service.CustomUserDetails;
 import com.example.DongAisa.service.NewsService;
 import com.example.DongAisa.service.TranslateNewsService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -42,6 +46,11 @@ public class NewsController {
         try {
             NewsDto news = newsService.getNews(newsId);
             model.addAttribute("news", news);
+
+            // 현재 로그인한 사용자의 userId 가져오기
+            Long currentUserId = getCurrentUserId();
+            model.addAttribute("currentUserId", currentUserId);
+
             return "main_text";
         } catch (EntityNotFoundException e) {
             // 뉴스가 존재하지 않는 경우
@@ -51,7 +60,13 @@ public class NewsController {
             return String.valueOf(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         }
     }
-
+    private Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof CustomUserDetails) {
+            return ((CustomUserDetails) authentication.getPrincipal()).getUserId();
+        }
+        return null;
+    }
     @PostMapping("/{newsId}")
     public String getTranslatedNews(
             @PathVariable Long newsId,

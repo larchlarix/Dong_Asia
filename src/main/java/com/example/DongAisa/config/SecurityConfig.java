@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +27,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -39,7 +41,7 @@ import java.net.URLEncoder;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig   {
+public class SecurityConfig {
 
     @Autowired
     @Lazy
@@ -51,20 +53,14 @@ public class SecurityConfig   {
 
     private final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws  Exception{
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-               /*
 
-                .authorizeHttpRequests((authorizeRequests) ->
-                  authorizeRequests
-                    .requestMatchers("/swagger-resources/**").permitAll()
-                    .requestMatchers("/","/user/**","/news/**","/analysis","/keyword_analysis").permitAll()
-                          .requestMatchers("/admin/**").hasRole("ADMIN")
-                          .anyRequest().authenticated()
-                )*/
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN"))
@@ -112,6 +108,8 @@ public class SecurityConfig   {
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

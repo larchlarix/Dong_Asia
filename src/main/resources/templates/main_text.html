@@ -49,11 +49,12 @@
                 <span th:text="${news.newsDate}">기사 날짜</span>
             </td>
 
-            <!-- 북마크 추가/삭제 폼 -->
-            <div class="bookmark-form">
+            <div class="bookmark-form" sec:authorize="isAuthenticated()">
+                <!-- 로그인한 사용자에게만 보이는 북마크 폼 -->
                 <form id="bookmarkForm">
-                    <!-- Spring Security를 사용하여 현재 사용자의 ID를 가져오는 방법 -->
-                    <input type="hidden" id="userId" th:if="${#authentication.isAuthenticated() and #authentication.principal != null}" th:value="${#authentication.principal?.userId}" />
+
+                    <input type="hidden" id="userId" th:value="${currentUserId}"/>
+
                     <input type="hidden" id="newsId" th:value="${news.newsId}" />
 
                     <button type="button" onclick="addBookmark()">북마크 추가</button>
@@ -61,12 +62,14 @@
                 </form>
             </div>
 
+
             <td style="text-align: right">
+                <!--
                 <span>
                     <img th:src="@{/img/bookmark_0.png}" width="12" height="12">
                     스크랩하기
                 </span>
-                &nbsp;&nbsp;·&nbsp;&nbsp;
+                &nbsp;&nbsp;·&nbsp;&nbsp;-->
                 <a th:href="${news.newsLink}">원문보기</a>
             </td>
         </tr>
@@ -105,7 +108,7 @@
 
 <script th:inline="javascript">
     function addBookmark() {
-        var userId = /*[[${#authentication.principal?.userId}]]*/ null;
+        var userId = document.getElementById("userId").value;
         var newsId = document.getElementById("newsId").value;
 
         var data = {
@@ -140,7 +143,7 @@
     }
 
     function removeBookmark() {
-        var userId = /*[[${#authentication.principal?.userId}]]*/ null;
+        var userId = document.getElementById("userId").value;
         var newsId = document.getElementById("newsId").value;
 
         var data = {
@@ -174,6 +177,41 @@
             });
     }
 </script>
+<!-- 모바일 하단 메뉴 -->
+<nav th:replace="fragments.html :: mobile-nav"></nav>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+
+    function translateNews() {
+        // 폼 데이터 가져오기
+        var formData = new FormData(document.forms[0]);
+
+        // 명시적으로 "title"과 "content" 파라미터 추가
+        formData.append("title", newsTitle);
+        formData.append("content", newsContents);
+        // newsId를 추가
+        formData.append("newsId", newsId);
+
+        // 서버로 데이터 전송
+        fetch('/news?newsId=' + newsId,  {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {})
+            .catch(error => {
+                console.error('Error:', error);
+                alert('번역 중 오류가 발생했습니다.');
+            });
+
+        // 폼 제출 방지
+        return false;
+    }
+    /*]]>*/
+</script>
+
 <!-- 모바일 하단 메뉴 -->
 <nav th:replace="fragments.html :: mobile-nav"></nav>
 

@@ -1,9 +1,11 @@
 package com.example.DongAisa.service;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+
 
 public class CustomUserDetails implements UserDetails {
 
@@ -11,6 +13,9 @@ public class CustomUserDetails implements UserDetails {
     private String userEmail;
     private String userPassword;
     private Collection<? extends GrantedAuthority> authorities;
+
+
+
 
     public CustomUserDetails(Long userId, String userEmail, String userPassword, Collection<? extends GrantedAuthority> authorities) {
         this.userId = userId;
@@ -20,7 +25,9 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public Long getUserId() {
-        return userId;  }
+        return userId;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
