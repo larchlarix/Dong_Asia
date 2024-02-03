@@ -1,6 +1,7 @@
 package com.example.DongAisa.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -39,19 +40,20 @@ public class News {
     @Column(name="news_image_url", unique=false, nullable=true)
     private String newsImageURL;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "news", cascade = CascadeType.ALL)
-    private List<User> user;
-
-    public List<User> getUser() {
-        return user;
-    }
-
-    public void setUser(List<User> user) {
-        this.user = user;
-    }
-
+    @ColumnDefault("0")
+    @Column(name = "like_count", nullable = false)
+    private Integer likeCount;
 
     public News(){};
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
 
 
     public Long getNewsId() {

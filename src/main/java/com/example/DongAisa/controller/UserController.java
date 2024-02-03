@@ -1,8 +1,13 @@
 package com.example.DongAisa.controller;
 
 import com.example.DongAisa.domain.User;
+import com.example.DongAisa.dto.BookMarkDto;
+import com.example.DongAisa.service.BookMarkService;
+import com.example.DongAisa.service.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import com.example.DongAisa.dto.UserDto;
@@ -16,6 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -25,6 +32,9 @@ public class UserController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private BookMarkService bookMarkService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -66,18 +76,22 @@ public class UserController {
         return "redirect:/";
     }
 
-    /*
-    @GetMapping(value = "/login/error")
-    public String loginError(Model model){
-        model.addAttribute("loginErrorMsg","아이디 또는 비밀번호를 확인해주세요");
-        return "login";
-    }
 
-*/
 
     @GetMapping(value = "/mypage")
-    public String userMypage(){
+    public String showBookmarks(Model model) {
+        Long userId = getCurrentUserId();
+        List<BookMarkDto> bookmarks = bookMarkService.getBookmarksByUserId(userId);
+        model.addAttribute("bookmarks", bookmarks);
         return "mypage";
+    }
+
+    private Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof CustomUserDetails) {
+            return ((CustomUserDetails) authentication.getPrincipal()).getUserId();
+        }
+        return null;
     }
 
 }

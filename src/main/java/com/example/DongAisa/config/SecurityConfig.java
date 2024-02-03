@@ -92,7 +92,7 @@ public class SecurityConfig   {
                     /* 권한이 필요한 요청은 해당 url로 리다이렉트 */
                     formLogin.loginPage("/user/login")
                              .defaultSuccessUrl("/")
-                             .usernameParameter("userEmail")
+                            .usernameParameter("userEmail")
                              .passwordParameter("userPassword")
                             // .failureUrl("/user/login/error")
                              .failureHandler(authenticationFailureHandler);
@@ -120,7 +120,7 @@ public class SecurityConfig   {
     @Bean
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(this.userService);
+        provider.setUserDetailsService(userService);
         provider.setPasswordEncoder(this.passwordEncoder());
         return provider;
     }

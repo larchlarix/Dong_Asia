@@ -79,10 +79,12 @@ public class UserService implements UserDetailsService {
         User user = existingUser.get();
 
 
+
         // 역할을 SimpleGrantedAuthority로 생성
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().toString()));
 
-        return new org.springframework.security.core.userdetails.User(
+        return new CustomUserDetails(
+                user.getUserId(), // 추가된 부분
                 user.getUserEmail(),
                 user.getUserPassword(),
                 authorities

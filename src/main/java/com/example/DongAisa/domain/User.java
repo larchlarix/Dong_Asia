@@ -28,9 +28,6 @@ public class User {
     @Column(name="user_password", unique = false, nullable = false)
     private  String userPassword;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="news_id")
-    private News news;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -48,14 +45,6 @@ public class User {
 
 
     public User(){};
-
-    public News getNews() {
-        return news;
-    }
-
-    public void setNews(News news) {
-        this.news = news;
-    }
 
 
     public Long getUserId() {
