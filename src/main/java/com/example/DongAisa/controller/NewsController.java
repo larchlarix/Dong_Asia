@@ -4,6 +4,7 @@ package com.example.DongAisa.controller;
 import com.example.DongAisa.domain.News;
 import com.example.DongAisa.dto.NewsDto;
 import com.example.DongAisa.dto.TranslationDto;
+import com.example.DongAisa.repository.NewsRepository;
 import com.example.DongAisa.service.CustomUserDetails;
 import com.example.DongAisa.service.NewsService;
 import com.example.DongAisa.service.TranslateNewsService;
@@ -29,6 +30,9 @@ public class NewsController {
     @Autowired
     TranslateNewsService translateNewsService;
 
+    @Autowired
+    private NewsRepository newsRepository;
+
     // 생성자 주입을 통해 TranslateNewsService 주입
     public NewsController(TranslateNewsService translateNewsService) {
         this.translateNewsService = translateNewsService;
@@ -40,6 +44,7 @@ public class NewsController {
         return new ResponseEntity<>(news, HttpStatus.OK);
     }
 */
+    /*
 
     @RequestMapping(value = "/{newsId}", method = RequestMethod.GET)
     public String getNews(Model model, @PathVariable("newsId") final long newsId) {
@@ -60,6 +65,40 @@ public class NewsController {
             return String.valueOf(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         }
     }
+
+     */
+    @RequestMapping(value = "/{newsId}", method = RequestMethod.GET)
+    public String getNews(Model model, @PathVariable("newsId") final long newsId) {
+        try {
+            NewsDto news = newsService.getNews(newsId);
+
+            // 현재 로그인한 사용자의 userId 가져오기
+            Long currentUserId = getCurrentUserId();
+            model.addAttribute("currentUserId", currentUserId);
+
+            // 북마크 상태를 모델에 추가
+            boolean bookmarked = isNewsBookmarked(newsId);
+            model.addAttribute("bookmarked", bookmarked);
+
+            model.addAttribute("news", news);
+
+            return "main_text";
+        } catch (EntityNotFoundException e) {
+            // 뉴스가 존재하지 않는 경우
+            return String.valueOf(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            // 다른 예외 발생 시
+            return String.valueOf(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        }
+    }
+    private boolean isNewsBookmarked(Long newsId) {
+        // likeCount 값이 0이면 북마크가 안되어 있는 상태, 1이면 북마크가 되어있는 상태로 간주
+        News news = newsRepository.findById(newsId)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find news id: " + newsId));
+
+        return news.getLikeCount() == 1;
+    }
+
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof CustomUserDetails) {

@@ -54,11 +54,16 @@
                 <form id="bookmarkForm">
 
                     <input type="hidden" id="userId" th:value="${currentUserId}"/>
-
                     <input type="hidden" id="newsId" th:value="${news.newsId}" />
 
-                    <button type="button" onclick="addBookmark()">북마크 추가</button>
-                    <button type="button" onclick="removeBookmark()">북마크 삭제</button>
+                    <!-- 북마크 추가 버튼 -->
+                    <button th:if="${not bookmarked}" type="button" onclick="addBookmark()">북마크 추가</button>
+                    <img th:if="${not bookmarked}" th:src="@{/img/bookmark_0.png}" width="12" height="12">
+
+                    <!-- 북마크 삭제 버튼 -->
+                    <button th:if="${bookmarked}" type="button" onclick="removeBookmark()">북마크 삭제</button>
+                    <img th:if="${bookmarked}" th:src="@{/img/bookmark_1.png}" width="12" height="12">
+
                 </form>
             </div>
 
@@ -135,6 +140,7 @@
                 }
                 console.log('북마크 추가됨:', data);
                 alert('북마크가 성공적으로 추가되었습니다!');
+                location.reload(); // 페이지 리로드
             })
             .catch((error) => {
                 console.error('에러:', error);
@@ -170,6 +176,7 @@
                 }
                 console.log('북마크 삭제됨:', data);
                 alert('북마크가 성공적으로 삭제되었습니다!');
+                location.reload(); // 페이지 리로드
             })
             .catch((error) => {
                 console.error('에러:', error);
