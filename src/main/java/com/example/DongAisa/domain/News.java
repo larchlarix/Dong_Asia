@@ -44,6 +44,17 @@ public class News {
     @Column(name = "like_count", nullable = false)
     private Integer likeCount;
 
+    @Column(name="news_country", nullable = false)
+    private String newsCountry;
+
+    public String getNewsCountry() {
+        return newsCountry;
+    }
+
+    public void setNewsCountry(String newsCountry) {
+        this.newsCountry = newsCountry;
+    }
+
     public News(){};
 
     public Integer getLikeCount() {

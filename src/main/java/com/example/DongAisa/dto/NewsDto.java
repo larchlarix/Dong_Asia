@@ -16,6 +16,10 @@ public class NewsDto {
 
     Long newsPublisher;
 
+    Integer LikeCount;
+
+    String newsCountry;
+
 
     public Long getNewsId() {
         return newsId;
@@ -82,4 +86,19 @@ public class NewsDto {
         this.newsImageURL = newsImageURL;
     }
 
+    public Integer getLikeCount() {
+        return LikeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        LikeCount = likeCount;
+    }
+
+    public String getNewsCountry() {
+        return newsCountry;
+    }
+
+    public void setNewsCountry(String newsCountry) {
+        this.newsCountry = newsCountry;
+    }
 }

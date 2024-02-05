@@ -19,6 +19,8 @@ public class NewsMapper {
         newsDto.setNewsCategory(news.getNewsCategory());
         newsDto.setNewsImageURL(news.getNewsImageURL());
         newsDto.setNewsPublisher(news.getNewsPublisher());
+        newsDto.setLikeCount(news.getLikeCount());
+        newsDto.setNewsCountry(news.getNewsCountry());
         return newsDto;
 
     }
@@ -32,6 +34,8 @@ public class NewsMapper {
         news.setNewsCategory(newsDto.getNewsCategory());
         news.setNewsImageURL(newsDto.getNewsImageURL());
         news.setNewsPublisher(newsDto.getNewsPublisher());
+        news.setLikeCount(newsDto.getLikeCount());
+        news.setNewsCountry(newsDto.getNewsCountry());
         return  news;
     }
 
