@@ -12,11 +12,12 @@
 <div class="page-right">
 
     <div class="page-section">
+
         <h2>회원 정보 수정</h2>
+
         <main class='change_profile'>
             <ul>
-                <li class="change_profile on" onclick="setNew('change_profile')">내정보 수정</li>
-                <li class="bookmarked_news" onclick="setNew('bookmarked_news')">내가 북마크한 기사</li>
+                <li class="change_profile">내정보 수정</li>
             </ul>
 
             <!-- '내정보 수정' 선택 시 노출 -->
@@ -29,49 +30,16 @@
                 <div>
                     <label for="userPassword"> <h4>새 비밀번호&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4></label>  <input type="password" id="userPassword" name="userPassword">
                 </div>
-
-                    <button type="button" onclick="editUser()">개인정보 수정</button>
+                    <br>
+                    <button type="button" class="prof-btn" onclick="editUser()">수정하기</button>
                 </form>
             </div>
 
-
-            <!-- '내가 북마크한 기사' 선택 시 노출 -->
-
-            <div class="con con2">
-                <!-- 기사 목록 -->
-                <h4 style="margin: 50px;" th:if="${bookmarks == null or #lists.isEmpty(bookmarks)}">북마크한 기사가 없습니다.</h4>
-
-                <table class="list-table" th:if="${bookmarks != null and not #lists.isEmpty(bookmarks)}" th:each="bookmark : ${bookmarks}">
-                    <tr>
-                        <td th:unless="${bookmark.newsImageURL == ''}" rowspan="2" width="200">
-                            <img class="news-img" th:src="${bookmark.newsImageURL}" alt="뉴스 이미지">
-                        </td>
-                        <td colspan="3" class="news-title"><a th:href="@{/news/{newsId}(newsId=${bookmark.newsId})}" th:text="${bookmark.newsTitle}">기사 제목</a></td>
-                    </tr>
-                    <tr height="50" style="font-size: 14px">
-                        <td width="40">
-                    <span th:switch="${bookmark.newsPublisher}">
-                            <span th:case="0"><img class="news-icon" th:src="@{/img/nhk.png}"></span>
-                            <span th:case="1"><img class="news-icon" th:src="@{/img/mainichi.png}"></span>
-                            <span th:case="2"><img class="news-icon" th:src="@{/img/asahi.png}"></span>
-                            <span th:case="3"><img class="news-icon" th:src="@{/img/sankei.png}"></span>
-                    </span>
-                        </td>
-                        <td>
-                    <span th:switch="${bookmark.newsPublisher}">
-                            <span th:case="0">NHK</span>
-                            <span th:case="1">마이니치</span>
-                            <span th:case="2">아사히</span>
-                            <span th:case="3">산케이</span>
-                    </span>
-                        </td>
-                        <td th:text="${bookmark.newsDate}" style="text-align:right; color: grey">기사 일자</td>
-                    </tr>
-                </table>
-            </div>
         </main>
     </div>
 </div>
+<br>
+
 
 <script>
 
@@ -111,8 +79,6 @@
 
 </script>
 
-<!-- 모바일 하단 메뉴 -->
-<nav th:replace="fragments.html :: mobile-nav"></nav>
 
 <script>
     function setNew (_menu) {
@@ -127,6 +93,9 @@
         element.classList.add(_menu);
     }
 </script>
+
+<!-- 모바일 메뉴 -->
+<nav th:replace="fragments.html :: mobile-nav"></nav>
 
 </body>
 </html>

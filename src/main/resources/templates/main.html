@@ -77,15 +77,24 @@
             <div class="layer"></div>
         </div>
 
-    </div>
-
-    <div class="mainpage-box">
         <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
             <th:block th:each="news, index : ${newsList}" th:if="${index.index} < 5">
                 <input type="hidden" name="originalTitles" th:value="${news.newsTitle}"/>
             </th:block>
-            <button type="submit" class="translate-button">번역</button>
+            <button type="submit" class="translate-button translate_btn mp">번역</button>
         </form>
+
+    </div>
+
+    <div class="mainpage-box">
+        <!--
+        <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
+            <th:block th:each="news, index : ${newsList}" th:if="${index.index} < 5">
+                <input type="hidden" name="originalTitles" th:value="${news.newsTitle}"/>
+            </th:block>
+            <button type="submit" class="translate-button translate_btn">번역</button>
+        </form>
+        -->
         <!-- 최신 기사 목록 (5개) -->
         <table class="list-table" th:unless="${#lists.isEmpty(newsList)}" th:each="news, index : ${newsList}" th:if="${index.index} < 5">
             <tr>

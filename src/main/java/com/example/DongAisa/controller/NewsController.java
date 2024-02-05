@@ -123,9 +123,19 @@ public class NewsController {
             model.addAttribute("translatedNews", translationDto);
             model.addAttribute("translatedTitle", translationDto.getTranslatedTitle());
             model.addAttribute("translatedContent", translationDto.getTranslatedContent());
+
+            // 북마크 상태를 모델에 추가
+            boolean bookmarked = isNewsBookmarked(newsId);
+            model.addAttribute("bookmarked", bookmarked);
+
             return "main_text"; // 여기에 반환할 페이지의 이름을 넣어주세요
         } catch (RuntimeException e) {
             model.addAttribute("translatedNews", new TranslationDto("번역 중 오류가 발생했습니다.", ""));
+
+            // 북마크 상태를 모델에 추가
+            boolean bookmarked = isNewsBookmarked(newsId);
+            model.addAttribute("bookmarked", bookmarked);
+
             return "main_text"; // 예외 발생 시에도 같은 페이지를 반환하도록 처리
         }
     }

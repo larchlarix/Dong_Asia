@@ -37,23 +37,25 @@
             </td>
         </tr>
         <tr>
-            <!--번역 기능-->
-            <div class="translation-form">
-                <form th:action="@{/translateSubmit}" method="post" onsubmit="return translateSubmit(event)">
-                    <input type="text" id="sentence" name="sentence" placeholder="번역할 단어 입력하기" required>
-                    <button type="submit">
-                        ➜
-                    </button>
-                </form>
-            </div>
+
             <td colspan="2">
+                <!--번역 기능-->
+                <div class="translation-form ana-search-form">
+                    <form th:action="@{/translateSubmit}" method="post" onsubmit="return translateSubmit(event)">
+                        <input type="text" id="sentence" name="sentence" placeholder="번역할 단어 입력하기" required>
+                        <button type="submit" class="short_btn">번역</button>
+                    </form>
+                </div>
+
+                <br>
                 <!--검색 기능-->
                 <form>
-                <div class="ana-search-form">
-                    <input type="text" name="query" value="" placeholder="키워드를 입력하세요" id="keyword">
-                    <button type="submit" id="btnSubmit" class="short_btn">검색</button>
-                </div>
-            </form></td>
+                    <div class="ana-search-form">
+                        <input type="text" name="query" value="" placeholder="키워드를 입력하세요" id="keyword">
+                        <button type="submit" id="btnSubmit" class="short_btn">검색</button>
+                    </div>
+                </form>
+            </td>
         </tr>
         <tr class="suggested_keywords" >
 

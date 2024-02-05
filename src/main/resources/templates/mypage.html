@@ -9,29 +9,27 @@
 
 <header th:replace="fragments.html :: fragment-header"></header>
 
+
 <div class="page-right">
 
 <div class="page-section">
     <h2>마이페이지</h2>
     <main class='change_profile'>
         <ul>
-            <li class="change_profile on" onclick="setNew('change_profile')">내정보 수정</li>
+            <li class="change_profile on" onclick="setNew('change_profile')">내정보</li>
             <li class="bookmarked_news" onclick="setNew('bookmarked_news')">내가 북마크한 기사</li>
         </ul>
 
         <!-- '내정보 수정' 선택 시 노출 -->
         <div class="con con1">
             <div>
-                <h4>닉네임　&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <span th:text="${userDto.userName}"> 님</span>
+                <h4>닉네임　&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <span th:text="${userDto.userName}"></span>
             </div>
             <br>
             <div>
                 <h4>이메일　&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4> <span th:text="${userDto.userEmail}"></span>
             </div>
             <br>
-            <div>
-                <h4>비밀번호&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</h4>  <span> </span>
-            </div>
             <button class="prof-btn"> <a href="/user/edit">회원정보 수정</a></button>
         </div>
 
@@ -73,10 +71,7 @@
     </main>
 </div>
 </div>
-
-
-<!-- 모바일 하단 메뉴 -->
-<nav th:replace="fragments.html :: mobile-nav"></nav>
+<br>
 
 <script>
     function setNew (_menu) {
@@ -91,6 +86,9 @@
         element.classList.add(_menu);
     }
 </script>
+
+<!-- 모바일 메뉴 -->
+<nav th:replace="fragments.html :: mobile-nav"></nav>
 
 </body>
 </html>

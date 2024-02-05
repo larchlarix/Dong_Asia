@@ -10,74 +10,6 @@
 <body>
 <!-- <div id="logoHead"><div class="slogan">한국 이슈에 대한 일본과 중국의 시각을 한 눈에!</div> -->
 
-<!-- header -->
-<!--
-<header th:fragment="fragment-header">
-
-    <table class="header-table">
-        <tr>
-            <td class="td1">
-                <span>&nbsp;&nbsp;<a th:href="@{/#}">Dongasians'</a></span>
-            </td>
-            <td class="td2">
-                <div class="translation-form">
-                    <form th:action="@{/}" method="post" onsubmit="return translateAndSubmit()">
-                        <input type="text" id="sentence" name="sentence" placeholder="번역할 단어 입력하기" required>
-                        <button type="submit">
-                            ➜
-                        </button>
-                    </form>
-                </div>
-
-                <div style="visibility: collapse" th:if="${translatedSentence != null and not #strings.isEmpty(translatedSentence)}"></div>
-
-                <div class="search-form">
-                    <form th:action="@{/news/search}" method="get">
-                        <label for="searchKeyword"></label>
-                        <input type="text" id="searchKeyword" name="keyword" placeholder="뉴스 검색하기" th:value="${translatedSentence}" required>
-                        <button type="submit">
-                            🔍︎
-                        </button>
-                    </form>
-                </div>
-                &nbsp;&nbsp;
-                <div>
-                    <img th:src="@{/img/ques.png}" width="12" height="12">
-                </div>
-            </td>
-            <td class="td3" sec:authorize="isAnonymous()">
-                    <a href="/user/login">로그인</a>
-                    &nbsp;&nbsp;·&nbsp;&nbsp;
-                    <a href="/user/signup">회원가입</a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-            </td>
-            <td class="td3" sec:authorize="isAuthenticated()">
-                <a href="/user/mypage">마이페이지</a>
-                &nbsp;&nbsp;·&nbsp;&nbsp;
-                <a href="/user/logout">로그아웃</a>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-            </td>
-        </tr>
-    </table>
-
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        function translateAndSubmit() {
-            var sentenceInput = document.getElementById('sentence');
-            var translatedSentenceDiv = document.getElementById('translatedSentence');
-            var translatedSentence = translatedSentenceDiv.textContent.trim();
-
-            // 번역된 결과를 검색 상자에 설정
-            document.getElementById('searchKeyword').value = translatedSentence;
-
-            // 폼을 제출하여 페이지 이동을 막습니다.
-            return false;
-        }
-        /*]]>*/
-    </script>
-</header>
--->
-
 <header th:fragment="fragment-header" class="side-header">
     <div class="side-bar">
         <span class="logo"><a th:href="@{/#}">Dongasians'</a></span>
@@ -102,50 +34,7 @@
     <div class="under-side-bar"></div>
 </header>
 
-<!-- nav-bar -->
-<nav th:fragment="fragment-nav">
-    <div class="nav-bar">
-        <div><a th:href ="@{/news}">기사 보기</a></div>
-        <div class="nav-bar-analysis"><a>기사 분석</a></div>
-    </div>
-    <ul class="nav-bar-sub-menu">
-        <li>
-            <a th:href="@{/analysis}">언급량 분석</a>
-        </li>
-        <li>
-            <a th:href="@{/keyword_analysis}">키워드 분석</a>
-        </li>
-    </ul>
-
-    <script>
-        const menu=document.querySelector(".nav-bar-analysis");
-        const subBar=document.querySelector(".nav-bar-sub-menu");
-
-        let subToggle=true;
-        function show_sub(){
-            if(subToggle){
-                subBar.style.height="40px";
-                subBar.style.borderBottomColor="grey";
-                subToggle=!subToggle;
-            }else{
-                subBar.style.height="0px";
-                subBar.style.borderBottomColor="white";
-                subToggle=!subToggle;
-            }
-        }
-        menu.addEventListener("click",show_sub);
-    </script>
-</nav>
-
-<!-- 푸터 -->
-<footer th:fragment="fragment-footer" id="footer">
-    <div><h2>LOGO</h2>
-        <span>팀 동아시아 제작</span>
-        <span></span>
-    </div>
-</footer>
-
-<!-- 모바일 하단 메뉴 -->
+<!-- 모바일 사이드 메뉴 -->
 <nav th:fragment="mobile-nav" class="mobile-nav">
 
     <div class="mobile-menu">
@@ -184,7 +73,8 @@
                 const menu = document.getElementsByClassName('mobile-side-bar')[0];
                 menu.style.left = "0"
 
-                document.getElementsByClassName('mobile-under-side-bar')[0].style.opacity = "0.5";
+                document.getElementsByClassName('mobile-under-side-bar')[0].style.opacity = "0.6";
+                document.getElementsByClassName('mobile-under-side-bar')[0].style.display = "inline-block";
 
                 document.getElementById('mobile-menu-btn-img').setAttribute( 'src', '/img/x.png');
 
@@ -195,6 +85,7 @@
                 menu.style.left = "-300px"
 
                 document.getElementsByClassName('mobile-under-side-bar')[0].style.opacity = "0";
+                document.getElementsByClassName('mobile-under-side-bar')[0].style.display = "none";
 
                 document.getElementById('mobile-menu-btn-img').setAttribute( 'src', '/img/circle-menu.png');
 
@@ -203,19 +94,6 @@
 
         });
     </script>
-
-    <!--
-
-    <div class="space-bottom-menu"></div>
-    <div class="bottom-menu">
-        <div class="left-menu-btn" style="float: left">
-            <a><img th:src="@{/img/menu.png}"></a>
-        </div>
-        <div style="float: right">
-            <a><img th:src="@{/img/person.png}"></a>
-        </div>
-    </div>
-    -->
 </nav>
 
 </body>

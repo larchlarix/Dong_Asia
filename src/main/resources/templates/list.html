@@ -28,14 +28,15 @@
         </form>
         -->
 <!--번역 폼-->
-        <div class="translation-form">
-            <form th:action="@{/translateSubmit}" method="post" onsubmit="return translateSubmit(event)">
-                <input type="text" id="sentence" name="sentence" placeholder="번역할 단어 입력하기" required>
-                <button type="submit">
-                    ➜
-                </button>
-            </form>
-        </div>
+        <form th:action="@{/translateSubmit}" method="post" class="news-option" style="border: 0" onsubmit="return translateSubmit(event)">
+                <div class="ana-search-form">
+                    <label for="sentence"></label>
+                    <input type="text" id="sentence" name="sentence" placeholder="번역할 단어 입력하기" required>
+                    <button type="submit" class="short_btn">번역</button>
+                </div>
+        </form>
+
+        <br>
 <!--검색 폼-->
         <form th:action="@{/news/search}" method="get" class="news-option" style="border: 0">
             <div class="ana-search-form">
@@ -114,15 +115,14 @@
 
 <div class="page-section">
 
-    <h2>
-        <span>기사 보기</span>
+    <h2 style="display: flex">
+        <span style="display: inline-block">기사 보기</span>
         &nbsp;&nbsp;
-
         <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
             <th:block th:each="news, index : ${isFiltering ? newsFilterList : newsList}" th:if="${index.index} < 10">
                 <input type="hidden" name="originalTitles" th:value="${news.newsTitle}"/>
             </th:block>
-            <button type="submit" class="translate-button">번역</button>
+            <button type="submit" class="translate-button translate_btn nl">번역</button>
         </form>
 
     </h2>

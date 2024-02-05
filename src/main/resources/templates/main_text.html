@@ -24,7 +24,7 @@
                 <!-- newsId를 숨은 필드로 추가 -->
                 <input type="hidden" name="title" th:if="${news}" th:value="${news.newsTitle}" />
                 <input type="hidden" name="content" th:if="${news}" th:value="${news.newsContents}" />
-                <button type="submit" class="translate_btn">번역</button>
+                <button type="submit" class="translate_btn mt">번역</button>
             </form>
         </td></tr>
 
@@ -49,32 +49,26 @@
                 <span th:text="${news.newsDate}">기사 날짜</span>
             </td>
 
-            <div class="bookmark-form" sec:authorize="isAuthenticated()">
-                <!-- 로그인한 사용자에게만 보이는 북마크 폼 -->
-                <form id="bookmarkForm">
-
-                    <input type="hidden" id="userId" th:value="${currentUserId}"/>
-                    <input type="hidden" id="newsId" th:value="${news.newsId}" />
-
-                    <!-- 북마크 추가 버튼 -->
-                    <button th:if="${not bookmarked}" type="button" onclick="addBookmark()">북마크 추가</button>
-                    <img th:if="${not bookmarked}" th:src="@{/img/bookmark_0.png}" width="12" height="12">
-
-                    <!-- 북마크 삭제 버튼 -->
-                    <button th:if="${bookmarked}" type="button" onclick="removeBookmark()">북마크 삭제</button>
-                    <img th:if="${bookmarked}" th:src="@{/img/bookmark_1.png}" width="12" height="12">
-
-                </form>
-            </div>
-
-
             <td style="text-align: right">
-                <!--
-                <span>
-                    <img th:src="@{/img/bookmark_0.png}" width="12" height="12">
-                    스크랩하기
-                </span>
-                &nbsp;&nbsp;·&nbsp;&nbsp;-->
+                <div class="bookmark-form" sec:authorize="isAuthenticated()">
+                    <!-- 로그인한 사용자에게만 보이는 북마크 폼 -->
+                    <form id="bookmarkForm">
+
+                        <input type="hidden" id="userId" th:value="${currentUserId}"/>
+                        <input type="hidden" id="newsId" th:value="${news.newsId}" />
+
+                        <!-- 북마크 추가 버튼 -->
+                        <button th:if="${not bookmarked}" type="button" onclick="addBookmark()" class="bm_btn">북마크하기</button>
+                        <img th:if="${not bookmarked}" th:src="@{/img/bookmark_0.png}" width="12" height="12">
+
+                        <!-- 북마크 삭제 버튼 -->
+                        <button th:if="${bookmarked}" type="button" onclick="removeBookmark()" class="bm_btn">북마크 해제</button>
+                        <img th:if="${bookmarked}" th:src="@{/img/bookmark_1.png}" width="12" height="12">
+
+                        &nbsp;&nbsp;·&nbsp;&nbsp;
+                    </form>
+                </div>
+
                 <a th:href="${news.newsLink}">원문보기</a>
             </td>
         </tr>
@@ -184,8 +178,6 @@
             });
     }
 </script>
-<!-- 모바일 하단 메뉴 -->
-<nav th:replace="fragments.html :: mobile-nav"></nav>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -219,12 +211,8 @@
     /*]]>*/
 </script>
 
-<!-- 모바일 하단 메뉴 -->
-<nav th:replace="fragments.html :: mobile-nav"></nav>
-
 <script th:inline="javascript">
     /*<![CDATA[*/
-
 
     function translateNews() {
         // 폼 데이터 가져오기
@@ -253,5 +241,9 @@
     }
     /*]]>*/
 </script>
+
+<!-- 모바일 메뉴 -->
+<nav th:replace="fragments.html :: mobile-nav"></nav>
+
 </body>
 </html>
