@@ -2,9 +2,11 @@ package com.example.DongAisa.controller;
 
 
 import com.example.DongAisa.domain.News;
+import com.example.DongAisa.dto.BookMarkDto;
 import com.example.DongAisa.dto.NewsDto;
 import com.example.DongAisa.dto.TranslationDto;
 import com.example.DongAisa.repository.NewsRepository;
+import com.example.DongAisa.service.BookMarkService;
 import com.example.DongAisa.service.CustomUserDetails;
 import com.example.DongAisa.service.NewsService;
 import com.example.DongAisa.service.TranslateNewsService;
@@ -26,6 +28,9 @@ public class NewsController {
 
     @Autowired
     NewsService newsService;
+
+    @Autowired
+    BookMarkService bookMarkService;
 
     @Autowired
     TranslateNewsService translateNewsService;
@@ -77,7 +82,7 @@ public class NewsController {
             model.addAttribute("currentUserId", currentUserId);
 
             // 북마크 상태를 모델에 추가
-            boolean bookmarked = isNewsBookmarked(newsId);
+            boolean bookmarked = isNewsBookmarked(currentUserId,newsId);
             model.addAttribute("bookmarked", bookmarked);
 
             model.addAttribute("news", news);
@@ -91,14 +96,17 @@ public class NewsController {
             return String.valueOf(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         }
     }
-    private boolean isNewsBookmarked(Long newsId) {
-        // likeCount 값이 0이면 북마크가 안되어 있는 상태, 1이면 북마크가 되어있는 상태로 간주
-        News news = newsRepository.findById(newsId)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find news id: " + newsId));
+    private boolean isNewsBookmarked(Long userId, Long newsId) {
+        try {
+            List<BookMarkDto> bookmarks = bookMarkService.getBookmarksByUserId(userId);
 
-        return news.getLikeCount() == 1;
+            // 주어진 newsId가 북마크 목록에 있는지 확인
+            return bookmarks.stream().anyMatch(bookmark -> bookmark.getNewsId().equals(newsId));
+        } catch (EntityNotFoundException e) {
+            // 사용자를 찾을 수 없거나 다른 예외를 처리합니다.
+            return false;
+        }
     }
-
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof CustomUserDetails) {
@@ -124,16 +132,15 @@ public class NewsController {
             model.addAttribute("translatedTitle", translationDto.getTranslatedTitle());
             model.addAttribute("translatedContent", translationDto.getTranslatedContent());
 
-            // 북마크 상태를 모델에 추가
-            boolean bookmarked = isNewsBookmarked(newsId);
-            model.addAttribute("bookmarked", bookmarked);
 
             return "main_text"; // 여기에 반환할 페이지의 이름을 넣어주세요
         } catch (RuntimeException e) {
             model.addAttribute("translatedNews", new TranslationDto("번역 중 오류가 발생했습니다.", ""));
 
+            // 현재 로그인한 사용자의 userId 가져오기
+            Long currentUserId = getCurrentUserId();
             // 북마크 상태를 모델에 추가
-            boolean bookmarked = isNewsBookmarked(newsId);
+            boolean bookmarked = isNewsBookmarked(currentUserId,newsId);
             model.addAttribute("bookmarked", bookmarked);
 
             return "main_text"; // 예외 발생 시에도 같은 페이지를 반환하도록 처리

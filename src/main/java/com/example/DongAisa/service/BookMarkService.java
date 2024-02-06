@@ -51,7 +51,7 @@ public class BookMarkService {
 
             bookMarkRepository.save(bookMark);
 
-            newsRepository.addLikeCount(news);
+
         } catch (RuntimeException e) {
             log.error("Error occurred during bookmark insertion", e);
             throw e; // 롤백을 위해 예외를 다시 던진다.
@@ -72,7 +72,7 @@ public class BookMarkService {
 
             bookMarkRepository.delete(bookMark);
 
-            newsRepository.subLikeCount(news);
+
         } catch (RuntimeException e) {
             log.error("Error occurred during bookmark deletion", e);
             throw e; // 롤백을 위해 예외를 다시 던진다.

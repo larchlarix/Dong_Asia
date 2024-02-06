@@ -19,8 +19,6 @@ public class QNews extends EntityPathBase<News> {
 
     public static final QNews news = new QNews("news");
 
-    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
-
     public final NumberPath<Long> newsCategory = createNumber("newsCategory", Long.class);
 
     public final StringPath newsContents = createString("newsContents");

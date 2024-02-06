@@ -20,11 +20,5 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     List<News> findByNewsCategoryInAndNewsPublisherIn(List<Long> categories, List<Long> publishers);
 
 
-    @Modifying
-    @Query("UPDATE News n SET n.likeCount = n.likeCount + 1 WHERE n = :selectedNews")
-    void addLikeCount(@Param("selectedNews") News selectedNews);
 
-    @Modifying
-    @Query("UPDATE News n SET n.likeCount = n.likeCount - 1 WHERE n = :selectedNews")
-    void subLikeCount(@Param("selectedNews") News selectedNews);
 }

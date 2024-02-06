@@ -357,19 +357,26 @@
 
         // 모든 뉴스 제목을 FormData에 추가
         var newsTitles = document.getElementsByName("originalTitles");
+
         for (var i = 0; i < newsTitles.length; i++) {
             formData.append("originalTitles", newsTitles[i].value);
+
         }
 
         event.preventDefault();
 
+        for (const entry of formData.entries()) {
+            console.log(entry);
+        }
 
         fetch('/translatedtitles', {
             method: 'POST',
             body: formData
+
         })
             .then(response => response.json())
             .then(data => {
+
                 console.log('fetch 함수에서 받아온 데이터:', data);
                 var translatedTitles = Array.from(new Set(data.titles)).slice(0, 10); // 중복 제거 및 최대 5개만 선택
                 updateTranslatedTitles(translatedTitles);
