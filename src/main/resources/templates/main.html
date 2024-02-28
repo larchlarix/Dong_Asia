@@ -13,7 +13,7 @@
     <div style="display: flex">
 
         <h2>주간 키워드</h2>
-
+        <!--
         <div class="country-button button-10">
             <input type="checkbox" class="country-checkbox" />
             <div class="knobs">
@@ -21,6 +21,7 @@
             </div>
             <div class="layer"></div>
         </div>
+        -->
 
     </div>
 
@@ -68,7 +69,7 @@
     <div style="display: flex">
 
         <h2>최신 뉴스</h2>
-
+        <!--
         <div class="country-button button-10">
             <input type="checkbox" class="country-checkbox" />
             <div class="knobs">
@@ -76,6 +77,7 @@
             </div>
             <div class="layer"></div>
         </div>
+        -->
 
         <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
             <th:block th:each="news, index : ${newsList}" th:if="${index.index} < 5">
@@ -163,7 +165,7 @@
             <span>산케이</span>
         </a>
     </div>
-
+    <!--
     <span class="go-to-site-line"></span>
 
     <div class="go-to-site">
@@ -201,7 +203,8 @@
               <img th:src="@{/img/chamgo.png}">
               <span>참고소식</span>
           </a>
-      </div>
+      <div>
+      -->
   </div>
 </div>
 </div>

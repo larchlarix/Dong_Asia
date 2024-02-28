@@ -54,6 +54,7 @@
 
     <form method="post" th:action="@{/news}" th:object="${filterForm}">
         <table class="news-option">
+            <!--
             <tr>
                 <td width="100">
                     <span>국가</span>
@@ -64,12 +65,14 @@
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <input type="radio" name="country" value="1" id="ch">
                     <label for="ch">중국</label>
-                    <!-- 추가 국가 버튼들을 필요에 따라 추가 -->
+                    <!- 추가 국가 버튼들을 필요에 따라 추가 ->
                 </td>
-                <td rowspan="3" style="text-align: right">
+
+                <td rowspan="2" style="text-align: right">
                     <input type="submit" value="조회" class="long_btn">
                 </td>
             </tr>
+            -->
             <tr>
                 <td>
                     <span>주제</span>
@@ -86,6 +89,9 @@
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <input type="checkbox" name="category" value="2" id="cate2">
                     <label for="cate2">스포츠</label>
+                </td>
+                <td rowspan="2" style="text-align: right">
+                    <input type="submit" value="조회" class="long_btn">
                 </td>
             </tr>
 
