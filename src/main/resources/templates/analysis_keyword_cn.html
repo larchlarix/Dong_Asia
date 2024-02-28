@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://unpkg.com/d3@6"></script>
+    <script src="https://unpkg.com/d3-cloud@1.2.5/build/d3.layout.cloud.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
+
+    <title>기사 분석 :: 키워드 분석</title>
+</head>
+<body class="keyword_ana">
+<!-- header fragment -->
+<header th:replace="fragments.html :: fragment-header"></header>
+<!-- mebubar fragment -->
+<!--<nav th:replace="fragments.html :: fragment-nav"></nav>-->
+
+<div class="page-right">
+    <div class="page-section">
+
+        <h2>키워드 분석</h2>
+
+        <table class="news-option">
+            <tr>
+                <td width="100">
+                    <span>기간</span>
+                </td>
+                <td>
+                    <label class="dateBox" for="startdate2">
+                        <input type="date" id="startdate2" max="2050-12-31" min="2000-01-01">
+                    </label>
+                    ~
+                    <label class="dateBox" for="enddate2">
+                        <input type="date" id="enddate2" max="2050-12-31" min="2000-01-01">
+                    </label>
+                </td>
+            </tr>
+            <tr>
+
+                <td colspan="2">
+                    <!--번역 기능
+                    <div class="translation-form ana-search-form">
+                        <form th:action="@{/translateSubmit}" method="post" onsubmit="return translateSubmit(event)">
+                            <input type="text" id="sentence" name="sentence" placeholder="번역할 단어 입력하기" required>
+                            <button type="submit" class="short_btn">번역</button>
+                        </form>
+                    </div>
+
+                    <br>
+                    -->
+                    <!--검색 기능-->
+                    <form>
+                        <div class="ana-search-form">
+                            <input type="text" name="query" value="" placeholder="키워드를 입력하세요" id="keyword">
+                            <button type="submit" id="btnSubmit" class="short_btn">검색</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            <tr class="suggested_keywords" >
+
+                <td colspan="2" id = suggestedKeywords>
+                    <p style="text-align: center; font-size: 12px">추천 키워드</p>
+                    <script th:inline="javascript">
+                        // Thymeleaf에서 받은 JSON 데이터
+                        var keyword_suggested = /*[[${keyword_suggested}]]*/ null;
+
+                        if (keyword_suggested) {
+                            // JavaScript로 동적으로 키워드 리스트 생성
+                            var suggestedKeywords = document.getElementById("suggestedKeywords");
+
+                            for (var i = 0; i < keyword_suggested.length; i++) {
+                                var spanKeyword = document.createElement("span");
+                                spanKeyword.classList.add("keyword");
+                                spanKeyword.textContent = keyword_suggested[i];
+
+                                suggestedKeywords.appendChild(spanKeyword);
+                            }
+                        }
+                    </script>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+
+
+    <br>
+
+    <div class="page-section">
+        <main class='ana1'>
+            <ul>
+                <li class="ana1 on" onclick="setNew('ana1')">언급량 추이</li>
+                <li class="ana2" onclick="setNew('ana2')">연관어 및 긍ㆍ부정 분석</li>
+                <li class="ana3" onclick="setNew('ana3')">언론사별 긍ㆍ부정 경향</li>
+            </ul>
+
+            <!-- '언급량 추이' 선택 시 노출 -->
+            <div class="con con1">
+                <div id="graphContainer" class="graph-container"><p class="bf_result">키워드를 입력하면 분석 결과가 나옵니다.</p></div>
+            </div>
+
+            <!-- '연관어 및 긍ㆍ부정 분석' 선택 시 노출 -->
+            <div class="con con2">
+                <div id="mindMapContainer" class="wordcloud-container"><p class="bf_result">키워드를 입력하면 분석 결과가 나옵니다.</p></div>
+            </div>
+
+            <!-- '언론사별 긍ㆍ부정 경향' 선택 시 노출 -->
+            <div class="con con3">
+                <div id="BarGraph" class="BarGraph-container"><p class="bf_result">키워드를 입력하면 분석 결과가 나옵니다.</p></div>
+            </div>
+        </main>
+    </div>
+
+    <br>
+
+    <!-- 관련 기사 목록 -->
+    <div class="page-section" style="display: none">
+        <div id="t_button">
+
+        </div>
+        <div id="newsList">
+            <p>관련 기사</p>
+        </div>
+
+    </div>
+
+<!--
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        //번역 기능 함수
+        async function translateSubmit(event) {
+            event.preventDefault(); // 기본 동작 중지
+
+            var sentenceInput = document.getElementById('sentence');
+            var translatedSentenceDiv = document.getElementById('translatedSentence');
+
+            try {
+                var response = await fetch('/translateSubmit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        'sentence': sentenceInput.value,
+                    }),
+                });
+
+                if (response.ok) {
+                    var result = await response.json();
+
+                    if (result.translatedSentence) {
+                        // 번역된 결과를 검색 상자에 설정
+                        document.getElementById('keyword').value = result.translatedSentence;
+
+                        // 번역 결과를 화면에 표시
+                        translatedSentenceDiv.textContent = result.translatedSentence;
+                    } else if (result.error) {
+                        console.error('번역 오류:', result.error);
+                    }
+                } else {
+                    console.error('번역 요청 실패:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('번역 요청 중 오류 발생:', error);
+            }
+
+            return false;
+        }
+        /*]]>*/
+    </script>
+-->
+    <script>
+        function setNew (_menu) {
+            var menus = document.querySelectorAll('li');
+            menus.forEach(function (menu) {
+                menu.classList.remove('on');
+            })
+            document.querySelector('li.' + _menu).classList.add('on');
+
+            element = document.querySelector("main");
+            element.className = '';
+            element.classList.add(_menu);
+        }
+
+        $(document).ready(function () {
+            $('#btnSubmit').click(function (event) {
+                event.preventDefault();
+                var startDate = $('#startdate2').val();
+                var endDate = $('#enddate2').val();
+                var keyWord = $('#keyword').val();
+
+                var requestData = {
+                    "startdate": startDate,
+                    "enddate": endDate,
+                    "keyword": keyWord
+                };
+
+                var request1 = $.ajax({
+                    type: 'POST',
+                    url: '/keyword_process_cn',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    contentType: 'application/json'
+                });
+
+                var request2 = $.ajax({
+                    type: 'POST',
+                    url: '/keyword_amount_process_cn',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    contentType: 'application/json'
+                });
+
+                var request3 = $.ajax({
+                    type: 'POST',
+                    url: '/keyword_posinega_cn',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    contentType: 'application/json'
+                });
+
+
+
+                $.when(request1, request2, request3).done(function (response1, response2, response3) {
+                    console.log("response1", response1);
+                    console.log("response2:", response2);
+                    console.log("response3:", response3);
+
+
+                    // response2 데이터 변환 함수
+                    function transformData(data) {
+                        // JSON 문자열을 JavaScript 객체로 파싱
+                        var parsedData = JSON.parse(data);
+
+                        // 객체를 날짜와 값 속성을 갖는 객체 배열로 변환
+                        return Object.entries(parsedData)
+                            .filter(([date, value]) => !isNaN(Date.parse(date)) && !isNaN(+value))
+                            .map(([date, value]) => ({date: new Date(date), value: +value}));
+                    }
+
+                    // D3.js 꺾은선 그래프 생성
+                    var transformedData = transformData(response2[0]);
+                    renderGraph(transformedData);
+
+                    // WordCloud 생성
+                    var similarWords = JSON.parse(response1[0]).map(item => [item[0], item[1], item[2]]);
+                    renderMindMap(keyWord, similarWords);
+
+                    var BarData = JSON.parse(response3[0]);
+                    const categories = Object.keys(BarData);
+                    var BarGraph = d3.select("#BarGraph");
+                    renderBarGraph(BarGraph, categories, BarData);
+
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error from /keyword_process:', jqXHR.responseText);
+                });
+            });
+
+
+            function renderMindMap(keyword, similarWords) {
+                var mindMapContainer = d3.select("#mindMapContainer");
+                mindMapContainer.html(""); // 기존 내용 지우기
+
+                function drawMindMap(root) {
+                    var width = 600; //800
+                    var height = 300; //400
+
+                    var svg = d3.select("#mindMapContainer").append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+
+                    // 레이아웃 설정
+                    var simulation = d3.forceSimulation()
+                        .force("center", d3.forceCenter(width / 2, height / 2))
+                        .force("charge", d3.forceManyBody().strength(-10))
+                        .force("link", d3.forceLink().id(function (d) {
+                            return d.id;
+                        }))
+                        .force("collision", d3.forceCollide().radius(function (d) {
+                            return d.radius + 5;
+                        }))
+                        .nodes(root.descendants());
+
+                    // 연결선 그리기
+                    svg.selectAll(".link")
+                        .data(root.links())
+                        .enter().append("line")
+                        .attr("class", "link")
+                        .attr("x1", function (d) {
+                            return d.source.x;
+                        })
+                        .attr("y1", function (d) {
+                            return d.source.y;
+                        })
+                        .attr("x2", function (d) {
+                            return d.target.x;
+                        })
+                        .attr("y2", function (d) {
+                            return d.target.y;
+                        });
+
+                    // 노드 그리기
+                    var node = svg.selectAll(".node")
+                        .data(root.descendants())
+                        .enter().append("g")
+                        .attr("class", "node")
+                        .call(d3.drag()
+                            .on("start", dragstarted)
+                            .on("drag", dragged)
+                            .on("end", dragended));
+
+                    // 노드 원형 그리기
+                    node.append("circle")
+                        .attr("r", function (d) {
+                            return d.data.size / 2;
+                        })
+                        .style("fill", function (d) {
+                            return d.data.sentimentColor;
+                        });
+
+                    // 노드 라벨 그리기
+                    node.append("text")
+                        .attr("dy", ".35em")
+                        .style("text-anchor", "middle")
+                        .text(function (d) {
+                            return d.data.text;
+                        });
+
+                    // 강제배치 업데이트
+                    simulation.on("tick", function () {
+                        node.attr("transform", function (d) {
+                            return "translate(" + d.x + "," + d.y + ")";
+                        });
+
+                        svg.selectAll(".link")
+                            .attr("x1", function (d) {
+                                return d.source.x;
+                            })
+                            .attr("y1", function (d) {
+                                return d.source.y;
+                            })
+                            .attr("x2", function (d) {
+                                return d.target.x;
+                            })
+                            .attr("y2", function (d) {
+                                return d.target.y;
+                            });
+                    });
+
+                    function dragstarted(d) {
+                        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+                        d.fx = d.x;
+                        d.fy = d.y;
+                    }
+
+                    function dragged(d) {
+                        d.fx = d3.event.x;
+                        d.fy = d3.event.y;
+                    }
+
+                    function dragended(d) {
+                        if (!d3.event.active) simulation.alphaTarget(0);
+                        d.fx = null;
+                        d.fy = null;
+                    }
+                }
+
+
+                // MindMap 계층 구성
+                var mindMapData = {
+                    text: keyword,
+                    size: 60,
+                    sentiment: "user-keyword",
+                    sentimentColor: "grey", // 사용자 키워드 색상
+                    children: similarWords.map(word => ({
+                        text: word[0],
+                        size: word[1] * 40,
+                        sentiment: word[2],
+                        sentimentColor: getSentimentColor(word[2]) // 감성 색상 가져오는 함수
+                    }))
+                };
+
+                var root = d3.hierarchy(mindMapData);
+                drawMindMap(root);
+            }
+
+
+            function getSentimentColor(sentiment) {
+                switch (sentiment) {
+                    case "positive":
+                        return "#53C0D8";
+                    case "negative":
+                        return "#FF7B7B";
+                    case "neutral":
+                        return "#FF9F46";
+                    default:
+                        return "grey";
+                }
+            }
+
+            function renderGraph(data) {
+                var graphContainer = d3.select("#graphContainer");
+                graphContainer.html(""); // 이전 내용 지우기
+
+                // D3.js 그래프 생성
+                var margin = {top: 20, right: 20, bottom: 30, left: 50},
+                    //width = 800 - margin.left - margin.right,
+                    //height = 400 - margin.top - margin.bottom;
+                    width = 600 - margin.left - margin.right,
+                    height = 300 - margin.top - margin.bottom;
+
+                // 시간 형식 지정
+                //var parseTime = d3.timeParse("%b %d");
+
+                var x = d3.scaleTime()
+                    .domain(d3.extent(data, d => d.date))
+                    .range([0, width]);
+
+                var y = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => d.value)])
+                    .range([height, 0]);
+
+                var line = d3.line()
+                    .x(d => x(d.date))
+                    .y(d => y(d.value));
+
+                var svg = graphContainer.append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                // 선만 그리기
+                svg.append("path")
+                    .data([data])
+                    .attr("class", "line")
+                    .attr("d", line)
+                    .style("fill", "none")
+                    .style("stroke", "#851212"); // 선의 색상을 지정합니다. 원하는 색상으로 변경해주세요.
+
+                // x축에 시간 형식 적용
+                svg.append("g")
+
+
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%m-%d")));
+
+                svg.append("g")
+                    .call(d3.axisLeft(y));
+            }
+
+            function renderBarGraph(BarGraph, categories, BarData) {
+                BarGraph.html(""); // 이전 내용 지우기
+
+                // 데이터 가공
+                const processedData = categories.map((key) => {
+                    const total = BarData[key][0][3]; // 총 개수
+                    const ratios = [
+                        BarData[key][0][1], // 부정 비율
+                        BarData[key][0][0], // 긍정 비율
+                        BarData[key][0][2], // 중립 비율
+                    ];
+                    return {total, ratios};
+                });
+
+                // 각 비율을 총 개수에 맞게 조정
+                const chartData = {
+                    labels: categories.map(key => numToPub(key)), // x 축 라벨 변환//categories,
+                    datasets: [{
+                        label: '긍정',
+                        backgroundColor: '#53C0D8',
+                        data: processedData.map(data => data.ratios[1] * data.total),
+                    }, {
+                        label: '부정',
+                        backgroundColor: '#FF7B7B',
+                        data: processedData.map(data => data.ratios[0] * data.total),
+                    }, {
+                        label: '중립',
+                        backgroundColor: '#FF9F46',
+                        data: processedData.map(data => data.ratios[2] * data.total),
+                    }],
+                };
+
+                // 실제 HTML 엘리먼트에 접근
+                const canvasElement = BarGraph.append("canvas").node();
+                const ctx = canvasElement.getContext("2d");
+
+                const myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true,
+                            },
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                            },
+                            afterDraw: function (chart) {
+                                const datasets = chart.data.datasets;
+                                const ctx = chart.ctx;
+
+                                datasets.forEach(function (dataset, i) {
+                                    const meta = chart.getDatasetMeta(i);
+                                    if (!meta.hidden) {
+                                        meta.data.forEach(function (bar, index) {
+                                            const data = dataset.data[index];
+                                            const total = processedData[index].total; // 총 개수
+                                            const fontSize = 12;
+                                            const fontStyle = 'bold';
+                                            const fontFamily = 'Arial';
+                                            ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+                                            ctx.fillStyle = 'black';
+                                            ctx.textAlign = 'center';
+                                            ctx.textBaseline = 'bottom';
+
+                                            // 각 막대 그래프 위에 숫자로 총 개수 표시
+                                            ctx.fillText(`${data.toFixed(2)}\n(${total})`, bar._model.x, bar._model.y - 5);
+                                        });
+                                    }
+                                });
+                            },
+                        },
+                    },
+                });
+            }
+
+            function numToPub(num) {
+                if (num == 10) {
+                    return "신화통신";
+
+                } else {
+                    return "미분류";
+                }
+            }
+
+
+        })
+
+    </script>
+
+    <!--
+    <script>
+        function setNew (_menu) {
+            var menus = document.querySelectorAll('li');
+            menus.forEach(function (menu) {
+                menu.classList.remove('on');
+            })
+            document.querySelector('li.' + _menu).classList.add('on');
+
+            element = document.querySelector("main");
+            element.className = '';
+            element.classList.add(_menu);
+        }
+
+        $(document).ready(function () {
+            $('#btnSubmit').click(function (event) {
+                event.preventDefault();
+                var startDate = $('#startdate2').val();
+                var endDate = $('#enddate2').val();
+                var keyWord = $('#keyword').val();
+
+                var requestData = {
+                    "startdate": startDate,
+                    "enddate": endDate,
+                    "keyword": keyWord
+                };
+
+                var request1 = $.ajax({
+                    type: 'POST',
+                    url: '/keyword_process',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    contentType: 'application/json'
+                });
+
+                var request2 = $.ajax({
+                    type: 'POST',
+                    url: '/keyword_amount_process',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    contentType: 'application/json'
+                });
+
+                var request3 = $.ajax({
+                    type: 'POST',
+                    url: '/keyword_posinega',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    contentType: 'application/json'
+                });
+
+                var request4 = $.ajax({
+                    type: 'POST',
+                    url: '/keyword_related_news_cn',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    contentType: 'application/json'
+                });
+
+                $.when(request1, request2, request3, request4).done(function (response1, response2, response3, response4) {
+                    console.log("response1", response1);
+                    console.log("response2:", response2);
+                    console.log("response3:", response3);
+                   console.log("response4:", response4);
+
+                    // response2 데이터 변환 함수
+                    function transformData(data) {
+                        // JSON 문자열을 JavaScript 객체로 파싱
+                        var parsedData = JSON.parse(data);
+
+                        // 객체를 날짜와 값 속성을 갖는 객체 배열로 변환
+                        return Object.entries(parsedData)
+                            .filter(([date, value]) => !isNaN(Date.parse(date)) && !isNaN(+value))
+                            .map(([date, value]) => ({date: new Date(date), value: +value}));
+                    }
+
+                    // D3.js 꺾은선 그래프 생성
+                    var transformedData = transformData(response2[0]);
+                    renderGraph(transformedData);
+
+                    // WordCloud 생성
+                    var similarWords = JSON.parse(response1[0]).map(item => [item[0], item[1], item[2]]);
+                    renderMindMap(keyWord, similarWords);
+
+                    var BarData = JSON.parse(response3[0]);
+                    const categories = Object.keys(BarData);
+                    var BarGraph = d3.select("#BarGraph");
+                    renderBarGraph(BarGraph, categories, BarData);
+
+                    // response4가 문자열인 경우에 대한 처리
+                    if (typeof response4[0] === 'string') {
+                        // 문자열을 파싱하여 배열로 변환
+                        var newsIds = JSON.parse(response4[0]);
+
+                        // 각 newsId에 대한 상세 정보를 서버에서 조회하고 출력
+                        fetchNewsList(newsIds);
+                    } else {
+                        // response4가 객체인 경우에 대한 처리
+                        for (var key in response4[0]) {
+                            if (response4[0].hasOwnProperty(key)) {
+                                var newsId = response4[0][key];
+                                // newsId를 문자열로 변환하지 않고 그대로 보내기
+                                fetchNewsDetail(newsId);
+                            }
+                        }
+                    }
+
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error from /keyword_process:', jqXHR.responseText);
+                });
+            });
+
+
+            function renderMindMap(keyword, similarWords) {
+                var mindMapContainer = d3.select("#mindMapContainer");
+                mindMapContainer.html(""); // 기존 내용 지우기
+
+                function drawMindMap(root) {
+                    var width = 600; //800
+                    var height = 300; //400
+
+                    var svg = d3.select("#mindMapContainer").append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+
+                    // 레이아웃 설정
+                    var simulation = d3.forceSimulation()
+                        .force("center", d3.forceCenter(width / 2, height / 2))
+                        .force("charge", d3.forceManyBody().strength(-10))
+                        .force("link", d3.forceLink().id(function (d) {
+                            return d.id;
+                        }))
+                        .force("collision", d3.forceCollide().radius(function (d) {
+                            return d.radius + 5;
+                        }))
+                        .nodes(root.descendants());
+
+                    // 연결선 그리기
+                    svg.selectAll(".link")
+                        .data(root.links())
+                        .enter().append("line")
+                        .attr("class", "link")
+                        .attr("x1", function (d) {
+                            return d.source.x;
+                        })
+                        .attr("y1", function (d) {
+                            return d.source.y;
+                        })
+                        .attr("x2", function (d) {
+                            return d.target.x;
+                        })
+                        .attr("y2", function (d) {
+                            return d.target.y;
+                        });
+
+                    // 노드 그리기
+                    var node = svg.selectAll(".node")
+                        .data(root.descendants())
+                        .enter().append("g")
+                        .attr("class", "node")
+                        .call(d3.drag()
+                            .on("start", dragstarted)
+                            .on("drag", dragged)
+                            .on("end", dragended));
+
+                    // 노드 원형 그리기
+                    node.append("circle")
+                        .attr("r", function (d) {
+                            return d.data.size / 2;
+                        })
+                        .style("fill", function (d) {
+                            return d.data.sentimentColor;
+                        });
+
+                    // 노드 라벨 그리기
+                    node.append("text")
+                        .attr("dy", ".35em")
+                        .style("text-anchor", "middle")
+                        .text(function (d) {
+                            return d.data.text;
+                        });
+
+                    // 강제배치 업데이트
+                    simulation.on("tick", function () {
+                        node.attr("transform", function (d) {
+                            return "translate(" + d.x + "," + d.y + ")";
+                        });
+
+                        svg.selectAll(".link")
+                            .attr("x1", function (d) {
+                                return d.source.x;
+                            })
+                            .attr("y1", function (d) {
+                                return d.source.y;
+                            })
+                            .attr("x2", function (d) {
+                                return d.target.x;
+                            })
+                            .attr("y2", function (d) {
+                                return d.target.y;
+                            });
+                    });
+
+                    function dragstarted(d) {
+                        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+                        d.fx = d.x;
+                        d.fy = d.y;
+                    }
+
+                    function dragged(d) {
+                        d.fx = d3.event.x;
+                        d.fy = d3.event.y;
+                    }
+
+                    function dragended(d) {
+                        if (!d3.event.active) simulation.alphaTarget(0);
+                        d.fx = null;
+                        d.fy = null;
+                    }
+                }
+
+
+                // MindMap 계층 구성
+                var mindMapData = {
+                    text: keyword,
+                    size: 60,
+                    sentiment: "user-keyword",
+                    sentimentColor: "grey", // 사용자 키워드 색상
+                    children: similarWords.map(word => ({
+                        text: word[0],
+                        size: word[1] * 40,
+                        sentiment: word[2],
+                        sentimentColor: getSentimentColor(word[2]) // 감성 색상 가져오는 함수
+                    }))
+                };
+
+                var root = d3.hierarchy(mindMapData);
+                drawMindMap(root);
+            }
+
+
+            function getSentimentColor(sentiment) {
+                switch (sentiment) {
+                    case "positive":
+                        return "#53C0D8";
+                    case "negative":
+                        return "#FF7B7B";
+                    case "neutral":
+                        return "#FF9F46";
+                    default:
+                        return "grey";
+                }
+            }
+
+            function renderGraph(data) {
+                var graphContainer = d3.select("#graphContainer");
+                graphContainer.html(""); // 이전 내용 지우기
+
+                // D3.js 그래프 생성
+                var margin = {top: 20, right: 20, bottom: 30, left: 50},
+                    //width = 800 - margin.left - margin.right,
+                    //height = 400 - margin.top - margin.bottom;
+                    width = 600 - margin.left - margin.right,
+                    height = 300 - margin.top - margin.bottom;
+
+                // 시간 형식 지정
+                //var parseTime = d3.timeParse("%b %d");
+
+                var x = d3.scaleTime()
+                    .domain(d3.extent(data, d => d.date))
+                    .range([0, width]);
+
+                var y = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => d.value)])
+                    .range([height, 0]);
+
+                var line = d3.line()
+                    .x(d => x(d.date))
+                    .y(d => y(d.value));
+
+                var svg = graphContainer.append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                // 선만 그리기
+                svg.append("path")
+                    .data([data])
+                    .attr("class", "line")
+                    .attr("d", line)
+                    .style("fill", "none")
+                    .style("stroke", "#851212"); // 선의 색상을 지정합니다. 원하는 색상으로 변경해주세요.
+
+                // x축에 시간 형식 적용
+                svg.append("g")
+
+
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%m-%d")));
+
+                svg.append("g")
+                    .call(d3.axisLeft(y));
+            }
+
+            function renderBarGraph(BarGraph, categories, BarData) {
+                BarGraph.html(""); // 이전 내용 지우기
+
+                // 데이터 가공
+                const processedData = categories.map((key) => {
+                    const total = BarData[key][0][3]; // 총 개수
+                    const ratios = [
+                        BarData[key][0][1], // 부정 비율
+                        BarData[key][0][0], // 긍정 비율
+                        BarData[key][0][2], // 중립 비율
+                    ];
+                    return {total, ratios};
+                });
+
+                // 각 비율을 총 개수에 맞게 조정
+                const chartData = {
+                    labels: categories.map(key => numToPub(key)), // x 축 라벨 변환//categories,
+                    datasets: [{
+                        label: '긍정',
+                        backgroundColor: '#53C0D8',
+                        data: processedData.map(data => data.ratios[1] * data.total),
+                    }, {
+                        label: '부정',
+                        backgroundColor: '#FF7B7B',
+                        data: processedData.map(data => data.ratios[0] * data.total),
+                    }, {
+                        label: '중립',
+                        backgroundColor: '#FF9F46',
+                        data: processedData.map(data => data.ratios[2] * data.total),
+                    }],
+                };
+
+                // 실제 HTML 엘리먼트에 접근
+                const canvasElement = BarGraph.append("canvas").node();
+                const ctx = canvasElement.getContext("2d");
+
+                const myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true,
+                            },
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                            },
+                            afterDraw: function (chart) {
+                                const datasets = chart.data.datasets;
+                                const ctx = chart.ctx;
+
+                                datasets.forEach(function (dataset, i) {
+                                    const meta = chart.getDatasetMeta(i);
+                                    if (!meta.hidden) {
+                                        meta.data.forEach(function (bar, index) {
+                                            const data = dataset.data[index];
+                                            const total = processedData[index].total; // 총 개수
+                                            const fontSize = 12;
+                                            const fontStyle = 'bold';
+                                            const fontFamily = 'Arial';
+                                            ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+                                            ctx.fillStyle = 'black';
+                                            ctx.textAlign = 'center';
+                                            ctx.textBaseline = 'bottom';
+
+                                            // 각 막대 그래프 위에 숫자로 총 개수 표시
+                                            ctx.fillText(`${data.toFixed(2)}\n(${total})`, bar._model.x, bar._model.y - 5);
+                                        });
+                                    }
+                                });
+                            },
+                        },
+                    },
+                });
+            }
+
+            function numToPub(num) {
+                if (num == 0) {
+                    return "NHK";
+                } else if (num == 1) {
+                    return "마이니치";
+                } else if (num == 2) {
+                    return "아사히";
+                } else if (num == 3) {
+                    return "산케이";
+                } else {
+                    return "미분류";
+                }
+            }
+
+            // 뉴스 목록 담기
+            var allNewsTitles = [];
+
+// News 목록을 가져와서 출력하는 함수
+            function fetchNewsList(newsIds) {
+                var newsList = $('#newsList');
+
+                // 각 newsId에 대한 상세 정보를 서버에서 조회하고 출력
+                $.each(newsIds, function (index, newsId) {
+                    fetchNewsDetail(newsId);
+                });
+            }
+
+// News 상세 정보를 가져와서 출력하는 함수
+            function fetchNewsDetail(newsId) {
+                console.log("NewsId type:", typeof newsId);
+                // newsId가 배열인 경우에 대한 처리
+                if (Array.isArray(newsId)) {
+                    // 각 newsId에 대한 상세 정보를 서버에서 조회하고 출력
+                    $.each(newsId, function (index, singleNewsId) {
+                        fetchNewsDetail(singleNewsId);
+                    });
+                    return; // 함수 종료
+                }
+
+                // 그 외의 경우 에러 처리
+                if (typeof newsId !== 'number') {
+                    console.error("Invalid newsId format:", newsId);
+                    return; // 함수 종료
+                }
+
+                // newsId를 인코딩하지 않고 그대로 보내기
+                var requestDetail = $.ajax({
+                    type: 'GET',
+                    url: '/get_news_detail',
+                    data: { newsId: newsId },
+                    dataType: 'json',
+                    contentType: 'application/json'
+                });
+
+                // 상세 정보를 가져온 후 처리
+                requestDetail.done(function (responseDetail) {
+                    // 원래의 제목을 표시
+                    var originalTitle = responseDetail.newsTitle;
+                    console.log("받아오는 뉴스: ",originalTitle)
+
+
+                    // 뉴스 제목을 allNewsTitles에 추가
+                    allNewsTitles.push(originalTitle);
+                    console.log("allNewsTitles: " ,  allNewsTitles)
+
+
+                    var item = '<table class="list-table-related"><tr><td class="news-title" style="height: 40px"><a href="/news/' + responseDetail.newsId.toString() + '">'
+                        + originalTitle + '</a></td></tr><tr style="font-size: 14px"><td style="text-align:right; color: grey">'
+                        + numToPub(responseDetail.newsPublisher) + '&nbsp&nbsp·&nbsp&nbsp' + responseDetail.newsDate + '</td></tr></table>';
+
+                    // 뉴스 목록에 추가
+                    $('#newsList').append(item);
+
+                    document.getElementsByClassName('page-section')[2].style.display = 'block';
+                });
+
+                // 에러 처리
+                requestDetail.fail(function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status === 404) {
+                        console.error("News not found");
+                        // 추가적인 처리를 여기에 추가할 수 있습니다.
+                    } else {
+                        console.error("Error fetching news detail:", errorThrown);
+                    }
+                });
+
+                // 번역 버튼 생성
+                requestDetail.done(function (responseDetail) {
+                    if ($('#translateButton').length === 0) {
+                        var translateButton = $('<button>').text('번역').addClass('translate-button translate_btn nl').attr('id', 'translateButton').on('click', function () {
+                            // 모든 뉴스 제목을 번역
+                            translateAllTitles(allNewsTitles);
+                        });
+
+                        // 부모 요소 생성
+                        var parentContainer = $('<div>').css('display', 'flex');
+
+                        // 번역 버튼을 부모 요소에 추가
+                        parentContainer.append(translateButton);
+
+                        // "관련 기사" 요소 뒤에 부모 요소를 추가
+                        $('#t_button').after(parentContainer);
+                    }
+                });
+            }
+
+// 전체 번역 버튼 클릭 시 호출되는 함수
+
+            function translateAllTitles(allNewsTitles) {
+                var formData = new FormData();
+
+                // allNewsTitles 배열의 각 요소를 formData에 추가합니다.
+                for (var i = 0; i < allNewsTitles.length; i++) {
+                    formData.append("originalTitles", allNewsTitles[i]);
+                }
+
+                // fetch를 사용하여 데이터를 전송합니다.
+                fetch('/translatedtitles', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('fetch 함수에서 받아온 데이터:', data);
+                        var translatedTitles = Array.from(new Set(data.titles)).slice(0, 10); // 중복 제거 및 최대 10개만 선택
+                        updateTranslatedTitles(translatedTitles);
+                    })
+                    .catch(error => {
+                        console.error('오류:', error);
+                        alert('번역 중 오류가 발생했습니다.');
+                    });
+
+                console.log('전체 뉴스 제목 번역됨');
+            }
+
+
+// 번역된 제목을 각 뉴스에 적용하는 함수
+            function updateTranslatedTitles(translatedTitles) {
+                console.log('updateTranslatedTitles 함수 내에서의 번역 결과:', translatedTitles);
+
+                var elements = document.getElementsByClassName("news-title");
+
+                // 확인용 로그
+                console.log('찾은 엘리먼트 수:', elements.length);
+
+                // 번역된 결과를 각 뉴스에 적용
+                for (var i = 0; i < elements.length; i++) {
+                    // 확인용 로그
+                    console.log('현재 인덱스:', i);
+                    console.log('번역 결과:', translatedTitles[i]);
+
+                    elements[i].innerHTML = '<a href="/news/' + i.toString() + '">' + translatedTitles[i] + '</a>';
+                }
+            }
+
+        })
+
+
+
+    </script>-->
+
+    <!-- 모바일 하단 메뉴 -->
+    <nav th:replace="fragments.html :: mobile-nav"></nav>
+
+</body>
+</html>

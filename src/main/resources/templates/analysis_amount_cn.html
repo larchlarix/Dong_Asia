@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <title>기사 분석 :: 언급량 분석</title> <!-- 중국 -->
+</head>
+<body>
+
+<header th:replace="fragments.html :: fragment-header"></header>
+<!-- mebubar fragment -->
+<!--<nav th:replace="fragments.html :: fragment-nav"></nav>-->
+
+<div class="page-right">
+    <div class="page-section">
+
+        <h2>언급량 분석</h2>
+
+        <!-- 기사 옵션 ⌵ -->
+        <table class="news-option">
+            <tr>
+                <td width="100">
+                    <span>기간</span>
+                </td>
+                <td>
+                    <label class="dateBox" for="startdate1">
+                        <input type="date" id="startdate1" max="2050-12-31" min="2000-01-01">
+                    </label>
+                    ~
+                    <label class="dateBox" for="enddate1">
+                        <input type="date" id="enddate1" max="2050-12-31" min="2000-01-01">
+                    </label>
+                </td>
+                <td rowspan="2" style="text-align: right"><input class="btn-check-submit long_btn" type="button" value="조회" id="btnSubmit"></td>
+            </tr>
+            <tr id="publisherCheckboxes">
+                <td>
+                    <span>언론사</span>&nbsp;&nbsp;<button class="switchToTopicBtn"><img src="/img/change.png"></button>
+                </td>
+                <td>
+                    <input type="radio" class="btn-check publisher-checkbox" id="btncheckall" name="publisher" data-publisher-index="-1" autocomplete="off" checked="checked">
+                    <label for="btncheckall">전체</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="radio" class="btn-check publisher-checkbox" id="btncheck0" name="publisher" data-publisher-index="10" autocomplete="off">
+                    <label for="btncheck0">신화매일전신</label>
+
+                </td>
+            </tr>
+            <tr id="topicCheckboxes" style="display: none">
+                <td>
+                    <span>주제</span>&nbsp;&nbsp;<button class="switchToTopicBtn"><img src="/img/change.png"></button>
+                </td>
+                <td>
+                    <input type="radio" class="btn-check topic-checkbox" id="btncheck0all" name="topic" data-topic-index="-1" autocomplete="off" checked="checked">
+                    <label for="btncheck0all">전체</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="radio" class="btn-check topic-checkbox" id="btncheck01" name="topic" data-topic-index="1" autocomplete="off">
+                    <label for="btncheck01">국제·정치</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="radio" class="btn-check topic-checkbox" id="btncheck04" name="topic" data-topic-index="4" autocomplete="off">
+                    <label for="btncheck04">경제</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="radio" class="btn-check topic-checkbox" id="btncheck02" name="topic" data-topic-index="2" autocomplete="off">
+                    <label for="btncheck02">스포츠</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="radio" class="btn-check topic-checkbox" id="btncheck03" name="topic" data-topic-index="3" autocomplete="off">
+                    <label for="btncheck03">사회·문화</label>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input type="radio" class="btn-check topic-checkbox" id="btncheck05" name="topic" data-topic-index="5" autocomplete="off">
+                    <label for="btncheck05">과학</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div class="page-section">
+        <div id="resultContainer"><p class="bf_result">이곳에 분석 결과가 나옵니다.</p></div>
+    </div>
+
+</div>
+
+<script>
+    // 초기 상태 설정
+    var isPublisherMode = true;
+
+    // 주제 체크박스 그룹 숨기기
+    $('#topicCheckboxes').hide();
+
+    $('.switchToTopicBtn').click(function () {
+        // 언론사와 주제 모드를 전환
+        isPublisherMode = !isPublisherMode;
+
+        // 언론사와 주제 체크박스 그룹을 각각 표시 또는 감춤
+        if (isPublisherMode) {
+            $('#btncheck0all').prop('checked', true);
+            $('#btncheckall').prop('checked', true);
+            $('#publisherCheckboxes').show();
+            $('#topicCheckboxes').hide();
+        } else {
+            // 언론사 모드로 전환할 때, 선택된 언론사 체크박스를 초기화
+            $('#btncheck0all').prop('checked', true);
+            $('#btncheckall').prop('checked', true);
+            $('#publisherCheckboxes').hide();
+            $('#topicCheckboxes').show();
+        }
+
+        // 결과를 출력하는 div 초기화
+        $('#resultContainer').empty();
+    });
+
+    $('#btnSubmit').click(function () {
+        document.getElementById('resultContainer').innerHTML = ''; // 기존 내용 지우기
+
+        var startDate = $('#startdate1').val();
+        var endDate = $('#enddate1').val();
+
+        var selectedPublishers = [];
+        var selectedTopics = [];
+
+        $('.btn-check:checked').each(function () {
+            var dataIndex = $(this).data('publisher-index');
+            if (dataIndex !== undefined) {
+                // 언론사 선택된 경우
+                selectedPublishers.push(dataIndex.toString());  // 문자열로 변환
+            } else {
+                // 주제 선택된 경우
+                selectedTopics.push($(this).data('topic-index'));
+            }
+        });
+
+        // 언론사가 선택된 경우 topic에 -1, 주제가 선택된 경우 publisher에 -1을 할당
+        var requestData = {
+            "startdate": startDate,
+            "enddate": endDate,
+            "publisher": selectedPublishers.length > 0 ? selectedPublishers.join(',') : '-1',
+            "topic": selectedTopics.length > 0 ? selectedTopics.join(',') : '-1'
+        };
+        console.log("Request Data:", requestData);
+
+        // Ajax 요청 보내기
+        $.ajax({
+            type: 'POST',
+            url: '/process_cn',
+            data: JSON.stringify(requestData),
+            dataType: 'json',
+            contentType: "application/json",
+            success: function (response) {
+                console.log("Flask 응답:", response);
+                response = JSON.parse(response);
+                drawWordCloud(response);
+            },
+
+            error: function (request, status, error) {
+                alert('AJAX 통신 실패');
+                alert(error);
+            }
+        });
+    });
+
+    // 워드클라우드를 그리는 함수
+    function drawWordCloud(data) {
+
+        // Flask에서 받은 데이터를 ZingChart 워드클라우드 형식에 맞게 변환
+        var wordsData = data.map(function (item) {
+            return {
+                text: item[0],
+                count: item[1]
+            };
+        });
+
+        // ZingChart 설정 업데이트
+        var myConfig = {
+            type: 'wordcloud',
+            options: {
+                words: wordsData,
+                minLength: 5,
+                ignore: [""],
+                maxItems: 50,
+                aspect: 'spiral',
+                colorType: 'palette',
+                palette: ['#D32F2F', '#5D4037', '#1976D2', '#E53935', '#6D4C41', '#1E88E5', '#F44336', '#795548', '#2196F3', '#EF5350', '#8D6E63', '#42A5F5'],
+                style: {
+                    fontFamily: 'Crete Round',
+                    hoverState: {
+                        backgroundColor: '#D32F2F',
+                        borderRadius: 2,
+                        fontColor: 'white'
+                    },
+                    tooltip: {
+                        text: '%text: %hits',
+                        visible: true,
+                        alpha: 0.9,
+                        backgroundColor: '#1976D2',
+                        borderRadius: 2,
+                        borderColor: 'none',
+                        fontColor: 'white',
+                        fontFamily: 'Georgia',
+                        textAlpha: 1
+                    }
+                }
+            },
+            source: {
+                fontColor: '#64B5F6',
+                fontSize: 10,
+                fontFamily: 'Georgia',
+                fontWeight: 'normal',
+                marginBottom: '10%'
+            }
+        };
+
+        // 워드클라우드 차트 렌더링
+        zingchart.render({
+            id: 'resultContainer',
+            data: myConfig
+            //height: 400,
+            //width: '100%'
+        });
+    }
+</script>
+
+<!-- 모바일 하단 메뉴 -->
+<nav th:replace="fragments.html :: mobile-nav"></nav>
+
+</body>
+</html>
