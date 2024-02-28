@@ -116,11 +116,14 @@
 
 <!-- 관련 기사 목록 -->
 <div class="page-section" style="display: none">
-    <div id="t_button">
 
-    </div>
     <div id="newsList">
-        <p>관련 기사</p>
+        <div class="rela">
+            <div style="display: flex">
+                <span>관련 기사</span>
+                <div id="t_button"></div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -419,7 +422,7 @@
                 case "negative":
                     return "#FF7B7B";
                 case "neutral":
-                    return "#FF9F46";
+                    return "#FFF59A";
                 default:
                     return "grey";
             }
@@ -503,7 +506,7 @@
                     data: processedData.map(data => data.ratios[0] * data.total),
                 }, {
                     label: '중립',
-                    backgroundColor: '#FF9F46',
+                    backgroundColor: '#FFF59A',
                     data: processedData.map(data => data.ratios[2] * data.total),
                 }],
             };
