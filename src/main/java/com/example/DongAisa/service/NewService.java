@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 @Service
 public class NewService {
+    //flask(일본)서비스
 
     @Value("${flask.url}")
     private String flaskUrl;

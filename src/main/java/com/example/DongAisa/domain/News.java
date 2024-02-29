@@ -23,10 +23,10 @@ public class News {
     @Column(name= "news_date", unique = false, nullable = true)
     private String newsDate;
 
-    @Column(name="news_contents", unique = true, nullable = false,columnDefinition = "TEXT")
+    @Column(name="news_contents", unique = false, nullable = false,columnDefinition = "TEXT")
     private String newsContents;
 
-    @Column(name = "news_link",unique = true,nullable = true)
+    @Column(name = "news_link",unique = false,nullable = true)
     private String newsLink;
 
     @Column(name = "news_category", unique = false, nullable = true)

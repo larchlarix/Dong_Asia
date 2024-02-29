@@ -328,7 +328,7 @@
                     .attr("y2", function (d) {
                         return d.target.y;
                     });
-
+/*
                 // 노드 그리기
                 var node = svg.selectAll(".node")
                     .data(root.descendants())
@@ -338,8 +338,78 @@
                         .on("start", dragstarted)
                         .on("drag", dragged)
                         .on("end", dragended));
+*/
+                // 중심 노드와 나머지 노드들에 대한 데이터 선택
+                var nodes = root.descendants();
 
-                // 노드 원형 그리기
+// 노드 그리기
+                // 노드 그리기
+                var node = svg.selectAll(".node")
+                    .data(nodes)
+                    .enter().append("g")
+                    .attr("class", "node")
+                    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+// 중심 노드 그리기
+                node.filter(function(d) { return d.depth === 0; })
+                    .append("circle")
+                    .attr("r", 30) // 중심 노드의 반지름 설정
+                    .style("fill", "#CCCCCC");// 중심 노드의 색상 설정
+
+// 둥근 직사각형 노드 그리기
+                node.filter(function(d) { return d.depth !== 0; })
+                    .append("rect")
+                    .attr("width", function(d) { return d.data.text.length * 10 + 20; })
+                    .attr("height", 30) // 고정된 세로 크기
+                    .attr("rx", 15) // x축 모서리 반지름
+                    .attr("ry", 15) // y축 모서리 반지름
+                    .style("fill", function(d) { return d.data.sentimentColor; }) // 노드의 색상 설정
+                  /*
+                  .attr("x", function(d) {
+                        var textWidth = this.getBBox().width; // 현재 노드의 텍스트 너비를 가져옵니다.
+                        return -(textWidth / 2); // 노드의 가로 길이의 반만큼 이동하여 모서리에 걸치지 않게 합니다.
+                    }) */
+                    //.attr("y", function(d) { return -(this.getBBox().height / 2); }); // 노드의 위치를 조정합니다.
+                // 중심 노드 라벨 그리기
+                node.filter(function(d) { return d.depth === 0; })
+                    .append("text")
+                    .attr("dy", ".35em")
+                    .attr("x", 0) // 텍스트의 x 좌표를 중앙으로 설정합니다.
+                    .attr("y", 0) // 텍스트의 y 좌표를 조정하여 노드 안에 위치시킵니다.
+                    .style("text-anchor", "middle")
+                    .style("font-size", "20px")
+                    .style("font-weight", "bold")
+                    .style("fill", "black")
+                    .text(function(d) {
+                        // 텍스트가 너무 길 경우 잘라내거나 줄여서 표시
+                        var maxLength = 10; // 최대 길이 설정
+                        if (d.data.text.length > maxLength) {
+                            return d.data.text.substring(0, maxLength) + '...';
+                        } else {
+                            return d.data.text;
+                        }
+                    });
+
+                // 노드 라벨 그리기
+                node.filter(function(d) { return d.depth !== 0; })
+                    .append("text")
+                    .attr("dy", ".35em")
+                    .attr("x", 5) // 텍스트의 x 좌표를 중앙으로 설정합니다.
+                    .attr("y", 15) // 텍스트의 y 좌표를 조정하여 노드 안에 위치시킵니다.
+                    //.style("text-anchor", "middle")
+                    .style("fill", "black")
+                    .text(function(d) {
+                        // 텍스트가 너무 길 경우 잘라내거나 줄여서 표시
+                        var maxLength = 10; // 최대 길이 설정
+                        if (d.data.text.length > maxLength) {
+                            return d.data.text.substring(0, maxLength) + '...';
+                        } else {
+                            return d.data.text;
+                        }
+                    });
+
+                    //.attr("dy", ".35em"); // 라벨 텍스트의 위치를 조정하여 노드의 가운데에 위치시킵니다.
+              /*// 노드 원형 그리기
                 node.append("circle")
                     .attr("r", function (d) {
                         return d.data.size / 2;
@@ -347,7 +417,7 @@
                     .style("fill", function (d) {
                         return d.data.sentimentColor;
                     });
-
+*//*
                 // 노드 라벨 그리기
                 node.append("text")
                     .attr("dy", ".35em")
@@ -355,6 +425,7 @@
                     .text(function (d) {
                         return d.data.text;
                     });
+                    */
 
                 // 강제배치 업데이트
                 simulation.on("tick", function () {
@@ -401,10 +472,10 @@
                 text: keyword,
                 size: 60,
                 sentiment: "user-keyword",
-                sentimentColor: "grey", // 사용자 키워드 색상
+                //sentimentColor: "grey", // 사용자 키워드 색상
                 children: similarWords.map(word => ({
                     text: word[0],
-                    size: word[1] * 40,
+                    size: word[1] * 60,
                     sentiment: word[2],
                     sentimentColor: getSentimentColor(word[2]) // 감성 색상 가져오는 함수
                 }))

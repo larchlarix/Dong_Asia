@@ -19,13 +19,23 @@ public class QNewsTest extends EntityPathBase<NewsTest> {
 
     public static final QNewsTest newsTest = new QNewsTest("newsTest");
 
-    public final StringPath newsTestBody = createString("newsTestBody");
+    public final NumberPath<Long> newsCategory = createNumber("newsCategory", Long.class);
 
-    public final StringPath newsTestDate = createString("newsTestDate");
+    public final StringPath newsContents = createString("newsContents");
+
+    public final StringPath newsCountry = createString("newsCountry");
+
+    public final StringPath newsDate = createString("newsDate");
+
+    public final StringPath newsImageURL = createString("newsImageURL");
+
+    public final StringPath newsLink = createString("newsLink");
+
+    public final NumberPath<Long> newsPublisher = createNumber("newsPublisher", Long.class);
 
     public final NumberPath<Long> newsTestId = createNumber("newsTestId", Long.class);
 
-    public final StringPath newsTestTitle = createString("newsTestTitle");
+    public final StringPath newsTitle = createString("newsTitle");
 
     public QNewsTest(String variable) {
         super(NewsTest.class, forVariable(variable));

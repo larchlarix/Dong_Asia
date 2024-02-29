@@ -9,15 +9,38 @@ public class NewsTest {
     @Column(name = "newsTest_id", unique = true, nullable = false)
     private Long newsTestId;
 
-    @Column(name="newsTest_title",unique = false, nullable = false)
-    private String newsTestTitle;
+    @Column(name = "news_title", unique = false, nullable = false)
+    private String newsTitle;
 
-    @Column(columnDefinition = "LONGTEXT",name="newsTest_body",unique = false, nullable = false)
-    private String newsTestBody;
-    @Column(name="newsTest_date",unique = false, nullable = false)
-    private String newsTestDate;
 
-    public NewsTest(){};
+    @Column(name = "news_date", unique = false, nullable = true)
+    private String newsDate;
+    @Column(name = "news_contents", unique = true, nullable = false, columnDefinition = "TEXT")
+    private String newsContents;
+
+    @Column(name = "news_link", unique = true, nullable = true)
+    private String newsLink;
+
+    @Column(name = "news_category", unique = false, nullable = true)
+    private Long newsCategory;
+
+
+    @Column(name = "news_publisher", unique = false, nullable = true)
+    private Long newsPublisher;
+
+
+    @Column(name = "news_image_url", unique = false, nullable = true)
+    private String newsImageURL;
+
+
+    @Column(name = "news_country", nullable = false)
+    private String newsCountry;
+
+
+    public NewsTest() {
+    }
+
+    ;
 
     public Long getNewsTestId() {
         return newsTestId;
@@ -25,30 +48,6 @@ public class NewsTest {
 
     public void setNewsTestId(Long newsTestId) {
         this.newsTestId = newsTestId;
-    }
-
-    public String getNewsTestTitle() {
-        return newsTestTitle;
-    }
-
-    public void setNewsTestTitle(String newsTestTitle) {
-        this.newsTestTitle = newsTestTitle;
-    }
-
-    public String getNewsTestBody() {
-        return newsTestBody;
-    }
-
-    public void setNewsTestBody(String newsTestBody) {
-        this.newsTestBody = newsTestBody;
-    }
-
-    public String getNewsTestDate() {
-        return newsTestDate;
-    }
-
-    public void setNewsTestDate(String newsTestDate) {
-        this.newsTestDate = newsTestDate;
     }
 
 }
