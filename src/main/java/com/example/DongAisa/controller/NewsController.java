@@ -126,7 +126,10 @@ public class NewsController {
             // 번역된 섹션을 나타내는 모델에도 원래 뉴스의 정보를 추가
             model.addAttribute("news", news);
             TranslationDto translationDto = translateNewsService.getTranslatedNews(title, content);
-
+            // 현재 로그인한 사용자의 userId 가져오기
+            Long currentUserId = getCurrentUserId();
+            boolean bookmarked = isNewsBookmarked(currentUserId,newsId);
+            model.addAttribute("bookmarked", bookmarked);
 
             model.addAttribute("translatedNews", translationDto);
             model.addAttribute("translatedTitle", translationDto.getTranslatedTitle());

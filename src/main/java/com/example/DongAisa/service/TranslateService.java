@@ -36,13 +36,13 @@ public class TranslateService {
             throw new IllegalArgumentException("번역할 문장이 비어 있습니다.");
         }
 
-        String apiUrl = "https://openapi.naver.com/v1/papago/n2mt";
+        String apiUrl = "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation";
         Map<String, String> requestHeaders = new HashMap<>();
 
         try {
             String text = URLEncoder.encode(sentence, StandardCharsets.UTF_8);
-            requestHeaders.put("X-Naver-Client-Id", clientId);
-            requestHeaders.put("X-Naver-Client-Secret", clientSecret);
+            requestHeaders.put("X-NCP-APIGW-API-KEY-ID", clientId);
+            requestHeaders.put("X-NCP-APIGW-API-KEY", clientSecret);
 
             String responseBody = post(apiUrl, requestHeaders, text);
             logger.info("Received API Response: {}", responseBody);
@@ -58,33 +58,7 @@ public class TranslateService {
         }
     }
 
-    //분석그래프 번역
-    public String getTranslatedAnalysis(String sentence) {
-        if (sentence == null || sentence.trim().isEmpty()) {
-            throw new IllegalArgumentException("번역할 문장이 비어 있습니다.");
-        }
 
-        String apiUrl = "https://openapi.naver.com/v1/papago/n2mt";
-        Map<String, String> requestHeaders = new HashMap<>();
-
-        try {
-            String text = URLEncoder.encode(sentence, StandardCharsets.UTF_8);
-            requestHeaders.put("X-Naver-Client-Id", clientId);
-            requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-
-            String responseBody = postAnalysis(apiUrl, requestHeaders, text);
-            logger.info("Received API Response: {}", responseBody);
-
-            if (isValidJson(responseBody)) {
-                return extractTranslatedText(responseBody);
-            } else {
-                throw new RuntimeException("API 응답이 유효한 JSON이 아닙니다. 응답 내용: " + responseBody);
-            }
-        } catch (RuntimeException e) {
-            logger.error("번역에 실패했습니다. 문장: {}", sentence, e);
-            throw new RuntimeException("번역에 실패했습니다.", e);
-        }
-    }
 
 
     private boolean isValidJson(String json) {
@@ -107,52 +81,6 @@ public class TranslateService {
     private String post(String apiUrl, Map<String, String> requestHeaders, String text) {
         HttpURLConnection con = connect(apiUrl);
         String postParams = "source=ko&target=ja&text=" + text; //원본언어: 한국어 (ko) -> 목적언어: 일본어 (ja)
-        try {
-            con.setRequestMethod("POST");
-            for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
-                con.setRequestProperty(header.getKey(), header.getValue());
-            }
-
-            con.setDoOutput(true);
-            try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
-                wr.write(postParams.getBytes());
-                wr.flush();
-            }
-
-            int responseCode = con.getResponseCode();
-            System.out.println("API Response Code: " + responseCode);
-
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                String responseBody = readBody(con.getInputStream());
-
-                // API 응답이 비어 있는 경우 처리
-                if (responseBody.isEmpty()) {
-                    logger.warn("API 응답이 비어 있습니다.");
-                    return "번역된 내용이 없습니다.";
-                }
-
-                // API 응답이 유효한 JSON인지 체크
-                if (isValidJson(responseBody)) {
-                    System.out.println("API Response Body: " + responseBody);
-                    return responseBody;
-                } else {
-                    throw new RuntimeException("API 응답이 유효한 JSON이 아닙니다. 응답 내용: " + responseBody);
-                }
-            } else {
-                String errorResponse = readBody(con.getErrorStream());
-                System.out.println("API Error Response: " + errorResponse);
-                return errorResponse;
-            }
-        } catch (IOException e) {
-            logger.error("API 요청과 응답 실패", e);
-            throw new RuntimeException("API 요청과 응답 실패", e);
-        } finally {
-            con.disconnect();
-        }
-    }
-    private String postAnalysis(String apiUrl, Map<String, String> requestHeaders, String text) {
-        HttpURLConnection con = connect(apiUrl);
-        String postParams = "source=ja&target=ko&text=" + text; //원본언어: 일본어 (ja) -> 목적언어: 한국어 (ko)
         try {
             con.setRequestMethod("POST");
             for (Map.Entry<String, String> header : requestHeaders.entrySet()) {

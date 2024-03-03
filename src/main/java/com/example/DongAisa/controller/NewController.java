@@ -56,6 +56,8 @@ public ResponseEntity<String> processForm(@RequestBody FormData formData) {
     public String analysis() {
         return "analysis_test"; // HTML 폼을 보여주는 페이지로 이동
     }
+
+    /*
     @PostMapping(value = "/analysis", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String getTranslatedAnalysis(@RequestBody Map<String, String> requestData) {
         try {
@@ -67,6 +69,8 @@ public ResponseEntity<String> processForm(@RequestBody FormData formData) {
         }
 
     }
+
+     */
 
     @PostMapping("/process")
     public ResponseEntity<String> process(@RequestBody NewsData newsData) {
