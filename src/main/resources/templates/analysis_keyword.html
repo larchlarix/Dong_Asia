@@ -9,6 +9,20 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/new_style.css}">
 
     <title>기사 분석 :: 키워드 분석</title>
+
+    <style>
+        .loading {
+            display: none; /* 초기에 숨겨진 상태로 설정 */
+            position: absolute; /* 절대 위치 */
+            top: 50%; /* 상단에서 50% 위치 */
+            left: 50%; /* 좌측에서 50% 위치 */
+            transform: translate(-50%, -50%); /* 세로 및 가로 중앙 정렬 */
+            background-color: rgba(255, 255, 255, 0.7); /* 투명도 조절 가능한 배경색 */
+            padding: 20px; /* 내부 여백 설정 */
+            border-radius: 10px; /* 모서리 둥글게 설정 */
+        }
+    </style>
+
 </head>
 <body class="keyword_ana">
 <!-- header fragment -->
@@ -94,6 +108,12 @@
             <li class="ana2" onclick="setNew('ana2')">연관어 및 긍ㆍ부정 분석</li>
             <li class="ana3" onclick="setNew('ana3')">언론사별 긍ㆍ부정 경향</li>
         </ul>
+
+        <!-- 로딩 화면 -->
+        <div id="loading" class="loading">
+            <p>Loading...</p>
+        </div>
+
 
         <!-- '언급량 추이' 선택 시 노출 -->
         <div class="con con1">
@@ -200,6 +220,9 @@
                 "keyword": keyWord
             };
 
+            // 로딩 화면 표시
+            showLoading();
+
             var request1 = $.ajax({
                 type: 'POST',
                 url: '/keyword_process',
@@ -279,12 +302,26 @@
                         }
                     }
                 }
+                // 모든 처리가 완료된 후에 로딩 화면 숨기기
+                hideLoading();
 
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error('Error from /keyword_process:', jqXHR.responseText);
+                // 에러 발생 시에도 로딩 화면 숨기기
+                hideLoading();
             });
         });
+
+        // 로딩 화면 표시 함수
+        function showLoading() {
+            $('#loading').show();
+        }
+
+// 로딩 화면 숨김 함수
+        function hideLoading() {
+            $('#loading').hide();
+        }
 
 
         function renderMindMap(keyword, similarWords) {
