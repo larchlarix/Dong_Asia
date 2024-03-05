@@ -12,6 +12,9 @@ import com.example.DongAisa.service.NewsService;
 import com.example.DongAisa.service.TranslateNewsService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +23,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 
 @Controller
@@ -151,6 +156,7 @@ public class NewsController {
     }
 
     //뉴스리스트(카테고리, 언론사)
+    /*
     @PostMapping("")
     public String getFilteredNews(
             @RequestParam(value = "category", required = false) List<Long> categories,
@@ -162,11 +168,38 @@ public class NewsController {
         model.addAttribute("newsFilterList", filteredNews);
         return "list";
     }
+*/
+    @GetMapping("/filter")
+    public String getFilteredNews(
+            @RequestParam(value = "category", required = false) List<Long> categories,
+            @RequestParam(value = "publisher", required = false) List<Long> publishers,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            Model model
+
+    ) {
+        // 필터링된 뉴스 페이징 처리
+        Pageable pageable = PageRequest.of(page, size);
+        Page<News> filteredNewsPage = newsService.getFilteredNews(categories, publishers, pageable);
+
+        model.addAttribute("isFiltering", true);
+        model.addAttribute("newsFilterList", filteredNewsPage.getContent());
+        model.addAttribute("currentPage", filteredNewsPage.getNumber());
+        model.addAttribute("totalPages", filteredNewsPage.getTotalPages());
+        model.addAttribute("totalItems", filteredNewsPage.getTotalElements());
+        model.addAttribute("pageNum", page);
+        model.addAttribute("size", size);
+        model.addAttribute("categories", categories);
+        model.addAttribute("publishers", publishers);
 
 
 
+        return "list";
+    }
 
 
+
+/*
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String getNewsList(Model model,
                               @RequestParam(value = "keyword", required = false, defaultValue = "") final String keyword,
@@ -181,6 +214,33 @@ public class NewsController {
         model.addAttribute("isFiltering", isFiltering);
         return "list";
     }
+*/
+//뉴스 리스트
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String getNewsList(Model model,
+                              @RequestParam(value = "keyword", required = false, defaultValue = "") final String keyword,
+                              @RequestParam(value = "sort", required = false, defaultValue = "byDate") final String sort,
+                              @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                              @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<NewsDto> newsPage = newsService.getNewsList(keyword, sort, pageable);
+
+        boolean isFiltering = !keyword.isEmpty(); // Filtering check
+
+        model.addAttribute("newsList", newsPage.getContent());
+        model.addAttribute("isFiltering", isFiltering);
+        model.addAttribute("currentPage", newsPage.getNumber());
+        model.addAttribute("totalPages", newsPage.getTotalPages());
+        model.addAttribute("totalItems", newsPage.getTotalElements());
+
+        model.addAttribute("pageNum", page);
+        model.addAttribute("size", size);
+
+        return "list";
+    }
+
+
 
 
     //뉴스 삭제
@@ -190,17 +250,31 @@ public class NewsController {
         return new ResponseEntity<>(deleteNewsDto, HttpStatus.OK);
     }
 
+//검색 후 뉴스 리스트
 @RequestMapping(value = "/search", method = RequestMethod.GET)
-public String search(@RequestParam(value = "keyword") String keyword, Model model){
+public String search(@RequestParam(value = "keyword") String keyword, Model model,@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                     @RequestParam(value = "size", required = false, defaultValue = "10") int size){
     // 로그 추가
     System.out.println("Search keyword: " + keyword);
-    List<NewsDto> newsDtoList = newsService.searchNews(keyword);
+
+    Pageable pageable = PageRequest.of(page, size);
+    Page<NewsDto> newsDtoPage = newsService.searchNews(keyword, pageable);
+    List<NewsDto> newsDtoList = newsDtoPage.getContent();
+
     model.addAttribute("newsList", newsDtoList);
+
+    model.addAttribute("currentPage", newsDtoPage.getNumber());
+    model.addAttribute("totalPages", newsDtoPage.getTotalPages());
+    model.addAttribute("totalItems", newsDtoPage.getTotalElements());
+
+    model.addAttribute("pageNum", page);
+    model.addAttribute("size", size);
+    model.addAttribute("keyword", keyword);
 
     boolean isFiltering = false;
     model.addAttribute("isFiltering", isFiltering);
 
-    return "list";
+    return "searchList";
 }
 
 

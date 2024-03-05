@@ -5,8 +5,6 @@ public class TranslationDto {
     String translatedContent;
 
 
-
-
     public TranslationDto(String translatedTitle, String translatedContent) {
         this.translatedTitle = translatedTitle;
         this.translatedContent = translatedContent;

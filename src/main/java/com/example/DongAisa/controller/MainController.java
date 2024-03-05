@@ -46,11 +46,11 @@ public class MainController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String getNewsList(Model model,
+    public String getMainNewsList(Model model,
                               @RequestParam(value = "keyword", required = false, defaultValue = "") final String keyword,
                               @RequestParam(value = "sort", required = false, defaultValue = "byDate") final String sort
     ) {
-        List<NewsDto> newsDtos = newsService.getNewsList(keyword, sort);
+        List<NewsDto> newsDtos = newsService.getMainNewsList(keyword, sort);
         // 로그에 출력
         System.out.println("NewsDtos: " + newsDtos);
         model.addAttribute("newsList", newsDtos);
@@ -79,30 +79,32 @@ public class MainController {
         }
     }
 
-//번역+검색 기능 합친 것
-@PostMapping("/translateAndSearch")
-@ResponseBody
-public ResponseEntity<Map<String, Object>> translateAndSearch(@RequestParam(required = false) String sentence) {
-    Map<String, Object> result = new HashMap<>();
-    try {
-        if (sentence != null) {
-            // 번역
-            String translatedSentence = translateService.getTranslatedSentence(sentence);
-            result.put("translatedSentence", translatedSentence);
+    /*
+    //번역+검색 기능 합친 것
+    @PostMapping("/translateAndSearch")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> translateAndSearch(@RequestParam(required = false) String sentence) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            if (sentence != null) {
+                // 번역
+                String translatedSentence = translateService.getTranslatedSentence(sentence);
+                result.put("translatedSentence", translatedSentence);
 
-            // 검색
-            List<NewsDto> newsDtoList = newsService.searchNews(translatedSentence);
-            result.put("newsList", newsDtoList);
-            result.put("isFiltering", true);
+                // 검색
+                List<NewsDto> newsDtoList = newsService.searchNews(translatedSentence);
+                result.put("newsList", newsDtoList);
+                result.put("isFiltering", true);
+            }
+        } catch (RuntimeException e) {
+            result.put("error", "번역 및 검색 중 오류가 발생했습니다.");
         }
-    } catch (RuntimeException e) {
-        result.put("error", "번역 및 검색 중 오류가 발생했습니다.");
+
+        return ResponseEntity.ok(result);
     }
+    */
 
-    return ResponseEntity.ok(result);
-}
-
-//검색창 번역기능
+    //검색창 번역기능
     @PostMapping("/translateSubmit")
     @ResponseBody
     public ResponseEntity<Map<String, String>> translate(@RequestParam(required = false) String sentence) {
@@ -120,17 +122,18 @@ public ResponseEntity<Map<String, Object>> translateAndSearch(@RequestParam(requ
     }
 
 
-//기사 제목 번역 기능
-@PostMapping("/translatedtitles")
-public ResponseEntity<TranslationTitleDto> getTranslatedTitles(@RequestParam(value = "originalTitles", required = false) String[] originalTitles) {
-    try {
-        TranslationTitleDto translationTitleDto = translateTitleService.getTranslatedTitles(originalTitles);
-        return ResponseEntity.ok(translationTitleDto);
-    } catch (RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    //기사 제목 번역 기능
+    @PostMapping("/translatedtitles")
+    public ResponseEntity<TranslationTitleDto> getTranslatedTitles(@RequestParam(value = "originalTitles", required = false) String[] originalTitles) {
+        try {
+            TranslationTitleDto translationTitleDto = translateTitleService.getTranslatedTitles(originalTitles);
+            return ResponseEntity.ok(translationTitleDto);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-}
 
 
 }
+
 

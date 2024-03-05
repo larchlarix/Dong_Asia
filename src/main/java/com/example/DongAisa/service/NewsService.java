@@ -4,6 +4,8 @@ import com.example.DongAisa.domain.News;
 import com.example.DongAisa.dto.NewsDto;
 import com.example.DongAisa.mapper.NewsMapper;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.DongAisa.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class NewsService {
         newsRepository.deleteById(newsId);
         return NewsMapper.convertToDto(news.get());
     }
-
+/*
     public List<NewsDto> getNewsList(String keyword, String sort) {
         List<News> news;
 
@@ -49,6 +51,36 @@ public class NewsService {
         List<NewsDto> newsDtos = NewsMapper.convertToDtoList(news);
         return newsDtos;
     }
+
+ */
+    //메인페이지 뉴스 목록
+public List<NewsDto> getMainNewsList(String keyword, String sort) {
+    List<News> news;
+
+    if (Objects.equals(sort, "byDate")) {
+        news = newsRepository.findByNewsTitleContainingOrderByNewsDateDesc(keyword);
+    } else {
+        throw new IllegalArgumentException("알 수 없는 정렬 기준입니다");
+    }
+    List<NewsDto> newsDtos = NewsMapper.convertToDtoList(news);
+    return newsDtos;
+}
+
+
+//뉴스 목록 페이지
+    public Page<NewsDto> getNewsList(String keyword, String sort, Pageable pageable) {
+        Page<News> newsPage;
+
+        if (Objects.equals(sort, "byDate")) {
+            newsPage = newsRepository.findByNewsTitleContainingOrderByNewsDateDesc(keyword, pageable);
+        } else {
+            throw new IllegalArgumentException("알 수 없는 정렬 기준입니다");
+        }
+
+        return newsPage.map(NewsMapper::convertToDto);
+    }
+
+
     public NewsDto getNewsDetail(Long newsId) {
         Optional<News> newsOptional = newsRepository.findById(newsId);
 
@@ -65,22 +97,29 @@ public class NewsService {
     }
 
      */
+    /*
     public List<News> getFilteredNews(List<Long> categories, List<Long> publishers) {
         // 필터링된 뉴스를 데이터베이스에서 조회
         return newsRepository.findByNewsCategoryInAndNewsPublisherIn(categories, publishers);
     }
 
+     */
+    public Page<News> getFilteredNews(List<Long> categories, List<Long> publishers, Pageable pageable) {
+        // 필터링된 뉴스를 데이터베이스에서 페이징하여 조회
+        return newsRepository.findByNewsCategoryInAndNewsPublisherIn(categories, publishers, pageable);
+    }
+
     //검색
-    public List<NewsDto> searchNews(String keyword) {
+    public Page<NewsDto> searchNews(String keyword, Pageable pageable) {
         System.out.println("Processing search for keyword: " + keyword);
 
         // 뉴스 검색
-        List<News> news = newsRepository.findByNewsTitleContaining(keyword);
+        Page<News> newsPage = newsRepository.findByNewsTitleContaining(keyword, pageable);
 
         // DTO로 변환
-        List<NewsDto> newsDtoList = NewsMapper.convertToDtoList(news);
+        Page<NewsDto> newsDtoPage = newsPage.map(NewsMapper::convertToDto);
 
-        return newsDtoList;
+        return newsDtoPage;
     }
 
 

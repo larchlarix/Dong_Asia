@@ -8,205 +8,205 @@
 
 <div class="page-right">
 
-<div class="page-section">
+    <div class="page-section">
 
-    <div style="display: flex">
+        <div style="display: flex">
 
-        <h2>주간 키워드</h2>
-        <!--
-        <div class="country-button button-10">
-            <input type="checkbox" class="country-checkbox" />
-            <div class="knobs">
-                <span>일본</span>
+            <h2>주간 키워드</h2>
+            <!--
+            <div class="country-button button-10">
+                <input type="checkbox" class="country-checkbox" />
+                <div class="knobs">
+                    <span>일본</span>
+                </div>
+                <div class="layer"></div>
             </div>
-            <div class="layer"></div>
+            -->
+
         </div>
-        -->
+
+        <div class="mainpage-box mainpage-box-1">
+            <p th:if="${topKeywordData != null}" th:text="${topKeywordData.startdate + ' ~ ' + topKeywordData.enddate}"></p>
+
+            <ul class="keyword-list" id="keywordList">
+                <!-- JavaScript로 동적으로 추가될 키워드 리스트 -->
+            </ul>
+            <script th:inline="javascript">
+                // Thymeleaf에서 받은 JSON 데이터
+                var topKeywordData = /*[[${topKeywordData}]]*/ null;
+
+                if (topKeywordData) {
+                    // JavaScript로 동적으로 키워드 리스트 생성
+                    var keywordList = document.getElementById("keywordList");
+
+                    for (var key in topKeywordData) {
+                        if (key !== 'startdate' && key !== 'enddate') {
+                            var li = document.createElement("li");
+                            li.classList.add("keyword-item");
+
+                            var divKeyword = document.createElement("div");
+                            divKeyword.classList.add("keyword");
+                            divKeyword.textContent = key;
+
+                            var divNum = document.createElement("div");
+                            divNum.classList.add("num");
+                            divNum.textContent = topKeywordData[key] + "건";
+
+                            li.appendChild(divKeyword);
+                            li.appendChild(divNum);
+
+                            keywordList.appendChild(li);
+                        }
+                    }
+                }
+            </script>
+        </div>
 
     </div>
 
-  <div class="mainpage-box mainpage-box-1">
-    <p th:if="${topKeywordData != null}" th:text="${topKeywordData.startdate + ' ~ ' + topKeywordData.enddate}"></p>
+    <div class="page-section">
 
-    <ul class="keyword-list" id="keywordList">
-      <!-- JavaScript로 동적으로 추가될 키워드 리스트 -->
-    </ul>
-    <script th:inline="javascript">
-      // Thymeleaf에서 받은 JSON 데이터
-      var topKeywordData = /*[[${topKeywordData}]]*/ null;
+        <div style="display: flex">
 
-      if (topKeywordData) {
-        // JavaScript로 동적으로 키워드 리스트 생성
-        var keywordList = document.getElementById("keywordList");
-
-        for (var key in topKeywordData) {
-          if (key !== 'startdate' && key !== 'enddate') {
-            var li = document.createElement("li");
-            li.classList.add("keyword-item");
-
-            var divKeyword = document.createElement("div");
-            divKeyword.classList.add("keyword");
-            divKeyword.textContent = key;
-
-            var divNum = document.createElement("div");
-            divNum.classList.add("num");
-            divNum.textContent = topKeywordData[key] + "건";
-
-            li.appendChild(divKeyword);
-            li.appendChild(divNum);
-
-            keywordList.appendChild(li);
-          }
-        }
-      }
-    </script>
-  </div>
-
-</div>
-
-<div class="page-section">
-
-    <div style="display: flex">
-
-        <h2>최신 뉴스</h2>
-        <!--
-        <div class="country-button button-10">
-            <input type="checkbox" class="country-checkbox" />
-            <div class="knobs">
-                <span>일본</span>
+            <h2>최신 뉴스</h2>
+            <!--
+            <div class="country-button button-10">
+                <input type="checkbox" class="country-checkbox" />
+                <div class="knobs">
+                    <span>일본</span>
+                </div>
+                <div class="layer"></div>
             </div>
-            <div class="layer"></div>
+            -->
+
+            <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
+                <th:block th:each="news, index : ${newsList}" th:if="${index.index} < 5">
+                    <input type="hidden" name="originalTitles" th:value="${news.newsTitle}"/>
+                </th:block>
+                <button type="submit" class="translate-button translate_btn mp">번역</button>
+            </form>
+
         </div>
-        -->
 
-        <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
-            <th:block th:each="news, index : ${newsList}" th:if="${index.index} < 5">
-                <input type="hidden" name="originalTitles" th:value="${news.newsTitle}"/>
-            </th:block>
-            <button type="submit" class="translate-button translate_btn mp">번역</button>
-        </form>
+        <div class="mainpage-box">
+            <!--
+            <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
+                <th:block th:each="news, index : ${newsList}" th:if="${index.index} < 5">
+                    <input type="hidden" name="originalTitles" th:value="${news.newsTitle}"/>
+                </th:block>
+                <button type="submit" class="translate-button translate_btn">번역</button>
+            </form>
+            -->
+            <!-- 최신 기사 목록 (5개) -->
+            <table class="list-table" th:unless="${#lists.isEmpty(newsList)}" th:each="news, index : ${newsList}" th:if="${index.index} < 5">
+                <tr>
+                    <td th:unless="${news.newsImageURL == ''}" rowspan="2" width="200">
+                        <img class="news-img" th:src="${news.newsImageURL}" alt="뉴스 이미지">
+                    </td>
+                    <td colspan="3" class="news-title">
+                        <a th:href="@{/news/{newsId}(newsId=${news.newsId})}" data-news-title="${news.newsTitle}">
+                            <span th:if="${not #lists.isEmpty(newsList)}" th:text="${news.newsTitle}" class="after-translation"></span>
+                            <span th:if="${translatedTitles != null}" th:text="${translatedTitles[index.index]}" ></span>
 
-    </div>
-
-    <div class="mainpage-box">
-        <!--
-        <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
-            <th:block th:each="news, index : ${newsList}" th:if="${index.index} < 5">
-                <input type="hidden" name="originalTitles" th:value="${news.newsTitle}"/>
-            </th:block>
-            <button type="submit" class="translate-button translate_btn">번역</button>
-        </form>
-        -->
-        <!-- 최신 기사 목록 (5개) -->
-        <table class="list-table" th:unless="${#lists.isEmpty(newsList)}" th:each="news, index : ${newsList}" th:if="${index.index} < 5">
-            <tr>
-                <td th:unless="${news.newsImageURL == ''}" rowspan="2" width="200">
-                    <img class="news-img" th:src="${news.newsImageURL}" alt="뉴스 이미지">
-                </td>
-                <td colspan="3" class="news-title">
-                    <a th:href="@{/news/{newsId}(newsId=${news.newsId})}" data-news-title="${news.newsTitle}">
-                        <span th:if="${not #lists.isEmpty(newsList)}" th:text="${news.newsTitle}" class="after-translation"></span>
-                        <span th:if="${translatedTitles != null}" th:text="${translatedTitles[index.index]}" ></span>
-
-                    </a>
-                </td>
-            </tr>
-            <tr height="50" style="font-size: 14px">
-                <td width="40">
+                        </a>
+                    </td>
+                </tr>
+                <tr height="50" style="font-size: 14px">
+                    <td width="40">
                 <span th:switch="${news.newsPublisher}">
                     <span th:case="0"><img class="news-icon" th:src="@{/img/nhk.png}"></span>
                     <span th:case="1"><img class="news-icon" th:src="@{/img/mainichi.png}"></span>
                     <span th:case="2"><img class="news-icon" th:src="@{/img/asahi.png}"></span>
                     <span th:case="3"><img class="news-icon" th:src="@{/img/sankei.png}"></span>
                 </span>
-                </td>
-                <td>
+                    </td>
+                    <td>
                 <span th:switch="${news.newsPublisher}">
                     <span th:case="0">NHK</span>
                     <span th:case="1">마이니치</span>
                     <span th:case="2">아사히</span>
                     <span th:case="3">산케이</span>
                 </span>
-                </td>
-                <td th:text="${news.newsDate}" style="text-align:right; color: grey">기사 일자</td>
-            </tr>
+                    </td>
+                    <td th:text="${news.newsDate}" style="text-align:right; color: grey">기사 일자</td>
+                </tr>
 
-        </table>
-        <a class="more-news-btn" th:href="@{/news}">최신 뉴스 더보기</a>
+            </table>
+            <a class="more-news-btn" th:href="@{/news}">최신 뉴스 더보기</a>
+        </div>
     </div>
-</div>
 
-<div class="page-section">
+    <div class="page-section">
 
-  <h2>원문 바로가기</h2>
+        <h2>원문 바로가기</h2>
 
-  <div class="mainpage-box" style="margin-bottom: 50px">
-    <div class="go-to-site">
-        <a href="https://www.nhk.or.jp/">
-            <img th:src="@{/img/nhk.png}">
-            <span>NHK</span>
-        </a>
-    </div>
-    <div class="go-to-site">
-        <a href="https://mainichi.jp/">
-            <img th:src="@{/img/mainichi.png}">
-            <span>마이니치</span>
-        </a>
-    </div>
-    <div class="go-to-site">
-        <a href="https://www.asahi.com/">
-            <img th:src="@{/img/asahi.png}" style="border: 1px solid grey">
-            <span>아사히</span>
-        </a>
-    </div>
-    <div class="go-to-site">
-        <a href="https://www.sankei.com/">
-            <img th:src="@{/img/sankei.png}" style="border: 1px solid grey">
-            <span>산케이</span>
-        </a>
-    </div>
-    <!--
-    <span class="go-to-site-line"></span>
+        <div class="mainpage-box" style="margin-bottom: 50px">
+            <div class="go-to-site">
+                <a href="https://www.nhk.or.jp/">
+                    <img th:src="@{/img/nhk.png}">
+                    <span>NHK</span>
+                </a>
+            </div>
+            <div class="go-to-site">
+                <a href="https://mainichi.jp/">
+                    <img th:src="@{/img/mainichi.png}">
+                    <span>마이니치</span>
+                </a>
+            </div>
+            <div class="go-to-site">
+                <a href="https://www.asahi.com/">
+                    <img th:src="@{/img/asahi.png}" style="border: 1px solid grey">
+                    <span>아사히</span>
+                </a>
+            </div>
+            <div class="go-to-site">
+                <a href="https://www.sankei.com/">
+                    <img th:src="@{/img/sankei.png}" style="border: 1px solid grey">
+                    <span>산케이</span>
+                </a>
+            </div>
+            <!--
+            <span class="go-to-site-line"></span>
 
-    <div class="go-to-site">
-        <a href="www.peopledaily.com.cn">
-            <img th:src="@{/img/inmin.png}" style="border: 1px solid grey">
-            <span>인민일보</span>
-        </a>
+            <div class="go-to-site">
+                <a href="www.peopledaily.com.cn">
+                    <img th:src="@{/img/inmin.png}" style="border: 1px solid grey">
+                    <span>인민일보</span>
+                </a>
+            </div>
+            <div class="go-to-site">
+                <a href="http://www.bjnews.com.cn/">
+                    <img th:src="@{/img/shinkyungbo.png}">
+                    <span>신경보</span>
+                </a>
+            </div>
+            <div class="go-to-site">
+                <a href="https://www.huanqiu.com/">
+                    <img th:src="@{/img/hwangu.png}">
+                    <span>환구시보</span>
+                </a>
+            </div>
+            <div class="go-to-site">
+                <a href="http://global.chinadaily.com.cn/">
+                    <img th:src="@{/img/jungguk.png}">
+                    <span>중국일보</span>
+                </a>
+            </div>
+              <div class="go-to-site">
+                  <a href="http://www.cyol.net/">
+                      <img th:src="@{/img/junggukchungnyun.png}">
+                      <span>중국청년보</span>
+                  </a>
+              </div>
+              <div class="go-to-site">
+                  <a href="http://www.cankaoxiaoxi.com/">
+                      <img th:src="@{/img/chamgo.png}">
+                      <span>참고소식</span>
+                  </a>
+              <div>
+              -->
+        </div>
     </div>
-    <div class="go-to-site">
-        <a href="http://www.bjnews.com.cn/">
-            <img th:src="@{/img/shinkyungbo.png}">
-            <span>신경보</span>
-        </a>
-    </div>
-    <div class="go-to-site">
-        <a href="https://www.huanqiu.com/">
-            <img th:src="@{/img/hwangu.png}">
-            <span>환구시보</span>
-        </a>
-    </div>
-    <div class="go-to-site">
-        <a href="http://global.chinadaily.com.cn/">
-            <img th:src="@{/img/jungguk.png}">
-            <span>중국일보</span>
-        </a>
-    </div>
-      <div class="go-to-site">
-          <a href="http://www.cyol.net/">
-              <img th:src="@{/img/junggukchungnyun.png}">
-              <span>중국청년보</span>
-          </a>
-      </div>
-      <div class="go-to-site">
-          <a href="http://www.cankaoxiaoxi.com/">
-              <img th:src="@{/img/chamgo.png}">
-              <span>참고소식</span>
-          </a>
-      <div>
-      -->
-  </div>
-</div>
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/

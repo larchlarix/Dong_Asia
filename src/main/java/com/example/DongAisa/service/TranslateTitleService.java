@@ -55,13 +55,17 @@ public class TranslateTitleService {
     }
 
     private String getTranslation(String text) {
+
         String apiUrl = "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation";
+
         Map<String, String> requestHeaders = new HashMap<>();
 
         try {
             String encodedText = URLEncoder.encode(text, StandardCharsets.UTF_8);
+
             requestHeaders.put("X-NCP-APIGW-API-KEY-ID", clientId);
             requestHeaders.put("X-NCP-APIGW-API-KEY", clientSecret);
+
 
             String responseBody = post(apiUrl, requestHeaders, encodedText);
             logger.info("Received API Response: {}", responseBody);
