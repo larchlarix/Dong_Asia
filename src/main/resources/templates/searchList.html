@@ -169,27 +169,25 @@
             </tr>
         </table>
 
-
-
-        <ul class="searchPagination">
-            <li th:class="${currentPage == 0 ? 'disabled' : ''}">
-                <a th:if="${currentPage != 0}" th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=0&amp;size=' + ${size}}" >First</a>
-            </li>
-            <li th:class="${currentPage == 0 ? 'disabled' : ''}">
-                <a th:if="${currentPage != 0}" th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=' + ${currentPage - 1} + '&amp;size=' + ${size}}" >Previous</a>
-            </li>
-            <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:class="${pageNum == currentPage ? 'active' : ''}" th:if="${pageNum >= currentPage - 2 && pageNum <= currentPage + 2}">
-
-                <a th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=' + ${pageNum} + '&amp;size=' + ${size}}" th:class="${pageNum == currentPage ? 'active' : ''}" th:text="${pageNum + 1}" ></a>
-            </li>
-
-            <li th:class="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                <a th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=' + ${currentPage + 1} + '&amp;size=' + ${size}}" onclick="return nextPage()">Next</a>
-            </li>
-            <li th:class="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                <a th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=' + ${totalPages - 1} + '&amp;size=' + ${size}}" onclick="return nextPage()">Last</a>
-            </li>
-        </ul>
+        <nav aria-label="Page navigation example" class="paging_sj">
+            <ul class="searchPagination pagination">
+                <li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+                    <a th:if="${currentPage != 0}" th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=0&amp;size=' + ${size}}" class="page-link">&laquo;</a>
+                </li>
+                <li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+                    <a th:if="${currentPage != 0}" th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=' + ${currentPage - 1} + '&amp;size=' + ${size}}" class="page-link">&lt;</a>
+                </li>
+                <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:class="${pageNum == currentPage ? 'page-item active ac' : 'page-item'}" th:if="${pageNum >= currentPage - 2 && pageNum <= currentPage + 2}">
+                    <a th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=' + ${pageNum} + '&amp;size=' + ${size}}" th:class="${pageNum == currentPage ? 'page-link active' : 'page-link'}" th:text="${pageNum + 1}"></a>
+                </li>
+                <li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+                    <a th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=' + ${currentPage + 1} + '&amp;size=' + ${size}}" onclick="return nextPage()" class="page-link">&gt;</a>
+                </li>
+                <li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+                    <a th:href="@{'/news/search?keyword=' + ${keyword} + '&amp;page=' + ${totalPages - 1} + '&amp;size=' + ${size}}" onclick="return nextPage()" class="page-link">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
 
 
     </div>

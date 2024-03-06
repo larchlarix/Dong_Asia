@@ -868,6 +868,42 @@ body {
     height: 50px;
 }
 
+.paging-sj {
+    display: flex;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    text-align: center;
+}
+.page-item {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 16px;
+}
+.ac a {
+    color: #851212;
+}
+.page-link {
+    text-decoration-line: none;
+    color: lightcoral;
+}
+.page-link:hover {
+    text-decoration-line: underline;
+    color: #851212;
+}
+.page-link:active {
+    text-decoration-line: underline;
+    color: #851212;
+}
+.page-link:disabled {
+    text-decoration-line: none;
+    color: lightgrey;
+}
+
 /* 모바일에 최적화된 예외 CSS 코드*/
 @media (max-width: 768px) {
     .side-header {

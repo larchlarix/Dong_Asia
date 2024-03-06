@@ -169,30 +169,32 @@
         </tr>
     </table>
 
-    <ul class="pagination">
-        <li th:class="${currentPage == 0 ? 'disabled' : ''}">
-            <a th:if="${currentPage != 0 && isFiltering}" th:href="@{/news/filter(page=0, size=${size}, category=${categories}, publisher=${publishers})}">First</a>
-            <a th:if="${currentPage != 0 && !isFiltering}" th:href="@{/news(page=0, size=${size})}">First</a>
-        </li>
-        <li th:class="${currentPage == 0 ? 'disabled' : ''}">
-            <a  th:if="${currentPage != 0 && isFiltering}" th:href="@{/news/filter(page=${currentPage - 1}, size=${size}, category=${categories}, publisher=${publishers})}">Previous</a>
-            <a  th:if="${currentPage != 0 && !isFiltering}" th:href="@{/news(page=${currentPage - 1}, size=${size})}">Previous</a>
-        </li>
-        <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:class="${pageNum == currentPage ? 'active' : ''}" th:if="${pageNum >= currentPage - 2 && pageNum <= currentPage + 2}">
-            <a th:if="${isFiltering}" th:href="@{/news/filter(page=${pageNum}, size=${size}, category=${categories}, publisher=${publishers})}" th:text="${pageNum + 1}"></a>
-            <a th:if="${!isFiltering}" th:href="@{/news(page=${pageNum}, size=${size})}" th:text="${pageNum + 1}"></a>
-        </li>
-        <li th:class="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-            <a th:if="${isFiltering}" th:href="@{/news/filter(page=${currentPage + 1}, size=${size}, category=${categories}, publisher=${publishers})}" onclick="return nextPage()">Next</a>
-            <a th:if="${!isFiltering}" th:href="@{/news(page=${currentPage + 1}, size=${size})}" onclick="return nextPage()">Next</a>
-        </li>
-        <li th:class="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-            <a th:if="${isFiltering}" th:href="@{/news/filter(page=${totalPages - 1}, size=${size}, category=${categories}, publisher=${publishers})}" onclick="return nextPage()">Last</a>
-            <a th:if="${!isFiltering}" th:href="@{/news(page=${totalPages - 1}, size=${size})}" onclick="return nextPage()">Last</a>
-        </li>
-    </ul>
+    <nav aria-label="Page navigation example" class="paging_sj">
 
+        <ul class="pagination">
+            <li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+                <a th:if="${currentPage != 0 && isFiltering}" th:href="@{/news/filter(page=0, size=${size}, category=${categories}, publisher=${publishers})}" class="page-link">&laquo;</a>
+                <a th:if="${currentPage != 0 && !isFiltering}" th:href="@{/news(page=0, size=${size})}" class="page-link">&laquo;</a>
+            </li>
+            <li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+                <a  th:if="${currentPage != 0 && isFiltering}" th:href="@{/news/filter(page=${currentPage - 1}, size=${size}, category=${categories}, publisher=${publishers})}" class="page-link">&lt;</a>
+                <a  th:if="${currentPage != 0 && !isFiltering}" th:href="@{/news(page=${currentPage - 1}, size=${size})}" class="page-link">&lt;</a>
+            </li>
+            <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:class="${pageNum == currentPage ? 'page-item active ac' : 'page-item'}" th:if="${pageNum >= currentPage - 2 && pageNum <= currentPage + 2}">
+                <a th:if="${isFiltering}" th:href="@{/news/filter(page=${pageNum}, size=${size}, category=${categories}, publisher=${publishers})}" th:text="${pageNum + 1}" class="page-link"></a>
+                <a th:if="${!isFiltering}" th:href="@{/news(page=${pageNum}, size=${size})}" th:text="${pageNum + 1}" class="page-link"></a>
+            </li>
+            <li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+                <a th:if="${isFiltering}" th:href="@{/news/filter(page=${currentPage + 1}, size=${size}, category=${categories}, publisher=${publishers})}" onclick="return nextPage()" class="page-link">&gt;</a>
+                <a th:if="${!isFiltering}" th:href="@{/news(page=${currentPage + 1}, size=${size})}" onclick="return nextPage()" class="page-link">&gt;</a>
+            </li>
+            <li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+                <a th:if="${isFiltering}" th:href="@{/news/filter(page=${totalPages - 1}, size=${size}, category=${categories}, publisher=${publishers})}" onclick="return nextPage()" class="page-link">&raquo;</a>
+                <a th:if="${!isFiltering}" th:href="@{/news(page=${totalPages - 1}, size=${size})}" onclick="return nextPage()" class="page-link">&raquo;</a>
+            </li>
+        </ul>
 
+    </nav>
 
 </div>
 </div>
