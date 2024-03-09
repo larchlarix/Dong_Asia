@@ -14,7 +14,8 @@
 <!--<nav th:replace="fragments.html :: fragment-nav"></nav>-->
 
 <div class="page-right">
-<div th:if="${news}" class="news-main-border-box">
+    <header th:replace="fragments.html :: fragment-header-m"></header>
+<div th:if="${news}" class="news-main-border-box" style="background-color: white">
     <table>
         <tr><td colspan="5" class="news-main-title">
             <span th:if="${translatedTitle == null}" th:text="${news.newsTitle}" class="before-translation">기사 제목</span>

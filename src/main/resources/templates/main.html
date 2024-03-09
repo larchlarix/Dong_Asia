@@ -7,13 +7,16 @@
 <header th:replace="fragments.html :: fragment-header"></header>
 
 <div class="page-right">
-
+    <header th:replace="fragments.html :: fragment-header-m"></header>
     <div class="page-section">
 
         <div style="display: flex">
-
             <h2>주간 키워드</h2>
-            <!--
+            <div><img src="/img/ques.png" style="width: 20px; height: 20px; margin-top: 25px; background-color: white; border-radius: 50%;
+             border-style: none;" id="weekly-ques">
+            <p id="weekly-keyword-ques-box">수집한 기사들 중 가장 많이 언급된 다섯 개의 단어들을 보여줍니다.(수집 기간: 일주일)</p></div>
+        </div>
+        <!--
             <div class="country-button button-10">
                 <input type="checkbox" class="country-checkbox" />
                 <div class="knobs">
@@ -23,9 +26,7 @@
             </div>
             -->
 
-        </div>
-
-        <div class="mainpage-box mainpage-box-1">
+        <div class="mainpage-box mainpage-box-1" style="background-color: white">
             <p th:if="${topKeywordData != null}" th:text="${topKeywordData.startdate + ' ~ ' + topKeywordData.enddate}"></p>
 
             <ul class="keyword-list" id="keywordList">
@@ -88,16 +89,7 @@
 
         </div>
 
-        <div class="mainpage-box">
-            <!--
-            <form action="/translatedtitles" method="post" onsubmit="return translateAndSubmit(event)">
-                <th:block th:each="news, index : ${newsList}" th:if="${index.index} < 5">
-                    <input type="hidden" name="originalTitles" th:value="${news.newsTitle}"/>
-                </th:block>
-                <button type="submit" class="translate-button translate_btn">번역</button>
-            </form>
-            -->
-            <!-- 최신 기사 목록 (5개) -->
+        <div class="mainpage-box" style="background-color: white">
             <table class="list-table" th:unless="${#lists.isEmpty(newsList)}" th:each="news, index : ${newsList}" th:if="${index.index} < 5">
                 <tr>
                     <td th:unless="${news.newsImageURL == ''}" rowspan="2" width="200">
@@ -140,7 +132,7 @@
 
         <h2>원문 바로가기</h2>
 
-        <div class="mainpage-box" style="margin-bottom: 50px">
+        <div class="mainpage-box" style="margin-bottom: 50px; background-color: white;">
             <div class="go-to-site">
                 <a href="https://www.nhk.or.jp/">
                     <img th:src="@{/img/nhk.png}">

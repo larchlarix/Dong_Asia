@@ -14,12 +14,17 @@
 <!--<nav th:replace="fragments.html :: fragment-nav"></nav>-->
 
 <div class="page-right">
+    <header th:replace="fragments.html :: fragment-header-m"></header>
 <div class="page-section">
 
     <h2>언급량 분석</h2>
+    <img src="/img/ques.png" id="analysis-mention-ques" style="width: 20px; height: 20px; margin-top: 25px; background-color: white; border-radius: 50%;
+border-style: none;">
+    <p id="analysis-mention-ques-box">분석하고 싶은 기사들의 기간과 언론사를 설정 후, 분석 버튼을 누르면, 분석 조건에 따른 기사들에서 언급된 키워드들이 출력됩니다.
+        <br>언급량이 높을수록 크기가 커집니다.</p>
 
     <!-- 기사 옵션 ⌵ -->
-    <table class="news-option">
+    <table class="news-option" style="background-color: white">
         <tr>
             <td width="100">
                 <span>기간</span>
@@ -83,7 +88,7 @@
 <br>
 
 <div class="page-section">
-    <div id="resultContainer"><p class="bf_result">이곳에 분석 결과가 나옵니다.</p></div>
+    <div id="resultContainer" style="background-color: white"><p class="bf_result">이곳에 분석 결과가 나옵니다.</p></div>
 </div>
 
 </div>

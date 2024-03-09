@@ -35,7 +35,7 @@
     <div class="login">
         <a th:href="@{/#}" class="title">InsightJapan</a>
 
-        <form action="/user/signup" role="form" method="post"  th:object="${userDto}" class="login-form">
+        <form action="/user/signup" role="form" method="post"  th:object="${userDto}" class="login-form" style="background-color: white">
             <div>
                 <label th:for="userEmail"></label>
                 <input class="login-input" type="email" th:field="*{userEmail}" placeholder="이메일을 입력해주세요">

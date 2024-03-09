@@ -64,7 +64,7 @@
 <!--<nav th:replace="fragments.html :: fragment-nav"></nav>-->
 
 <div class="page-right">
-
+    <header th:replace="fragments.html :: fragment-header-m"></header>
     <!-- 로딩 화면 -->
     <div id="loading" class="loading">
         <div class="main_">
@@ -77,10 +77,14 @@
     </div>
 
     <div class="page-section">
+    <h2>키워드 분석</h2>
+    <img src="/img/ques.png" id="analysis-keyword-ques" style="width: 20px; height: 20px; margin-left: 0; background-color: white; border-radius: 50%;
+border-style: none;">
+        <p id="analysis-keyword-ques-box">기간을 설정하고, 분석하고 싶은 단어를 입력합니다.<br>
+            (한국어를 입력하는 경우 상단의 번역 검색창에 입력한 후, 번역 버튼을 누릅니다. 해당 단어가 번역되어 아래의 키워드 검색창에 단어가 화면에 출력됩니다.)<br>
+            단어를 분석하면, 해당 단어에 대한 분석 결과가 하단에 출력됩니다.</p>
 
-        <h2>키워드 분석</h2>
-
-        <table class="news-option">
+        <table class="news-option" style="background-color: white">
             <tr>
                 <td width="100">
                     <span>기간</span>
@@ -147,7 +151,7 @@
     <br>
 
     <div class="page-section">
-        <main class='ana1'>
+        <main class='ana1' style="background-color: white;">
             <ul>
                 <li class="ana1 on" onclick="setNew('ana1')">언급량 추이</li>
                 <li class="ana2" onclick="setNew('ana2')">연관어 및 긍ㆍ부정 분석</li>
@@ -173,15 +177,14 @@
             </div>
         </main>
     </div>
-
     <br>
 
     <!-- 관련 기사 목록 -->
-    <div class="page-section" style="display: none">
+    <div class="page-section" style="display: none;">
 
-        <div id="newsList">
+        <div id="newsList" style="background-color: white;">
             <div class="rela">
-                <div style="display: flex">
+                <div style="display: flex;;">
                     <span>관련 기사</span>
                     <div id="t_button"></div>
                 </div>
@@ -189,7 +192,7 @@
         </div>
 
     </div>
-
+</div>
 
 
     <script th:inline="javascript">
@@ -876,17 +879,5 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
 

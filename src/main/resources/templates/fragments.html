@@ -15,11 +15,54 @@
         <span class="logo"><a th:href="@{/#}">InsightJapan</a></span>
 
         <span class="menu"><a th:href="@{/news}">기사 보기</a></span>
-        <span class="menu">기사 분석</span>
-        <span class="sub-menu"><a th:href="@{/analysis}">언급량 분석</a></span>
-        <span class="sub-menu"><a th:href="@{/keyword_analysis}">키워드 분석</a></span>
+        <span class="menu" id="menu-analysis-button">
+        <a href="#" id="analysis-toggle">기사 분석&emsp;&emsp;&emsp;&emsp;&emsp;+</a>
+    </span>
+        <span class="sub-menu" style="display: none; margin: 25px 2px 2px 100px; font-size: 18px;" id="mention-analysis">
+            <a th:href="@{/analysis}">언급량 분석</a></span>
+        <span class="sub-menu" id="keyword-analysis" style="display: none; margin: 2px 25px 25px 100px; font-size: 18px;">
+            <a th:href="@{/keyword_analysis}">키워드 분석</a></span>
 
-        <span class="line"></span>
+        <script>
+            document.getElementById("analysis-toggle").addEventListener("click", function() {
+                var mentionAnalysis = document.getElementById("mention-analysis");
+                var keywordAnalysis = document.getElementById("keyword-analysis");
+                var line = document.getElementById("menu-line");
+
+                const keyframes1 = [
+                    {transform: "translateY(-10px)"},
+                    {transform: "translateY(0)"}
+                ]
+
+                const keyframes2 = [
+                    {transform: "translateY(0)"},
+                    {transform: "translateY(15px)"}
+                ]
+
+                const keyframes3 = [
+                    {transform: "translateY(-5px)"},
+                    {transform: "translateY(0)"}
+                ]
+                const options = {
+                    duration: 500,
+                    easing: "ease-in",
+                    fill: "forwards"
+                };
+                mentionAnalysis.animate(keyframes1, options);
+                keywordAnalysis.animate(keyframes2, options);
+                line.animate(keyframes3, options);
+
+                if (mentionAnalysis.style.display === "none") {
+                    mentionAnalysis.style.display = "block";
+                    keywordAnalysis.style.display = "inline-block";
+                } else {
+                    mentionAnalysis.style.display = "none";
+                    keywordAnalysis.style.display = "none";
+                }
+            });
+        </script>
+
+        <span class="line" id="menu-line"></span>
 
         <span sec:authorize="isAnonymous()">
             <span class="menu"><a href="/user/login">로그인</a></span>
@@ -34,6 +77,10 @@
     <div class="under-side-bar"></div>
 </header>
 
+<header th:fragment="fragment-header-m" class="header-m">
+    <span class="logo"><a th:href="@{/#}">InsightJapan</a></span>
+</header>
+
 <!-- 모바일 사이드 메뉴 -->
 <nav th:fragment="mobile-nav" class="mobile-nav">
 
@@ -43,14 +90,60 @@
 
 
     <div class="mobile-side-bar">
-        <span class="logo"><a th:href="@{/#}">Dongasians'</a></span>
+        <span class="logo"><a th:href="@{/#}">InsightJapan</a></span>
 
         <span class="menu"><a th:href="@{/news}">기사 보기</a></span>
-        <span class="menu">기사 분석</span>
-        <span class="sub-menu"><a th:href="@{/analysis}">언급량 분석</a></span>
-        <span class="sub-menu"><a th:href="@{/keyword_analysis}">키워드 분석</a></span>
+        <span class="menu" id="menu-analysis-button-m">
+        <a href="#" id="analysis-toggle-m">기사 분석&emsp;&emsp;&emsp;&emsp;&emsp;+</a>
+    </span>
+            <span class="sub-menu" id="mention-analysis-m" style="display: none; margin: 25px 25px 25px 100px; font-size: 18px;">
+                <a th:href="@{/analysis}">언급량 분석</a></span>
+            <span class="sub-menu" id="keyword-analysis-m" style="display: none; margin: 25px 25px 25px 100px; font-size: 18px;">
+                <a th:href="@{/keyword_analysis}">키워드 분석</a></span>
 
-        <span class="line"></span>
+        <script>
+            document.getElementById("analysis-toggle-m").addEventListener("click", function() {
+                var mentionAnalysis = document.getElementById("mention-analysis-m");
+                var keywordAnalysis = document.getElementById("keyword-analysis-m");
+                var line = document.getElementById("line-m");
+
+                if (mentionAnalysis.style.display === "none") {
+                    mentionAnalysis.style.display = "block";
+                    keywordAnalysis.style.display = "block";
+                } else {
+                    mentionAnalysis.style.display = "none";
+                    keywordAnalysis.style.display = "none";
+                }
+
+                const keyframes1 = [
+                    {transform: "translateY(-10px)"},
+                    {transform: "translateY(0)"}
+                ]
+
+                const keyframes2 = [
+                    {transform: "translateY(0)"},
+                    {transform: "translateY(10px)"}
+                ]
+
+                const keyframes3 = [
+                    {transform: "translateY(-5px)"},
+                    {transform: "translateY(0)"}
+                ]
+                const options = {
+                    duration: 500,
+                    easing: "ease-in",
+                    fill: "forwards"
+                };
+
+                mentionAnalysis.animate(keyframes1, options);
+                keywordAnalysis.animate(keyframes2, options);
+                line.animate(keyframes3, options);
+            });
+        </script>
+
+        <!--<span class="menu" id="menu-analysis">기사 분석&emsp;&emsp;&emsp;&emsp;&emsp;+</span>-->
+
+        <span class="line" id="line-m"></span>
 
         <span sec:authorize="isAnonymous()">
             <span class="menu"><a href="/user/login">로그인</a></span>
