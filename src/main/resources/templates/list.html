@@ -40,7 +40,7 @@
         <br>
         <!--검색 폼-->
         <form th:action="@{/news/search}" method="get" class="news-option" style="border: 0; background-color: white;">
-            <div class="ana-search-form">
+            <div class="ana-search-form" style="background-color: white">
                 <label for="searchKeyword"></label>
                 <input type="text" id="searchKeyword" name="keyword" placeholder="뉴스 검색하기" required>
                 <button type="submit" class="short_btn">검색</button>
@@ -54,7 +54,7 @@
         <h2>옵션</h2>
 
         <form method="get" th:action="@{/news/filter}" id="news-list-option">
-            <table class="news-option" style="background-color: white">
+            <table class="news-option" style="background-color: white;">
                 <!--
                 <tr>
                     <td width="100">
@@ -74,7 +74,7 @@
                     </td>
                 </tr>
                 -->
-                <tr style="white-space: nowrap">
+                <tr style="white-space: nowrap;">
                     <td>
                         <span>주제</span>
                     </td>
@@ -96,7 +96,7 @@
                     </td>
                 </tr>
 
-                <tr style="white-space: nowrap">
+                <tr style="white-space: nowrap;">
                     <td>
                         <span>언론사</span>
                     </td>
@@ -118,20 +118,6 @@
         </form>
     </div>
 
-    <script>
-        //모바일 버전의 옵션
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        window.addEventListener("resize", function () {
-            if(width > 768) {
-
-            }
-            else {
-
-            }
-        });
-    </script>
-
     <br>
 
     <div class="page-section">
@@ -149,7 +135,7 @@
         </h2>
 
         <!-- 기사 목록 -->
-        <div style="background-color: white; border-radius: 0.8rem;">
+        <div id="news-list-div">
         <table class="list-table" id ="list-table" th:each="news, index : ${isFiltering ? newsFilterList : newsList}"
                th:if="${index.index} < 10">
 

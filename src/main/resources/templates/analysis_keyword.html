@@ -81,7 +81,6 @@
     <img src="/img/ques.png" id="analysis-keyword-ques" style="width: 20px; height: 20px; margin-left: 0; background-color: white; border-radius: 50%;
 border-style: none;">
         <p id="analysis-keyword-ques-box">기간을 설정하고, 분석하고 싶은 단어를 입력합니다.<br>
-            (한국어를 입력하는 경우 상단의 번역 검색창에 입력한 후, 번역 버튼을 누릅니다. 해당 단어가 번역되어 아래의 키워드 검색창에 단어가 화면에 출력됩니다.)<br>
             단어를 분석하면, 해당 단어에 대한 분석 결과가 하단에 출력됩니다.</p>
 
         <table class="news-option" style="background-color: white">
@@ -123,7 +122,9 @@ border-style: none;">
             <tr class="suggested_keywords" >
 
                 <td colspan="2" id = suggestedKeywords>
-                    <p style="text-align: center; font-size: 12px">추천 키워드</p>
+                    <div style="text-align: center; font-size: 15px">추천 키워드<img src="/img/ques.png" style="width: 15px; height: 15px; margin-left: 8px; background-color: white; border-radius: 50%;
+             border-style: none;" id="weekly-ques">
+                        <p id="weekly-keyword-ques-box">최근 1개월간의 언급량을 토대로 추천 키워드를 표시합니다.</p></div>
                     <script th:inline="javascript">
                         // Thymeleaf에서 받은 JSON 데이터
                         var keyword_suggested = /*[[${keyword_suggested}]]*/ null;

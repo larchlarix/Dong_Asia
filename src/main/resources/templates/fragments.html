@@ -16,9 +16,9 @@
 
         <span class="menu"><a th:href="@{/news}">기사 보기</a></span>
         <span class="menu" id="menu-analysis-button">
-        <a href="#" id="analysis-toggle">기사 분석&emsp;&emsp;&emsp;&emsp;&emsp;+</a>
+        <a href="javascript:void(0);" id="analysis-toggle">기사 분석&emsp;&emsp;&emsp;&emsp;&emsp;+</a>
     </span>
-        <span class="sub-menu" style="display: none; margin: 25px 2px 2px 100px; font-size: 18px;" id="mention-analysis">
+        <span class="sub-menu" style="display: none; margin: 0 2px 2px 100px; font-size: 18px;" id="mention-analysis">
             <a th:href="@{/analysis}">언급량 분석</a></span>
         <span class="sub-menu" id="keyword-analysis" style="display: none; margin: 2px 25px 25px 100px; font-size: 18px;">
             <a th:href="@{/keyword_analysis}">키워드 분석</a></span>
@@ -27,6 +27,7 @@
             document.getElementById("analysis-toggle").addEventListener("click", function() {
                 var mentionAnalysis = document.getElementById("mention-analysis");
                 var keywordAnalysis = document.getElementById("keyword-analysis");
+                var toggleButton = document.getElementById("analysis-toggle");
                 var line = document.getElementById("menu-line");
 
                 const keyframes1 = [
@@ -40,7 +41,11 @@
                 ]
 
                 const keyframes3 = [
-                    {transform: "translateY(-5px)"},
+                    {transform: "translateY(15px)"},
+                    {transform: "translateY(0)"}
+                ]
+
+                const keyframe4 = [
                     {transform: "translateY(0)"}
                 ]
                 const options = {
@@ -48,16 +53,20 @@
                     easing: "ease-in",
                     fill: "forwards"
                 };
-                mentionAnalysis.animate(keyframes1, options);
-                keywordAnalysis.animate(keyframes2, options);
-                line.animate(keyframes3, options);
-
                 if (mentionAnalysis.style.display === "none") {
-                    mentionAnalysis.style.display = "block";
+                    mentionAnalysis.style.display = "inline-block";
                     keywordAnalysis.style.display = "inline-block";
+                    toggleButton.textContent = "기사 분석" + '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0' + '-';
+                    mentionAnalysis.animate(keyframes1, options);
+                    keywordAnalysis.animate(keyframes2, options);
+                    line.animate(keyframes2, options);
                 } else {
                     mentionAnalysis.style.display = "none";
                     keywordAnalysis.style.display = "none";
+                    toggleButton.textContent = "기사 분석" + '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0' + '+';
+                    mentionAnalysis.animate(keyframe4, options);
+                    keywordAnalysis.animate(keyframes3, options);
+                    line.animate(keyframe4, options);
                 }
             });
         </script>
@@ -94,26 +103,19 @@
 
         <span class="menu"><a th:href="@{/news}">기사 보기</a></span>
         <span class="menu" id="menu-analysis-button-m">
-        <a href="#" id="analysis-toggle-m">기사 분석&emsp;&emsp;&emsp;&emsp;&emsp;+</a>
+        <a href="javascript:void(0);" id="analysis-toggle-m">기사 분석&emsp;&emsp;&emsp;&emsp;&emsp;+</a>
     </span>
-            <span class="sub-menu" id="mention-analysis-m" style="display: none; margin: 25px 25px 25px 100px; font-size: 18px;">
+            <span class="sub-menu" id="mention-analysis-m" style="display: none; margin: 0 25px 15px 100px; font-size: 18px;">
                 <a th:href="@{/analysis}">언급량 분석</a></span>
-            <span class="sub-menu" id="keyword-analysis-m" style="display: none; margin: 25px 25px 25px 100px; font-size: 18px;">
+            <span class="sub-menu" id="keyword-analysis-m" style="display: none; margin: 0 25px 25px 100px; font-size: 18px;">
                 <a th:href="@{/keyword_analysis}">키워드 분석</a></span>
 
         <script>
             document.getElementById("analysis-toggle-m").addEventListener("click", function() {
                 var mentionAnalysis = document.getElementById("mention-analysis-m");
                 var keywordAnalysis = document.getElementById("keyword-analysis-m");
-                var line = document.getElementById("line-m");
-
-                if (mentionAnalysis.style.display === "none") {
-                    mentionAnalysis.style.display = "block";
-                    keywordAnalysis.style.display = "block";
-                } else {
-                    mentionAnalysis.style.display = "none";
-                    keywordAnalysis.style.display = "none";
-                }
+                var toggleButton = document.getElementById("analysis-toggle-m");
+                var line = document.getElementById("menu-line-m");
 
                 const keyframes1 = [
                     {transform: "translateY(-10px)"},
@@ -122,11 +124,15 @@
 
                 const keyframes2 = [
                     {transform: "translateY(0)"},
-                    {transform: "translateY(10px)"}
+                    {transform: "translateY(15px)"}
                 ]
 
                 const keyframes3 = [
-                    {transform: "translateY(-5px)"},
+                    {transform: "translateY(15px)"},
+                    {transform: "translateY(0)"}
+                ]
+
+                const keyframe4 = [
                     {transform: "translateY(0)"}
                 ]
                 const options = {
@@ -134,10 +140,21 @@
                     easing: "ease-in",
                     fill: "forwards"
                 };
-
-                mentionAnalysis.animate(keyframes1, options);
-                keywordAnalysis.animate(keyframes2, options);
-                line.animate(keyframes3, options);
+                if (mentionAnalysis.style.display === "none") {
+                    mentionAnalysis.style.display = "inline-block";
+                    keywordAnalysis.style.display = "inline-block";
+                    toggleButton.textContent = "기사 분석" + '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0' + '-';
+                    mentionAnalysis.animate(keyframes1, options);
+                    keywordAnalysis.animate(keyframes2, options);
+                    line.animate(keyframes2, options);
+                } else {
+                    mentionAnalysis.style.display = "none";
+                    keywordAnalysis.style.display = "none";
+                    toggleButton.textContent = "기사 분석" + '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0' + '+';
+                    mentionAnalysis.animate(keyframe4, options);
+                    keywordAnalysis.animate(keyframes3, options);
+                    line.animate(keyframe4, options);
+                }
             });
         </script>
 

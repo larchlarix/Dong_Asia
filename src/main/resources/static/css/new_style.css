@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@700&display=swap');
 body {
     display: flex;
-    background-color: #f8f9f8;
+    background-color: #f1f3f4;
 }
 
 * {
@@ -580,6 +580,12 @@ img#analysis-keyword-ques:hover + #analysis-keyword-ques-box {
     font-weight: normal !important;
     font-size: 16px;
 }
+
+#news-list-div {
+    background-color: white;
+    border-radius: 0.8rem;
+}
+
 .news-option .short_btn {
     height: 24px;
     margin: 3px;
